@@ -4,17 +4,83 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* ===== LIGHT MODE (Default) ===== */
+  
+  /* Base colors - Clean, bright foundation */
+  --background: oklch(0.98 0.003 280);
+  --foreground: oklch(0.15 0.015 280);
+  
+  /* Surface colors - Elevated layers */
+  --card: oklch(1.00 0.000 280);
+  --card-foreground: oklch(0.15 0.015 280);
+  --popover: oklch(1.00 0.000 280);
+  --popover-foreground: oklch(0.15 0.015 280);
+  
+  /* Primary - Rich violet (same across themes for brand consistency) */
+  --primary: oklch(0.55 0.22 290);
+  --primary-foreground: oklch(0.98 0.003 280);
+  
+  /* Secondary - Light purple */
+  --secondary: oklch(0.94 0.02 285);
+  --secondary-foreground: oklch(0.20 0.08 285);
+  
+  /* Muted - Subtle backgrounds */
+  --muted: oklch(0.92 0.01 280);
+  --muted-foreground: oklch(0.45 0.02 280);
+  
+  /* Accent - Bright magenta */
+  --accent: oklch(0.60 0.24 320);
+  --accent-foreground: oklch(0.98 0.003 280);
+  
+  /* Semantic colors */
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0.003 280);
+  --success: oklch(0.55 0.20 155);
+  --success-foreground: oklch(0.98 0.003 280);
+  --warning: oklch(0.65 0.18 80);
+  --warning-foreground: oklch(0.15 0.015 280);
+  --info: oklch(0.55 0.20 250);
+  --info-foreground: oklch(0.98 0.003 280);
+  
+  /* Borders and inputs */
+  --border: oklch(0.88 0.01 280);
+  --input: oklch(0.96 0.005 280);
+  --ring: oklch(0.55 0.22 290);
+  
+  /* Chart colors - Vibrant for light backgrounds */
+  --chart-1: oklch(0.55 0.22 290); /* Violet */
+  --chart-2: oklch(0.55 0.20 250); /* Blue */
+  --chart-3: oklch(0.60 0.24 320); /* Magenta */
+  --chart-4: oklch(0.55 0.20 155); /* Green */
+  --chart-5: oklch(0.58 0.20 200); /* Cyan */
+  
+  --radius: 0.625rem;
+  
+  /* Sidebar */
+  --sidebar: oklch(0.96 0.005 280);
+  --sidebar-foreground: oklch(0.20 0.015 280);
+  --sidebar-primary: oklch(0.55 0.22 290);
+  --sidebar-primary-foreground: oklch(0.98 0.003 280);
+  --sidebar-accent: oklch(0.92 0.02 285);
+  --sidebar-accent-foreground: oklch(0.20 0.08 285);
+  --sidebar-border: oklch(0.88 0.01 280);
+  --sidebar-ring: oklch(0.55 0.22 290);
+}
+
+.dark {
+  /* ===== DARK MODE ===== */
+  
   /* Base colors - Deep indigo with violet undertones */
   --background: oklch(0.10 0.015 280);
   --foreground: oklch(0.98 0.005 280);
   
-  /* Surface colors */
+  /* Surface colors - Elevated layers in dark mode */
   --card: oklch(0.15 0.015 280);
   --card-foreground: oklch(0.98 0.005 280);
   --popover: oklch(0.14 0.015 280);
   --popover-foreground: oklch(0.98 0.005 280);
   
-  /* Primary - Rich violet */
+  /* Primary - Brighter violet for dark backgrounds */
   --primary: oklch(0.65 0.20 290);
   --primary-foreground: oklch(0.10 0.015 280);
   
@@ -22,16 +88,16 @@
   --secondary: oklch(0.26 0.06 285);
   --secondary-foreground: oklch(0.95 0.01 280);
   
-  /* Muted */
+  /* Muted - Darker subtle backgrounds */
   --muted: oklch(0.25 0.02 280);
   --muted-foreground: oklch(0.72 0.01 280);
   
-  /* Accent - Bright magenta */
+  /* Accent - Bright magenta (more saturated for dark mode) */
   --accent: oklch(0.68 0.22 320);
   --accent-foreground: oklch(0.10 0.015 280);
   
-  /* Semantic colors */
-  --destructive: oklch(0.55 0.22 25);
+  /* Semantic colors - Adjusted for dark backgrounds */
+  --destructive: oklch(0.58 0.22 25);
   --destructive-foreground: oklch(0.98 0.005 280);
   --success: oklch(0.65 0.18 155);
   --success-foreground: oklch(0.10 0.015 280);
@@ -40,62 +106,19 @@
   --info: oklch(0.67 0.18 250);
   --info-foreground: oklch(0.10 0.015 280);
   
-  /* Borders and inputs */
-  --border: oklch(0.32 0.04 280); /* Increased visibility */
+  /* Borders and inputs - Lighter for visibility on dark */
+  --border: oklch(0.32 0.04 280);
   --input: oklch(0.22 0.03 280);
   --ring: oklch(0.65 0.20 290);
   
-  /* Chart colors - Jewel tone palette */
+  /* Chart colors - Jewel tones for dark backgrounds */
   --chart-1: oklch(0.65 0.20 290); /* Violet */
   --chart-2: oklch(0.67 0.18 250); /* Blue */
   --chart-3: oklch(0.68 0.22 320); /* Magenta */
   --chart-4: oklch(0.65 0.18 155); /* Green */
   --chart-5: oklch(0.70 0.18 200); /* Cyan */
   
-  --radius: 0.625rem;
-  
-  /* Sidebar */
-  --sidebar: oklch(0.12 0.015 280);
-  --sidebar-foreground: oklch(0.95 0.01 280);
-  --sidebar-primary: oklch(0.65 0.20 290);
-  --sidebar-primary-foreground: oklch(0.10 0.015 280);
-  --sidebar-accent: oklch(0.26 0.06 285);
-  --sidebar-accent-foreground: oklch(0.95 0.01 280);
-  --sidebar-border: oklch(0.28 0.03 280);
-  --sidebar-ring: oklch(0.65 0.20 290);
-}
-
-.dark {
-  --background: oklch(0.10 0.015 280);
-  --foreground: oklch(0.98 0.005 280);
-  --card: oklch(0.15 0.015 280);
-  --card-foreground: oklch(0.98 0.005 280);
-  --popover: oklch(0.14 0.015 280);
-  --popover-foreground: oklch(0.98 0.005 280);
-  --primary: oklch(0.65 0.20 290);
-  --primary-foreground: oklch(0.10 0.015 280);
-  --secondary: oklch(0.26 0.06 285);
-  --secondary-foreground: oklch(0.95 0.01 280);
-  --muted: oklch(0.25 0.02 280);
-  --muted-foreground: oklch(0.72 0.01 280);
-  --accent: oklch(0.68 0.22 320);
-  --accent-foreground: oklch(0.10 0.015 280);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.98 0.005 280);
-  --success: oklch(0.65 0.18 155);
-  --success-foreground: oklch(0.10 0.015 280);
-  --warning: oklch(0.75 0.15 80);
-  --warning-foreground: oklch(0.10 0.015 280);
-  --info: oklch(0.67 0.18 250);
-  --info-foreground: oklch(0.10 0.015 280);
-  --border: oklch(0.28 0.03 280);
-  --input: oklch(0.22 0.03 280);
-  --ring: oklch(0.65 0.20 290);
-  --chart-1: oklch(0.65 0.20 290);
-  --chart-2: oklch(0.67 0.18 250);
-  --chart-3: oklch(0.68 0.22 320);
-  --chart-4: oklch(0.65 0.18 155);
-  --chart-5: oklch(0.70 0.18 200);
+  /* Sidebar - Dark mode specific */
   --sidebar: oklch(0.12 0.015 280);
   --sidebar-foreground: oklch(0.95 0.01 280);
   --sidebar-primary: oklch(0.65 0.20 290);
@@ -160,8 +183,45 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Focus visible styles for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  
+  /* Custom selection colors */
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Smooth theme transitions */
+body,
+.card,
+.popover,
+.sidebar {
+  transition: background-color 200ms ease-in-out, 
+              border-color 200ms ease-in-out,
+              color 200ms ease-in-out;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
 }
