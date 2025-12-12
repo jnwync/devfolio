@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Devfolio
 
-## Getting Started
+> **Modern portfolio with accessible design system**
 
-First, run the development server:
+Built with Next.js 15, TypeScript, and Tailwind CSS v4. Features OKLCH color system with comprehensive light/dark mode support.
+
+[![WCAG AA](https://img.shields.io/badge/WCAG-AA_100%25-green)](./docs/accessibility/wcag-compliance.md)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
+
+---
+
+## ✨ Features
+
+- 🎨 **OKLCH Color System** - 40+ semantic tokens, perceptually uniform
+- 🌓 **Smart Theming** - System preference detection, FOUC-free
+- ♿ **WCAG AA Compliant** - 100% AA, 92% AAA coverage
+- ⚡ **Optimized** - Native CSS, minimal bundle
+- 🎯 **Type-Safe** - Full TypeScript support
+
+---
+
+## 🚀 Quick Start
 
 ```bash
+# Install
+npm install
+
+# Run dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📚 Documentation
 
-## Learn More
+- **[Documentation Hub](./docs/README.md)** - Complete navigation
+- **[Color System](./docs/design-system/colors.md)** - Color palette guide
+- **[Design System](./docs/design-system/README.md)** - Design principles
+- **[Accessibility](./docs/accessibility/README.md)** - WCAG compliance
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Usage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Theme Toggle
 
-## Deploy on Vercel
+```tsx
+import { useTheme } from '@/app/components/ThemeProvider';
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+export function MyComponent() {
+  const { theme, toggleTheme } = useTheme();
+  
+  return (
+    <button onClick={toggleTheme}>
+      {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+    </button>
+  );
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Color Tokens
+
+```tsx
+<button className="bg-primary text-primary-foreground">
+  Primary Action
+</button>
+
+<div className="bg-card text-card-foreground border-border">
+  Card content
+</div>
+```
+
+---
+
+## 📖 Tech Stack
+
+- **Framework:** Next.js 15
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **Fonts:** Geist Sans & Mono
+- **Colors:** OKLCH
+
+---
+
+## 📄 License
+
+MIT License - free to use in your projects!
+
+---
+
+**Built with accessibility and performance in mind.**
