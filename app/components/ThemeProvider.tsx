@@ -8,22 +8,30 @@ interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
+  mounted: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    // SSR-safe: return 'light' during server render
-    if (typeof window === 'undefined') return 'light';
+  const [mounted, setMounted] = useState(false);
+  const [theme, setThemeState] = useState<Theme>('light');
+
+  // Set mounted and load theme on client side only
+  useEffect(() => {
+    setMounted(true);
     
     // Check localStorage first
     const stored = localStorage.getItem('theme');
-    if (stored === 'light' || stored === 'dark') return stored;
+    if (stored === 'light' || stored === 'dark') {
+      setThemeState(stored);
+      return;
+    }
     
     // Fall back to system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setThemeState(prefersDark ? 'dark' : 'light');
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -66,7 +74,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme, mounted }}>
       {children}
     </ThemeContext.Provider>
   );
