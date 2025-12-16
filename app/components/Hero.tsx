@@ -2,6 +2,7 @@
 
 import { useTheme } from './ThemeProvider';
 import { useEffect, useState } from 'react';
+import HeroImage from './HeroImage';
 
 const roles = [
   'Full-Stack Web Developer',
@@ -144,27 +145,13 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right: Image Placeholder */}
+          {/* Right: Image */}
           <div
             className={`relative order-first lg:order-last transition-all duration-700 delay-100 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <div className="relative aspect-square max-w-md mx-auto lg:max-w-none">
-              {/* Image container - ready for actual image */}
-              <div className="absolute inset-0 rounded-2xl bg-muted flex items-center justify-center overflow-hidden">
-                {/* Placeholder - replace with <img> or <Image> */}
-                <div className="text-center space-y-2 p-8">
-                  <div className="w-20 h-20 mx-auto rounded-full bg-accent/10 flex items-center justify-center">
-                    <span className="text-4xl">👤</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">Image placeholder</p>
-                </div>
-              </div>
-              
-              {/* Subtle accent glow */}
-              <div className="absolute -inset-4 bg-accent/5 rounded-3xl blur-2xl -z-10" />
-            </div>
+            <HeroImage />
           </div>
 
         </div>

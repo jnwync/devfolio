@@ -211,6 +211,39 @@ body,
               color 200ms ease-in-out;
 }
 
+/* Hero image duotone-style recoloring */
+.hero-image {
+  /* Light mode duotone approximation:
+     - Sepia creates warm base tint
+     - Hue-rotate shifts toward magenta/violet (320° accent)
+     - Saturate intensifies the color mapping
+     - Contrast enhances luminance separation
+     - Brightness fine-tunes overall exposure
+  */
+  filter: 
+    sepia(1)
+    hue-rotate(290deg)     /* Maps to --primary violet (290°) */
+    saturate(2.5)
+    contrast(1.1)
+    brightness(1.05);
+  transition: filter 200ms ease-in-out;
+}
+
+.dark .hero-image {
+  /* Dark mode duotone approximation:
+     - Higher saturation for jewel-tone effect
+     - Adjusted hue-rotate for violet/magenta accent
+     - Higher contrast for dramatic shadow mapping
+     - Brightness reduction for dark theme harmony
+  */
+  filter: 
+    sepia(1)
+    hue-rotate(280deg)     /* Maps to --accent magenta (320°) */
+    saturate(3.5)
+    contrast(1.25)
+    brightness(0.9);
+}
+
 /* Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *,
