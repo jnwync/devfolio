@@ -1,8 +1,8 @@
 'use client';
 
-import { useTheme } from './ThemeProvider';
+import { useTheme } from '../ThemeProvider';
 import { useEffect, useState } from 'react';
-import HeroImage from './HeroImage';
+import HeroImage from '../HeroImage';
 
 const roles = [
   'Full-Stack Web Developer',
