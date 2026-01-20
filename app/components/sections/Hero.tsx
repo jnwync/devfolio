@@ -3,11 +3,11 @@
 import { useTheme } from '../ThemeProvider';
 import { useEffect, useState } from 'react';
 import HeroImage from '../HeroImage';
+import { Button } from '@/components/ui/button';
 
 const roles = [
   'Full-Stack Web Developer',
   'React & Next.js Developer',
-  'React Native Developer',
   'Product-Focused Engineer',
 ];
 
@@ -26,7 +26,13 @@ export default function Hero() {
   // Typing animation effect
   useEffect(() => {
     const role = roles[currentRole];
-    const typingSpeed = isDeleting ? 50 : 100;
+    
+    // Safety check
+    if (!role) return;
+    
+    // Slower on mobile for better readability
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const typingSpeed = isDeleting ? (isMobile ? 60 : 50) : (isMobile ? 150 : 100);
     const pauseDuration = isDeleting ? 500 : 2000;
 
     if (!isDeleting && displayedText === role) {
@@ -52,7 +58,10 @@ export default function Hero() {
   }, [displayedText, isDeleting, currentRole]);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section 
+      className="relative min-h-dvh flex items-center overflow-hidden"
+      aria-label="Hero introduction"
+    >
       {/* Background with subtle grid pattern */}
       <div className="absolute inset-0 bg-background -z-10" />
       <div 
@@ -69,7 +78,7 @@ export default function Hero() {
         <button
           aria-label="Toggle theme"
           onClick={toggleTheme}
-          className="group inline-flex items-center gap-2 rounded-full px-4 py-2 bg-card border border-border hover:border-accent transition-colors"
+          className="group inline-flex items-center gap-2 rounded-full px-4 py-2 bg-card border border-border hover:border-accent transition-colors focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
         >
           <span className="text-sm">
             {!mounted ? '🌙' : theme === 'dark' ? '☀️' : '🌙'}
@@ -88,8 +97,8 @@ export default function Hero() {
           <div className="space-y-6 md:space-y-8">
             {/* Name with gradient */}
             <h1
-              className={`text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight transition-all duration-700 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              className={`text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight motion-safe:transition-all motion-safe:duration-700 ${
+                isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
             >
               <span className="bg-linear-to-r from-foreground via-accent to-foreground bg-clip-text text-transparent">
@@ -99,23 +108,23 @@ export default function Hero() {
 
             {/* Role */}
             <h2
-              className={`text-xl md:text-3xl lg:text-4xl font-medium text-muted-foreground transition-all duration-700 delay-200 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              className={`text-xl md:text-3xl lg:text-4xl font-medium text-muted-foreground motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-200 ${
+                isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
             >
               I'm a{' '}
-              <span className="relative inline-block min-h-[1.5em]">
+              <span className="relative inline-block min-h-[1.5em] min-w-[280px] sm:min-w-[380px] md:min-w-[480px]">
                 <span className="text-accent font-semibold">
                   {displayedText}
                 </span>
-                <span className="animate-pulse text-accent">|</span>
+                <span className="animate-pulse text-accent" aria-hidden="true">|</span>
               </span>
             </h2>
 
             {/* Description */}
             <p
-              className={`text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl transition-all duration-700 delay-300 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              className={`text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-300 ${
+                isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
             >
               I build clean, high-performance digital products focused on real users, accessibility, and long-term impact.
@@ -123,32 +132,30 @@ export default function Hero() {
 
             {/* CTAs */}
             <div
-              className={`flex flex-col sm:flex-row gap-3 pt-2 transition-all duration-700 delay-400 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              className={`flex flex-col sm:flex-row gap-3 pt-2 motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-400 ${
+                isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
             >
-              <a
-                href="#projects"
-                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3 font-semibold text-accent-foreground hover:opacity-90 transition-opacity"
-              >
-                <span>View Projects</span>
-                <span className="transition-transform group-hover:translate-x-0.5">→</span>
-              </a>
-              <a
-                href="/cv.pdf"
-                download
-                className="group inline-flex items-center justify-center gap-2 rounded-lg border-2 border-accent px-6 py-3 font-semibold text-accent hover:bg-accent/5 transition-colors"
-              >
-                <span>Download CV</span>
-                <span className="transition-transform group-hover:translate-y-0.5">↓</span>
-              </a>
+              <Button asChild size="lg">
+                <a href="#projects" className="group">
+                  <span>View Projects</span>
+                  <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                </a>
+              </Button>
+              
+              <Button asChild variant="outline" size="default">
+                <a href="/cv.pdf" download className="group">
+                  <span>Download CV</span>
+                  <span className="transition-transform group-hover:translate-y-0.5">↓</span>
+                </a>
+              </Button>
             </div>
           </div>
 
           {/* Right: Image */}
           <div
-            className={`relative order-first lg:order-last transition-all duration-700 delay-100 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            className={`relative order-first lg:order-last motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-100 ${
+              isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
             }`}
           >
             <HeroImage />
@@ -158,8 +165,8 @@ export default function Hero() {
 
         {/* Scroll Indicator */}
         <div
-          className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-700 delay-500 max-lg:hidden ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          className={`absolute bottom-8 left-1/2 -translate-x-1/2 motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-500 max-lg:hidden ${
+            isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-4'
           }`}
         >
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
