@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* 
+ * shadcn/ui Compatibility Layer
+ * Our existing color tokens are already shadcn-compatible
+ * shadcn components will use these CSS variables automatically
+ */
+
 :root {
   /* ===== LIGHT MODE (Default) ===== */
   
@@ -174,6 +180,9 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
 @layer base {
@@ -183,13 +192,13 @@
   body {
     @apply bg-background text-foreground;
   }
-  
+
   /* Focus visible styles for accessibility */
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
-  
+
   /* Custom selection colors */
   ::selection {
     background-color: var(--primary);
@@ -211,37 +220,35 @@ body,
               color 200ms ease-in-out;
 }
 
-/* Hero image duotone-style recoloring */
+/* Hero image - no filters, showing original colors */
 .hero-image {
-  /* Light mode duotone approximation:
-     - Sepia creates warm base tint
-     - Hue-rotate shifts toward magenta/violet (320° accent)
-     - Saturate intensifies the color mapping
-     - Contrast enhances luminance separation
-     - Brightness fine-tunes overall exposure
-  */
-  filter: 
-    sepia(1)
-    hue-rotate(290deg)     /* Maps to --primary violet (290°) */
-    saturate(2.5)
-    contrast(1.1)
-    brightness(1.05);
+  filter: brightness(1.1) contrast(1.05);
   transition: filter 200ms ease-in-out;
 }
 
 .dark .hero-image {
-  /* Dark mode duotone approximation:
-     - Higher saturation for jewel-tone effect
-     - Adjusted hue-rotate for violet/magenta accent
-     - Higher contrast for dramatic shadow mapping
-     - Brightness reduction for dark theme harmony
-  */
-  filter: 
-    sepia(1)
-    hue-rotate(280deg)     /* Maps to --accent magenta (320°) */
-    saturate(3.5)
-    contrast(1.25)
-    brightness(0.9);
+  /* Slight adjustment for dark mode */
+  filter: brightness(0.95);
+}
+
+/* Radial gradient background for hero image */
+.hero-image-container {
+  position: relative;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    var(--accent) 0%,
+    var(--primary) 50%,
+    var(--background) 100%
+  );
+}
+
+.dark .hero-image-container {
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    var(--accent) 0%,
+    var(--primary) 50%,
+    var(--background) 100%
+  );
 }
 
 /* Stagger animation for project cards */
@@ -276,11 +283,11 @@ body,
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   html {
     scroll-behavior: auto;
   }
-  
+
   /* Disable stagger animation */
   .animate-fade-in-stagger > * {
     animation: none !important;
