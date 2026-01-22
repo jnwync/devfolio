@@ -1,4 +1,7 @@
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { motion, type Variants } from 'framer-motion';
 
 interface Experience {
   id: string;
@@ -96,6 +99,29 @@ export default function ProfessionalExperience() {
     academic: 'Academic',
   };
 
+  // Animation variants
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
     <section 
       id="experience" 
@@ -104,7 +130,13 @@ export default function ProfessionalExperience() {
     >
       <div className="mx-auto max-w-6xl px-6">
         {/* Section Header */}
-        <header className="mb-16 space-y-4">
+        <motion.header
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="mb-16 space-y-4"
+        >
           <p className="text-sm font-semibold uppercase tracking-widest text-accent">
             Career Journey
           </p>
@@ -114,45 +146,59 @@ export default function ProfessionalExperience() {
           <p className="max-w-2xl text-muted-foreground">
             Proven track record delivering web and mobile solutions across contract, freelance, and capstone projects in agile, remote-first environments.
           </p>
-        </header>
+        </motion.header>
 
         {/* Experience Timeline */}
         <div className="relative">
           {/* Timeline line (hidden on mobile) */}
           <div 
-            className="absolute left-0 top-0 bottom-0 w-px bg-border hidden md:block" 
+            className="absolute left-0 top-0 bottom-0 w-px bg-linear-to-b from-border via-border to-transparent hidden md:block" 
             aria-hidden="true"
           />
 
           {/* Experience Cards */}
-          <div className="space-y-12">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            className="space-y-12"
+          >
             {experiences.map((exp, index) => (
-              <article
+              <motion.article
                 key={exp.id}
+                variants={cardVariants}
                 className="relative md:pl-8"
               >
                 {/* Timeline dot (hidden on mobile) */}
                 <div 
-                  className="absolute left-0 top-6 w-2 h-2 rounded-full bg-accent hidden md:block -translate-x-[3.5px]"
+                  className="absolute left-0 top-6 hidden md:block"
                   aria-hidden="true"
-                />
+                >
+                  <div className="relative">
+                    <div className="w-2 h-2 rounded-full bg-accent -translate-x-[3.5px]" />
+                    <div className="absolute inset-0 w-2 h-2 rounded-full bg-accent/20 animate-ping -translate-x-[3.5px]" />
+                  </div>
+                </div>
 
                 <Card className="group transition-[border-color,box-shadow] duration-200 hover:border-accent/50 hover:shadow-md">
                   <CardHeader>
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                       <div className="flex-1 space-y-1">
-                        <CardTitle className="text-2xl">{exp.company}</CardTitle>
-                        <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+                        <CardTitle className="text-2xl group-hover:text-accent transition-colors">
+                          {exp.company}
+                        </CardTitle>
+                        <div className="flex flex-col gap-1 text-sm">
                           <span className="font-semibold text-foreground">{exp.role}</span>
-                          <div className="flex flex-wrap items-center gap-2">
+                          <div className="flex flex-wrap items-center gap-2 text-muted-foreground">
                             <time dateTime={`${exp.startDate}/${exp.endDate}`}>
                               {exp.period}
                             </time>
-                            <span>•</span>
+                            <span aria-hidden="true">•</span>
                             <span>{typeLabels[exp.type]}</span>
                             {exp.location && (
                               <>
-                                <span>•</span>
+                                <span aria-hidden="true">•</span>
                                 <span>{exp.location}</span>
                               </>
                             )}
@@ -165,7 +211,7 @@ export default function ProfessionalExperience() {
                           href={exp.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 shrink-0"
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm shrink-0"
                           aria-label={`Visit ${exp.company} website`}
                         >
                           <svg 
@@ -193,20 +239,20 @@ export default function ProfessionalExperience() {
                       {exp.achievements.map((achievement, idx) => (
                         <li 
                           key={idx} 
-                          className="flex gap-3 text-sm text-muted-foreground leading-relaxed"
+                          className="flex gap-3 text-sm leading-relaxed"
                         >
                           <span className="text-accent mt-1.5 shrink-0" aria-hidden="true">▸</span>
-                          <span>{achievement}</span>
+                          <span className="text-foreground/80">{achievement}</span>
                         </li>
                       ))}
                     </ul>
 
                     {/* Technologies */}
-                    <div className="flex flex-wrap gap-1.5 pt-2">
+                    <div className="flex flex-wrap gap-2 pt-2">
                       {exp.technologies.map((tech) => (
                         <span 
                           key={tech}
-                          className="inline-block rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground"
+                          className="inline-block rounded-md bg-accent/5 px-3 py-1.5 text-xs font-medium text-foreground/70 border border-border hover:border-accent/30 hover:bg-accent/10 hover:text-foreground transition-colors"
                         >
                           {tech}
                         </span>
@@ -214,9 +260,9 @@ export default function ProfessionalExperience() {
                     </div>
                   </CardContent>
                 </Card>
-              </article>
+              </motion.article>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
