@@ -1,62 +1,212 @@
-"use client"
+'use client';
 
-import { useState } from "react"
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from './ThemeProvider';
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('about'); 
+  const { theme, toggleTheme, mounted } = useTheme();
 
   const links = [
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Skills", href: "#skills" },
-    { name: "Contact", href: "#contact" },
-  ]
+    { name: 'About', href: '#about' },
+    { name: 'Experience', href: '#experience' },
+    { name: 'Skills', href: '#skills' },
+    { name: 'Contact', href: '#contact' },
+  ];
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+        if (visibleEntries.length > 0) {
+          visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          setActiveSection(visibleEntries[0].target.id);
+        }
+      },
+      { 
+        rootMargin: '-20% 0px -50% 0px', 
+        threshold: [0, 0.25, 0.5, 0.75, 1], 
+      }
+    );
+
+    links.forEach((link) => {
+      const element = document.querySelector(link.href);
+      if (element) observer.observe(element);
+    });
+
+    const handleScroll = () => {
+      if (window.scrollY < 100) {
+        setActiveSection('about');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
+    <nav 
+      className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md supports-backdrop-filter:bg-background/80"
+      aria-label="Main navigation"
+    >
       <div className="mx-auto max-w-6xl px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold text-accent">JWC</div>
+          <a 
+            href="#about" 
+            onClick={(e) => handleLinkClick(e, '#about')}
+            className="text-2xl font-bold text-accent hover:text-accent/80 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-sm"
+            aria-label="Jon Wayne Cabusbusan - Home"
+          >
+            jnwync
+          </a>
 
-          {/* Desktop Menu */}
-          <div className="hidden gap-8 md:flex">
-            {links.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-accent"
-              >
-                {link.name}
-              </a>
-            ))}
+          <div className="hidden gap-1 md:flex items-center">
+            {links.map((link) => {
+              const isActive = activeSection === link.href.slice(1);
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleLinkClick(e, link.href)}
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-md focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
+                    isActive
+                      ? 'text-accent'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {link.name}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeSection"
+                      className="absolute inset-0 bg-accent/10 rounded-md -z-10"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </a>
+              );
+            })}
+
+            <button
+              onClick={toggleTheme}
+              className="ml-2 p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/10 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              {!mounted ? (
+                <div className="w-5 h-5" /> 
+              ) : theme === 'dark' ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden" aria-label="Toggle menu">
-            <div className="flex flex-col gap-1.5">
-              <div className="h-0.5 w-6 bg-foreground transition-all" />
-              <div className="h-0.5 w-6 bg-foreground transition-all" />
-              <div className="h-0.5 w-6 bg-foreground transition-all" />
-            </div>
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-md text-muted-foreground hover:text-foreground transition-colors"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              {!mounted ? (
+                <div className="w-5 h-5" />
+              ) : theme === 'dark' ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
+
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded-md text-foreground hover:bg-accent/10 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+            >
+              <div className="flex flex-col gap-1.5 w-6">
+                <motion.div
+                  animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                  className="h-0.5 w-6 bg-foreground origin-center"
+                />
+                <motion.div
+                  animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+                  className="h-0.5 w-6 bg-foreground"
+                />
+                <motion.div
+                  animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                  className="h-0.5 w-6 bg-foreground origin-center"
+                />
+              </div>
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="mt-4 flex flex-col gap-4 md:hidden">
-            {links.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-accent"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-        )}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              id="mobile-menu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+              className="overflow-hidden md:hidden"
+            >
+              <div className="flex flex-col gap-1 pt-4 pb-2">
+                {links.map((link) => {
+                  const isActive = activeSection === link.href.slice(1);
+                  return (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      onClick={(e) => handleLinkClick(e, link.href)}
+                      className={`px-4 py-3 text-sm font-medium rounded-md transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
+                        isActive
+                          ? 'text-accent bg-accent/10'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-accent/5'
+                      }`}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {link.name}
+                    </a>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
-  )
+  );
 }
