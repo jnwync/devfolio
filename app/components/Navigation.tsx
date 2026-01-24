@@ -20,20 +20,25 @@ export default function Navigation() {
     const observer = new IntersectionObserver(
       (entries) => {
         const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+        
         if (visibleEntries.length > 0) {
           visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-          setActiveSection(visibleEntries[0].target.id);
+          const mostVisibleSection = visibleEntries[0].target.id;
+          
+          setActiveSection(mostVisibleSection);
         }
       },
       { 
-        rootMargin: '-20% 0px -50% 0px', 
-        threshold: [0, 0.25, 0.5, 0.75, 1], 
+        rootMargin: '-10% 0px -60% 0px', 
+        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1], 
       }
     );
 
     links.forEach((link) => {
       const element = document.querySelector(link.href);
-      if (element) observer.observe(element);
+      if (element) {
+        observer.observe(element);
+      }
     });
 
     const handleScroll = () => {

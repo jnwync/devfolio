@@ -168,6 +168,8 @@ export default function ProfessionalExperience() {
               <motion.article
                 key={exp.id}
                 variants={cardVariants}
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 className="relative md:pl-8"
               >
                 {/* Timeline dot (hidden on mobile) */}
@@ -181,7 +183,7 @@ export default function ProfessionalExperience() {
                   </div>
                 </div>
 
-                <Card className="group transition-[border-color,box-shadow] duration-200 hover:border-accent/50 hover:shadow-md">
+                <Card className="group relative overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-accent/50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)] before:absolute before:inset-0 before:bg-linear-to-br before:from-accent/5 before:to-primary/5 before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100">
                   <CardHeader>
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                       <div className="flex-1 space-y-1">
@@ -211,7 +213,7 @@ export default function ProfessionalExperience() {
                           href={exp.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm shrink-0"
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.25)] transition-all duration-300 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm shrink-0"
                           aria-label={`Visit ${exp.company} website`}
                         >
                           <svg 

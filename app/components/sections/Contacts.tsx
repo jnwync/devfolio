@@ -93,10 +93,10 @@ export default function Contact() {
             Get In Touch
           </p>
           <h2 id="contact-heading" className="text-balance text-4xl font-bold md:text-5xl">
-            Let's Work Together
+            Let's Build Something Great
           </h2>
-          <p className="max-w-2xl mx-auto text-muted-foreground">
-            Available for freelance projects, contract work, and collaboration opportunities. Feel free to reach out via email or connect on social platforms.
+          <p className="max-w-2xl mx-auto text-muted-foreground text-lg">
+            I'm always excited to collaborate on impactful projects. Whether you need a full-stack developer, want to discuss an idea, or just say hi—drop me a line!
           </p>
 
           {/* Availability Badge */}
@@ -149,15 +149,15 @@ export default function Contact() {
                   href={link.href}
                   target={link.href.startsWith('http') ? '_blank' : undefined}
                   rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className="group flex items-center justify-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium transition-[border-color,box-shadow] hover:border-accent/50 hover:shadow-md focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+                  className="group flex items-center justify-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium transition-[border-color,box-shadow,transform] hover:border-accent/50 hover:shadow-[0_4px_20px_rgba(var(--accent-rgb),0.15)] hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 duration-300"
                 >
-                  <span className="text-accent group-hover:scale-110 transition-transform">
+                  <span className="text-accent group-hover:scale-110 transition-transform duration-300">
                     {link.icon}
                   </span>
-                  <span className="text-foreground">{link.label}</span>
+                  <span className="text-foreground group-hover:text-accent transition-colors duration-300">{link.label}</span>
                   {link.href.startsWith('http') && (
                     <svg 
-                      className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" 
+                      className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"

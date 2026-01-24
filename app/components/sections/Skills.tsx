@@ -1,42 +1,74 @@
 'use client';
 
 import { motion, type Variants } from 'framer-motion';
+import { useState } from 'react';
+
+interface Skill {
+  name: string;
+  proficiency: number; // 0-100
+  yearsUsed: number;
+}
 
 interface SkillCategory {
   title: string;
   description: string;
-  skills: string[];
+  skills: Skill[];
 }
 
 export default function Skills() {
-  // Featured top skills (most relevant for frontend roles)
-  const featuredSkills = [
-    'React',
-    'Next.js',
-    'TypeScript',
-    'TailwindCSS',
+  // const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+
+  const featuredSkills: Skill[] = [
+    { name: 'React', proficiency: 90, yearsUsed: 2 },
+    { name: 'Next.js', proficiency: 85, yearsUsed: 2 },
+    { name: 'TypeScript', proficiency: 85, yearsUsed: 2 },
+    { name: 'TailwindCSS', proficiency: 90, yearsUsed: 2 },
   ];
 
   const skillCategories: SkillCategory[] = [
     {
       title: 'Frontend Development',
       description: 'Modern JavaScript frameworks and libraries',
-      skills: ['React', 'Next.js', 'React Native', 'TypeScript', 'JavaScript (ES6+)'],
+      skills: [
+        { name: 'React', proficiency: 90, yearsUsed: 2 },
+        { name: 'Next.js', proficiency: 85, yearsUsed: 2 },
+        { name: 'React Native', proficiency: 75, yearsUsed: 1 },
+        { name: 'TypeScript', proficiency: 85, yearsUsed: 2 },
+        { name: 'JavaScript (ES6+)', proficiency: 90, yearsUsed: 3 },
+      ],
     },
     {
       title: 'Styling & UI',
       description: 'Component-driven design systems',
-      skills: ['TailwindCSS', 'CSS3', 'Responsive Design', 'Accessibility (WCAG)'],
+      skills: [
+        { name: 'TailwindCSS', proficiency: 90, yearsUsed: 2 },
+        { name: 'CSS3', proficiency: 85, yearsUsed: 3 },
+        { name: 'Responsive Design', proficiency: 90, yearsUsed: 3 },
+        { name: 'Accessibility (WCAG)', proficiency: 80, yearsUsed: 2 },
+      ],
     },
     {
       title: 'Backend & Database',
       description: 'Full-stack capabilities and data persistence',
-      skills: ['Node.js', 'Express.js', 'PostgreSQL', 'Prisma ORM', 'Firebase', 'REST APIs'],
+      skills: [
+        { name: 'Node.js', proficiency: 80, yearsUsed: 2 },
+        { name: 'Express.js', proficiency: 75, yearsUsed: 2 },
+        { name: 'PostgreSQL', proficiency: 75, yearsUsed: 2 },
+        { name: 'Prisma ORM', proficiency: 80, yearsUsed: 2 },
+        { name: 'Firebase', proficiency: 75, yearsUsed: 2 },
+        { name: 'REST APIs', proficiency: 85, yearsUsed: 2 },
+      ],
     },
     {
       title: 'Tools & Workflow',
       description: 'Professional development environment',
-      skills: ['Git/GitHub', 'Agile/Scrum', 'Postman', 'ESLint', 'VS Code'],
+      skills: [
+        { name: 'Git/GitHub', proficiency: 85, yearsUsed: 3 },
+        { name: 'Agile/Scrum', proficiency: 80, yearsUsed: 2 },
+        { name: 'Postman', proficiency: 85, yearsUsed: 2 },
+        { name: 'ESLint', proficiency: 80, yearsUsed: 2 },
+        { name: 'VS Code', proficiency: 90, yearsUsed: 3 },
+      ],
     },
   ];
 
@@ -109,23 +141,45 @@ export default function Skills() {
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
           className="mb-12"
         >
-          <h3 className="text-sm font-semibold text-foreground mb-4">Core Competencies</h3>
-          <div className="flex flex-wrap gap-3">
+          <h3 className="text-sm font-semibold text-foreground mb-6">Core Competencies</h3>
+          <div className="grid gap-6 sm:grid-cols-2">
             {featuredSkills.map((skill, index) => (
-              <motion.span
-                key={skill}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+              <motion.div
+                key={skill.name}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{
-                  duration: 0.4,
-                  ease: 'easeOut',
-                  delay: 0.3 + index * 0.1,
+                  type: 'spring',
+                  damping: 20,
+                  stiffness: 100,
+                  delay: 0.1 + index * 0.1,
                 }}
-                className="inline-flex items-center rounded-lg bg-accent/10 px-4 py-2 text-sm font-semibold text-accent border border-accent/20 hover:bg-accent/20 transition-colors"
+                className="group"
               >
-                {skill}
-              </motion.span>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors">
+                    {skill.name}
+                  </span>
+                  <span className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                    {skill.yearsUsed}yr • {skill.proficiency}%
+                  </span>
+                </div>
+                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${skill.proficiency}%` }}
+                    viewport={{ once: true }}
+                    transition={{
+                      type: 'spring',
+                      damping: 20,
+                      stiffness: 80,
+                      delay: 0.2 + index * 0.1,
+                    }}
+                    className="h-full bg-linear-to-r from-accent to-primary rounded-full"
+                  />
+                </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -159,11 +213,11 @@ export default function Skills() {
               >
                 {category.skills.map((skill, index) => (
                   <motion.span
-                    key={skill}
+                    key={skill.name}
                     variants={badgeVariants}
                     className="inline-block rounded-md bg-muted px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent/10 hover:text-accent transition-colors"
                   >
-                    {skill}
+                    {skill.name}
                   </motion.span>
                 ))}
               </motion.div>

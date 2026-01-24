@@ -37,6 +37,7 @@
   /* Accent - Bright magenta */
   --accent: oklch(0.60 0.24 320);
   --accent-foreground: oklch(0.98 0.003 280);
+  --accent-rgb: 203, 56, 181; /* For rgba() usage in animations */
   
   /* Semantic colors */
   --destructive: oklch(0.55 0.22 25);
@@ -101,6 +102,7 @@
   /* Accent - Bright magenta (more saturated for dark mode) */
   --accent: oklch(0.68 0.22 320);
   --accent-foreground: oklch(0.10 0.015 280);
+  --accent-rgb: 227, 81, 205; /* For rgba() usage in animations */
   
   /* Semantic colors - Adjusted for dark backgrounds */
   --destructive: oklch(0.58 0.22 25);

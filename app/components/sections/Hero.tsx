@@ -1,18 +1,17 @@
 'use client';
 
-import { useTheme } from '../ThemeProvider';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import HeroImage from '../HeroImage';
 import { Button } from '@/components/ui/button';
 
 const roles = [
   'Full-Stack Web Developer',
-  'React & Next.js Developer',
-  'Product-Focused Engineer',
+  'React & Next.js Specialist',
+  'Building Digital Experiences',
 ];
 
 export default function Hero() {
-  const { theme, toggleTheme, mounted } = useTheme();
   const [currentRole, setCurrentRole] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -59,11 +58,30 @@ export default function Hero() {
 
   return (
     <section 
+      id="about"
       className="relative min-h-dvh flex items-center overflow-hidden"
       aria-label="Hero introduction"
     >
-      {/* Background with subtle grid pattern */}
+      {/* Animated gradient mesh background */}
       <div className="absolute inset-0 bg-background -z-10" />
+      <motion.div
+        className="absolute inset-0 -z-10 opacity-30"
+        style={{
+          background: `
+            radial-gradient(circle at 20% 50%, var(--accent) 0%, transparent 50%),
+            radial-gradient(circle at 80% 50%, var(--primary) 0%, transparent 50%)
+          `,
+          filter: 'blur(80px)',
+        }}
+        animate={{
+          backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: 'linear',
+        }}
+      />
       <div 
         className="absolute inset-0 -z-10 opacity-[0.015]"
         style={{
@@ -72,22 +90,6 @@ export default function Hero() {
         }}
       />
       <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-muted/30 -z-10" />
-      
-      {/* Theme Toggle */}
-      <div className="absolute top-6 right-6 md:top-8 md:right-8 z-10">
-        <button
-          aria-label="Toggle theme"
-          onClick={toggleTheme}
-          className="group inline-flex items-center gap-2 rounded-full px-4 py-2 bg-card border border-border hover:border-accent transition-colors focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
-        >
-          <span className="text-sm">
-            {!mounted ? '🌙' : theme === 'dark' ? '☀️' : '🌙'}
-          </span>
-          <span className="text-sm opacity-0 group-hover:opacity-100 transition-opacity max-sm:hidden">
-            {!mounted ? 'Dark' : theme === 'dark' ? 'Light' : 'Dark'}
-          </span>
-        </button>
-      </div>
 
       {/* Main Container */}
       <div className="w-full max-w-7xl mx-auto px-6 py-16 md:py-24">
