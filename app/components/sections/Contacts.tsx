@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 interface ContactLink {
   label: string;
@@ -11,6 +12,19 @@ interface ContactLink {
 }
 
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+  const email = 'jonwayne.cabusbusan@gmail.com';
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy email:', err);
+    }
+  };
+
   const contactLinks: ContactLink[] = [
     {
       label: 'Email',
@@ -121,30 +135,66 @@ export default function Contact() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
-          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto"
+          className="space-y-6 max-w-4xl mx-auto"
         >
-          {contactLinks.map((link) => (
-            <motion.div key={link.label} variants={itemVariants}>
-              {link.primary ? (
-                <Button asChild size="lg" className="w-full group">
-                  <a 
-                    href={link.href}
-                    className="inline-flex items-center justify-center gap-2"
+          {/* Primary Email Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <motion.div variants={itemVariants}>
+              <Button asChild size="lg" className="group">
+                <a 
+                  href={`mailto:${email}`}
+                  className="inline-flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span>Send Email</span>
+                  <svg 
+                    className="w-4 h-4 transition-transform group-hover:translate-x-0.5" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
-                    {link.icon}
-                    <span>{link.label}</span>
-                    <svg 
-                      className="w-4 h-4 transition-transform group-hover:translate-x-0.5" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </Button>
+            </motion.div>
+            
+            <motion.div variants={itemVariants}>
+              <Button
+                onClick={handleCopyEmail}
+                variant="outline"
+                size="lg"
+                className="group relative"
+              >
+                {copied ? (
+                  <>
+                    <svg className="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                  </a>
-                </Button>
-              ) : (
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                    </svg>
+                    <span>Copy Email</span>
+                  </>
+                )}
+              </Button>
+            </motion.div>
+          </div>
+
+          {/* Social Links Grid */}
+          <motion.div
+            variants={containerVariants}
+            className="grid gap-4 sm:grid-cols-3 pt-4"
+          >
+            {contactLinks.filter(link => !link.primary).map((link) => (
+              <motion.div key={link.label} variants={itemVariants}>
                 <a
                   href={link.href}
                   target={link.href.startsWith('http') ? '_blank' : undefined}
@@ -167,9 +217,9 @@ export default function Contact() {
                     </svg>
                   )}
                 </a>
-              )}
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
       </div>
     </section>

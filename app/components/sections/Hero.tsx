@@ -92,14 +92,14 @@ export default function Hero() {
       <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-muted/30 -z-10" />
 
       {/* Main Container */}
-      <div className="w-full max-w-7xl mx-auto px-6 py-16 md:py-24">
+      <div className="w-full max-w-7xl mx-auto px-6 py-20 md:py-32">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           
           {/* Left: Content */}
           <div className="space-y-6 md:space-y-8">
             {/* Name with gradient */}
             <h1
-              className={`text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight motion-safe:transition-all motion-safe:duration-700 ${
+              className={`text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight motion-safe:transition-all motion-safe:duration-700 ${
                 isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
             >
@@ -129,7 +129,7 @@ export default function Hero() {
                 isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
             >
-              I build clean, high-performance digital products focused on real users, accessibility, and long-term impact.
+              I craft clean, high-performance web experiences that solve real problems. From database optimization to accessible UI, I focus on building products that users love and businesses trust.
             </p>
 
             {/* CTAs */}

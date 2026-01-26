@@ -192,12 +192,17 @@ export default function Skills() {
           viewport={{ once: true, margin: '-100px' }}
           className="grid gap-8 md:grid-cols-2"
         >
-          {skillCategories.map((category) => (
+          {skillCategories.map((category, index) => (
             <motion.div
               key={category.title}
               variants={itemVariants}
               className="group"
             >
+              {/* Visual separator for second row on desktop */}
+              {index >= 2 && (
+                <div className="hidden md:block border-t border-border/50 mb-6 -mt-2" aria-hidden="true" />
+              )}
+              
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-foreground mb-1">
                   {category.title}
