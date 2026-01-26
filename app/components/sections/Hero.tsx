@@ -139,8 +139,8 @@ export default function Hero() {
               }`}
             >
               <Button asChild size="lg">
-                <a href="#projects" className="group">
-                  <span>View Projects</span>
+                <a href="#experience" className="group">
+                  <span>View Experience</span>
                   <span className="transition-transform group-hover:translate-x-0.5">→</span>
                 </a>
               </Button>
