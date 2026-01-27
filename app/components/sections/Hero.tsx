@@ -59,7 +59,7 @@ export default function Hero() {
   return (
     <section 
       id="about"
-      className="relative min-h-dvh flex items-center overflow-hidden"
+      className="scroll-mt-20 relative min-h-dvh flex items-center overflow-hidden"
       aria-label="Hero introduction"
     >
       {/* Animated gradient mesh background */}
@@ -99,7 +99,7 @@ export default function Hero() {
           <div className="space-y-6 md:space-y-8">
             {/* Name with gradient */}
             <h1
-              className={`text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight motion-safe:transition-all motion-safe:duration-700 ${
+              className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight motion-safe:transition-all motion-safe:duration-700 ${
                 isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
             >
@@ -110,9 +110,11 @@ export default function Hero() {
 
             {/* Role */}
             <h2
-              className={`text-xl md:text-3xl lg:text-4xl font-medium text-muted-foreground motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-200 ${
+              className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-muted-foreground motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-200 ${
                 isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
+              aria-live="polite"
+              aria-atomic="true"
             >
               I'm a{' '}
               <span className="relative inline-block min-h-[1.5em] min-w-[280px] sm:min-w-[380px] md:min-w-[480px]">

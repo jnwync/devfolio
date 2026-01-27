@@ -8,7 +8,7 @@ import Contact from './components/sections/Contacts';
 
 export default function Home() {
   return (
-    <main>
+    <main id="main-content">
       <Navigation />
       <Hero />
       <ProfessionalExperience />

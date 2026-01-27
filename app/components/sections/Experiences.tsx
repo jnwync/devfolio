@@ -153,7 +153,7 @@ export default function ProfessionalExperience() {
     <section 
       id="experience" 
       aria-labelledby="experience-heading" 
-      className="border-t border-border py-20 md:py-32"
+      className="scroll-mt-20 border-t border-border py-20 md:py-32"
     >
       <div className="mx-auto max-w-6xl px-6">
         {/* Section Header */}
