@@ -207,10 +207,10 @@ export default function Navigation() {
           {isOpen && (
             <motion.div
               id="mobile-menu"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2, ease: 'easeInOut' }}
+              initial={{ maxHeight: 0, opacity: 0 }}
+              animate={{ maxHeight: 500, opacity: 1 }}
+              exit={{ maxHeight: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
               className="overflow-hidden md:hidden"
             >
               <div className="flex flex-col gap-1 pt-4 pb-2">

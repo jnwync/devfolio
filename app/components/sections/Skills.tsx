@@ -167,8 +167,8 @@ export default function Skills() {
                 </div>
                 <div className="h-2 bg-muted rounded-full overflow-hidden">
                   <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.proficiency}%` }}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: skill.proficiency / 100 }}
                     viewport={{ once: true }}
                     transition={{
                       type: 'spring',
@@ -176,7 +176,7 @@ export default function Skills() {
                       stiffness: 80,
                       delay: 0.2 + index * 0.1,
                     }}
-                    className="h-full bg-linear-to-r from-accent to-primary rounded-full"
+                    className="h-full bg-linear-to-r from-accent to-primary rounded-full origin-left"
                   />
                 </div>
               </motion.div>
