@@ -17,20 +17,29 @@ export default function Navigation() {
   ];
 
   useEffect(() => {
+    const sections = new Map<string, number>();
+    
     const observer = new IntersectionObserver(
       (entries) => {
-        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
-        
-        if (visibleEntries.length > 0) {
-          visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-          const mostVisibleSection = visibleEntries[0].target.id;
-          
-          setActiveSection(mostVisibleSection);
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            sections.set(entry.target.id, entry.intersectionRatio);
+          } else {
+            sections.delete(entry.target.id);
+          }
+        });
+
+        // Find the section with the highest intersection ratio
+        if (sections.size > 0) {
+          const mostVisible = Array.from(sections.entries()).reduce((max, current) => 
+            current[1] > max[1] ? current : max
+          );
+          setActiveSection(mostVisible[0]);
         }
       },
       { 
-        rootMargin: '-10% 0px -60% 0px', 
-        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1], 
+        rootMargin: '-80px 0px -80px 0px',
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], 
       }
     );
 
@@ -41,17 +50,9 @@ export default function Navigation() {
       }
     });
 
-    const handleScroll = () => {
-      if (window.scrollY < 100) {
-        setActiveSection('about');
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
     return () => {
       observer.disconnect();
-      window.removeEventListener('scroll', handleScroll);
+      sections.clear();
     };
   }, []);
 
@@ -59,8 +60,23 @@ export default function Navigation() {
     e.preventDefault();
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setIsOpen(false);
+      const sectionId = href.slice(1); // Remove the '#' to get the id
+      setActiveSection(sectionId); // Immediately update active section
+      setIsOpen(false); // Close mobile menu first
+      
+      // Small delay to ensure menu close animation completes
+      setTimeout(() => {
+        // Get actual nav height dynamically
+        const nav = document.querySelector('nav');
+        const navHeight = nav?.getBoundingClientRect().height || 64;
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition - navHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }, 100);
     }
   };
 
@@ -73,10 +89,19 @@ export default function Navigation() {
   }, []);
 
   return (
-    <nav 
-      className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md supports-backdrop-filter:bg-background/80"
-      aria-label="Main navigation"
-    >
+    <>
+      {/* Skip to main content link for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:px-4 focus:py-2 focus:bg-accent focus:text-accent-foreground focus:rounded-md focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+      
+      <nav 
+        className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md supports-backdrop-filter:bg-background/80"
+        aria-label="Main navigation"
+      >
       <div className="mx-auto max-w-6xl px-6 py-4">
         <div className="flex items-center justify-between">
           <a 
@@ -117,7 +142,7 @@ export default function Navigation() {
 
             <button
               onClick={toggleTheme}
-              className="ml-2 p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/10 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+              className="ml-2 p-3 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/10 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             >
               {!mounted ? (
@@ -137,7 +162,7 @@ export default function Navigation() {
           <div className="flex items-center gap-2 md:hidden">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-md text-muted-foreground hover:text-foreground transition-colors"
+              className="p-3 rounded-md text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             >
               {!mounted ? (
@@ -155,7 +180,7 @@ export default function Navigation() {
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-md text-foreground hover:bg-accent/10 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+              className="p-3 rounded-md text-foreground hover:bg-accent/10 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
@@ -213,5 +238,6 @@ export default function Navigation() {
         </AnimatePresence>
       </div>
     </nav>
+    </>
   );
 }
