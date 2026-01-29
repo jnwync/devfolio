@@ -2,75 +2,12 @@
 
 import { motion, type Variants } from 'framer-motion';
 import { useState } from 'react';
-
-interface Skill {
-  name: string;
-  proficiency: number; // 0-100
-  yearsUsed: number;
-}
-
-interface SkillCategory {
-  title: string;
-  description: string;
-  skills: Skill[];
-}
+import { portfolioData } from '@/data/portfolio';
 
 export default function Skills() {
-  // const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
-  const featuredSkills: Skill[] = [
-    { name: 'React', proficiency: 90, yearsUsed: 2 },
-    { name: 'Next.js', proficiency: 85, yearsUsed: 2 },
-    { name: 'TypeScript', proficiency: 85, yearsUsed: 2 },
-    { name: 'TailwindCSS', proficiency: 90, yearsUsed: 2 },
-  ];
-
-  const skillCategories: SkillCategory[] = [
-    {
-      title: 'Frontend Development',
-      description: 'Modern JavaScript frameworks and libraries',
-      skills: [
-        { name: 'React', proficiency: 90, yearsUsed: 2 },
-        { name: 'Next.js', proficiency: 85, yearsUsed: 2 },
-        { name: 'React Native', proficiency: 75, yearsUsed: 1 },
-        { name: 'TypeScript', proficiency: 85, yearsUsed: 2 },
-        { name: 'JavaScript (ES6+)', proficiency: 90, yearsUsed: 3 },
-      ],
-    },
-    {
-      title: 'Styling & UI',
-      description: 'Component-driven design systems',
-      skills: [
-        { name: 'TailwindCSS', proficiency: 90, yearsUsed: 2 },
-        { name: 'CSS3', proficiency: 85, yearsUsed: 3 },
-        { name: 'Responsive Design', proficiency: 90, yearsUsed: 3 },
-        { name: 'Accessibility (WCAG)', proficiency: 80, yearsUsed: 2 },
-      ],
-    },
-    {
-      title: 'Backend & Database',
-      description: 'Full-stack capabilities and data persistence',
-      skills: [
-        { name: 'Node.js', proficiency: 80, yearsUsed: 2 },
-        { name: 'Express.js', proficiency: 75, yearsUsed: 2 },
-        { name: 'PostgreSQL', proficiency: 75, yearsUsed: 2 },
-        { name: 'Prisma ORM', proficiency: 80, yearsUsed: 2 },
-        { name: 'Firebase', proficiency: 75, yearsUsed: 2 },
-        { name: 'REST APIs', proficiency: 85, yearsUsed: 2 },
-      ],
-    },
-    {
-      title: 'Tools & Workflow',
-      description: 'Professional development environment',
-      skills: [
-        { name: 'Git/GitHub', proficiency: 85, yearsUsed: 3 },
-        { name: 'Agile/Scrum', proficiency: 80, yearsUsed: 2 },
-        { name: 'Postman', proficiency: 85, yearsUsed: 2 },
-        { name: 'ESLint', proficiency: 80, yearsUsed: 2 },
-        { name: 'VS Code', proficiency: 90, yearsUsed: 3 },
-      ],
-    },
-  ];
+  const featuredSkills = portfolioData.featuredSkills;
+  const skillCategories = portfolioData.skillCategories;
 
   // Animation variants with proper typing
   const containerVariants: Variants = {

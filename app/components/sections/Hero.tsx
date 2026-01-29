@@ -4,14 +4,12 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import HeroImage from '../HeroImage';
 import { Button } from '@/components/ui/button';
-
-const roles = [
-  'Full-Stack Web Developer',
-  'React & Next.js Specialist',
-  'Building Digital Experiences',
-];
+import { portfolioData } from '@/data/portfolio';
 
 export default function Hero() {
+  const { personal } = portfolioData;
+  const roles = personal.roles;
+  
   const [currentRole, setCurrentRole] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -104,7 +102,7 @@ export default function Hero() {
               }`}
             >
               <span className="bg-linear-to-r from-foreground via-accent to-foreground bg-clip-text text-transparent">
-                Jon Wayne Cabusbusan
+                {personal.name}
               </span>
             </h1>
 
@@ -131,7 +129,7 @@ export default function Hero() {
                 isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
             >
-              I craft clean, high-performance web experiences that solve real problems. From database optimization to accessible UI, I focus on building products that users love and businesses trust.
+              {personal.bio}
             </p>
 
             {/* CTAs */}
