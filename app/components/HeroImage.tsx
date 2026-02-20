@@ -29,7 +29,6 @@ export default function HeroImage() {
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           onLoad={() => {
-            console.log('Image loaded successfully');
             setIsLoaded(true);
           }}
           onError={(e) => {

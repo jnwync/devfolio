@@ -1,7 +1,6 @@
 'use client';
 
 import { motion, type Variants } from 'framer-motion';
-import { useState } from 'react';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Skills() {
@@ -70,7 +69,7 @@ export default function Skills() {
           </p>
         </motion.header>
 
-        {/* Featured Skills */}
+        {/* Primary Stack */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -78,45 +77,19 @@ export default function Skills() {
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
           className="mb-12"
         >
-          <h3 className="text-sm font-semibold text-foreground mb-6">Core Competencies</h3>
-          <div className="grid gap-6 sm:grid-cols-2">
+          <h3 className="text-sm font-semibold text-foreground mb-6">Primary Stack</h3>
+          <div className="flex flex-wrap gap-3">
             {featuredSkills.map((skill, index) => (
-              <motion.div
+              <motion.span
                 key={skill.name}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{
-                  type: 'spring',
-                  damping: 20,
-                  stiffness: 100,
-                  delay: 0.1 + index * 0.1,
-                }}
-                className="group"
+                transition={{ duration: 0.3, ease: 'easeOut', delay: 0.1 + index * 0.05 }}
+                className="inline-block rounded-md border border-accent/40 bg-accent/5 px-4 py-2 text-sm font-semibold text-accent hover:border-accent hover:bg-accent/10 transition-colors"
               >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors">
-                    {skill.name}
-                  </span>
-                  <span className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                    {skill.yearsUsed}yr • {skill.proficiency}%
-                  </span>
-                </div>
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: skill.proficiency / 100 }}
-                    viewport={{ once: true }}
-                    transition={{
-                      type: 'spring',
-                      damping: 20,
-                      stiffness: 80,
-                      delay: 0.2 + index * 0.1,
-                    }}
-                    className="h-full bg-linear-to-r from-accent to-primary rounded-full origin-left"
-                  />
-                </div>
-              </motion.div>
+                {skill.name}
+              </motion.span>
             ))}
           </div>
         </motion.div>

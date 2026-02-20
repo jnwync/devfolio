@@ -31,6 +31,8 @@ export interface Project {
   achievements: string[];
   technologies: string[];
   link?: string;
+  github?: string;
+  image?: string;
 }
 
 export interface Skill {
@@ -101,7 +103,6 @@ export const portfolioData: PortfolioData = {
     roles: [
       'Full-Stack Web Developer',
       'React & Next.js Specialist',
-      'Building Digital Experiences',
     ],
     availability: {
       status: 'available',
@@ -124,11 +125,13 @@ export const portfolioData: PortfolioData = {
       location: 'Hybrid',
       description: 'Mobile-first web application enabling MSMEs to access wholesale packaging at reduced minimum order quantities (MOQs), improving supply-chain accessibility for small businesses.',
       achievements: [
-        'Built and maintained a mobile-first web app enabling MSMEs to access wholesale packaging at reduced MOQs, improving supply-chain accessibility for small businesses',
-        'Developed and deployed back-end API routes and database schemas, ensuring data integrity across sender and courier workflows',
-        'Collaborated on UI/UX design decisions and supported end-to-end production deployment, delivering a smooth, responsive experience on both mobile and desktop',
+        'Architected key front-end flows with Next.js App Router and server components, covering product catalog, order creation, and supplier-facing dashboards',
+        'Designed and deployed PostgreSQL schemas using Prisma ORM, modeling cascading relations across supplier, order, and courier entities with foreign-key integrity constraints',
+        'Iterated on mobile checkout UX through direct client collaboration, translating wireframe feedback into responsive, production-ready interfaces on both iOS and Android web views',
       ],
-      impact: [],
+      impact: [
+        { metric: '3', description: 'Core workflow modules shipped (supplier, sender, courier)' },
+      ],
       technologies: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'Prisma', 'Firebase'],
       link: 'https://www.packup.ph/',
     },
@@ -143,11 +146,14 @@ export const portfolioData: PortfolioData = {
       location: 'Hybrid',
       description: 'Next.js 15 + PostgreSQL e-commerce platform for MSMEs, covering product listings, cart, checkout, and a social feed with real-time updates.',
       achievements: [
-        'Contributed full-stack features to a Next.js 15 + PostgreSQL e-commerce platform for MSMEs, covering product listings, cart, checkout, and a social feed with likes, comments, and real-time updates',
-        'Implemented Supabase Auth (JWT + OAuth) and integrated Prisma ORM with versioned migrations, maintaining a clean, type-safe database layer across 6 migration iterations',
-        'Participated in agile ceremonies (stand-ups, sprint reviews) and provided design feedback, driving continuous improvement of platform features and performance',
+        'Implemented a real-time social feed with optimistic UI updates using Supabase Realtime, enabling instant likes and comment threads across the product marketplace',
+        'Configured Supabase Auth with JWT + Google OAuth, integrating role-based access control and persisting sessions across server and client components in Next.js 15',
+        'Maintained a versioned Prisma migration history across 6 schema iterations, performing zero-data-loss upgrades in both staging and production environments',
       ],
-      impact: [],
+      impact: [
+        { metric: '6', description: 'Versioned DB migrations in production' },
+        { metric: '2', description: 'Auth strategies integrated (JWT + Google OAuth)' },
+      ],
       technologies: ['Next.js', 'React', 'PostgreSQL', 'Supabase', 'Prisma', 'TypeScript'],
     },
     {
@@ -161,11 +167,13 @@ export const portfolioData: PortfolioData = {
       location: 'Remote',
       description: 'Patient portal and hospital booking web application for healthcare facility management.',
       achievements: [
-        'Led front-end development of a patient portal and hospital booking system, delivering a responsive UI/UX serving both patients and admin staff',
-        'Refactored back-end logic and optimized database structure, measurably reducing load times and enabling scalable, reliable performance under high-volume booking operations',
-        'Shipped to production in a 2-developer agile team, contributing to design discussions, sprint reviews, and end-to-end QA before release',
+        'Owned the patient-facing portal UI with React and TailwindCSS, building scheduling, appointment history, and admin management views from Figma designs to production',
+        'Refactored back-end API routes and restructured the PostgreSQL schema, reducing average query latency and improving reliability under concurrent booking loads',
+        'Coordinated end-to-end QA in a 2-developer agile team — writing regression test cases, validating against production data, and clearing release gates before each sprint deployment',
       ],
-      impact: [],
+      impact: [
+        { metric: '2', description: 'Developer agile delivery team' },
+      ],
       technologies: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'TailwindCSS'],
     },
     {
@@ -179,11 +187,14 @@ export const portfolioData: PortfolioData = {
       location: 'Iloilo, Philippines',
       description: 'Government-backed interactive MSME map for Iloilo, enabling DTI admins to register, visualize, and monitor regional businesses.',
       achievements: [
-        'Built and deployed a government-backed interactive MSME map for Iloilo using Next.js, Firebase Firestore, and Google Maps API — enabling DTI admins to register, visualize, and monitor regional businesses',
-        'Designed a RESTful API layer with role-based access control (superadmin / admin), a two-step signup approval workflow, and cascading Firestore operations across related collections',
-        'Implemented Zod validation and end-to-end TypeScript type safety across API routes, form schemas, and Firestore utility abstractions, reducing runtime errors in production',
+        'Integrated the Google Maps JavaScript API with dynamic marker clustering and custom info windows, enabling DTI staff to visually monitor MSME density and filter by industry category across Iloilo',
+        'Designed a RESTful API layer with role-based access control (superadmin / admin), a two-step signup approval workflow, and cascading Firestore write operations across related business collections',
+        'Applied Zod schema validation end-to-end — across API route handlers, multi-step registration forms, and Firestore utility abstractions — eliminating a class of runtime type errors before production launch',
       ],
-      impact: [],
+      impact: [
+        { metric: '3', description: 'Access tiers with approval workflows (superadmin, admin, viewer)' },
+        { metric: '100%', description: 'TypeScript & Zod coverage across API routes and forms' },
+      ],
       technologies: ['Next.js', 'Firebase Firestore', 'Google Maps API', 'TypeScript', 'Zod', 'REST APIs'],
       link: 'https://dti6-industry-map.vercel.app/',
     },
@@ -193,6 +204,21 @@ export const portfolioData: PortfolioData = {
   // PROJECTS
   // ---------------------------------------------------------------------------
   projects: [
+    {
+      id: 'devfolio',
+      title: 'Devfolio — Personal Portfolio',
+      type: 'personal',
+      period: 'Jan 2026 - Present',
+      startDate: '2026-01',
+      endDate: '2026-02',
+      description: 'Fully custom portfolio built from scratch with a focus on accessibility, a production-grade design system, and a centralized data architecture — no templates used.',
+      achievements: [
+        'Built on Next.js 16 App Router and React 19 with Tailwind v4, using an oklch-based design token system covering full light/dark mode, semantic color roles, and smooth 200ms theme transitions with no FOUC',
+        'Achieved WCAG 2.1 compliance throughout — skip-to-content link, aria-labelledby on every section, aria-live on dynamic content, and prefers-reduced-motion support across all Framer Motion animations',
+        'Centralized all content in a single typed data file (portfolio.ts) with domain interfaces and utility functions, so every section updates from one place without touching component code',
+      ],
+      technologies: ['Next.js', 'React', 'TypeScript', 'TailwindCSS', 'Framer Motion'],
+    },
     {
       id: 'reisky',
       title: 'Reisky - Traditional Filipino Martial Arts Website',

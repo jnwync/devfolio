@@ -1,7 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion, type Variants } from 'framer-motion';
+import { FaGithub } from 'react-icons/fa';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Projects() {
@@ -79,6 +81,17 @@ export default function Projects() {
               className="relative"
             >
               <Card className="group relative overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-accent/50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)] before:absolute before:inset-0 before:bg-linear-to-br before:from-accent/5 before:to-primary/5 before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100">
+                {project.image && (
+                  <div className="relative -mt-6 w-full aspect-video border-b border-border bg-muted overflow-hidden">
+                    <Image
+                      src={project.image}
+                      alt={`Screenshot of ${project.title}`}
+                      fill
+                      className="object-cover object-top"
+                      sizes="(max-width: 1200px) 100vw, 800px"
+                    />
+                  </div>
+                )}
                 <CardHeader>
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="flex-1 space-y-1">
@@ -94,25 +107,41 @@ export default function Projects() {
                       </div>
                     </div>
 
-                    {project.link && (
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.25)] transition-all duration-300 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm shrink-0"
-                        aria-label={`Visit ${project.title} website`}
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                        <span className="hidden sm:inline">Visit Site</span>
-                      </a>
+                    {(project.github || project.link) && (
+                      <div className="flex items-center gap-3 shrink-0">
+                        {project.github && (
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.25)] transition-all duration-300 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm"
+                            aria-label={`View ${project.title} source code on GitHub`}
+                          >
+                            <FaGithub className="w-4 h-4" aria-hidden="true" />
+                            <span className="hidden sm:inline">Source</span>
+                          </a>
+                        )}
+                        {project.link && (
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.25)] transition-all duration-300 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm"
+                            aria-label={`Visit ${project.title} website`}
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                            <span className="hidden sm:inline">Visit Site</span>
+                          </a>
+                        )}
+                      </div>
                     )}
                   </div>
 

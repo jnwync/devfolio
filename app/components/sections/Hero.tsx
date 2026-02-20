@@ -8,51 +8,12 @@ import { portfolioData } from '@/data/portfolio';
 
 export default function Hero() {
   const { personal } = portfolioData;
-  const roles = personal.roles;
-  
-  const [currentRole, setCurrentRole] = useState(0);
-  const [displayedText, setDisplayedText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   // Trigger entrance animations
   useEffect(() => {
     setIsVisible(true);
   }, []);
-
-  // Typing animation effect
-  useEffect(() => {
-    const role = roles[currentRole];
-    
-    // Safety check
-    if (!role) return;
-    
-    // Slower on mobile for better readability
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    const typingSpeed = isDeleting ? (isMobile ? 60 : 50) : (isMobile ? 150 : 100);
-    const pauseDuration = isDeleting ? 500 : 2000;
-
-    if (!isDeleting && displayedText === role) {
-      const timeout = setTimeout(() => setIsDeleting(true), pauseDuration);
-      return () => clearTimeout(timeout);
-    }
-
-    if (isDeleting && displayedText === '') {
-      setIsDeleting(false);
-      setCurrentRole((prev) => (prev + 1) % roles.length);
-      return;
-    }
-
-    const timeout = setTimeout(() => {
-      setDisplayedText(
-        isDeleting
-          ? role.substring(0, displayedText.length - 1)
-          : role.substring(0, displayedText.length + 1)
-      );
-    }, typingSpeed);
-
-    return () => clearTimeout(timeout);
-  }, [displayedText, isDeleting, currentRole]);
 
   return (
     <section 
@@ -111,16 +72,9 @@ export default function Hero() {
               className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-muted-foreground motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-200 ${
                 isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
               }`}
-              aria-live="polite"
-              aria-atomic="true"
             >
               I'm a{' '}
-              <span className="relative inline-block min-h-[1.5em] min-w-[280px] sm:min-w-[380px] md:min-w-[480px]">
-                <span className="text-accent font-semibold">
-                  {displayedText}
-                </span>
-                <span className="animate-pulse text-accent" aria-hidden="true">|</span>
-              </span>
+              <span className="text-accent font-semibold">{personal.tagline}</span>
             </h2>
 
             {/* Description */}
