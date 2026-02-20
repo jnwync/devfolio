@@ -10,17 +10,30 @@ Built with Next.js 15, TypeScript, and Tailwind CSS v4. Features OKLCH color sys
 
 ---
 
-## ✨ Features
+## Features
 
-- 🎨 **OKLCH Color System** - 40+ semantic tokens, perceptually uniform
-- 🌓 **Smart Theming** - System preference detection, FOUC-free
-- ♿ **WCAG AA Compliant** - 100% AA, 92% AAA coverage
-- ⚡ **Optimized** - Native CSS, minimal bundle
-- 🎯 **Type-Safe** - Full TypeScript support
+- **OKLCH Color System** — 40+ semantic tokens, perceptually uniform
+- **Smart Theming** — System preference detection, FOUC-free
+- **WCAG AA Compliant** — 100% AA, 92% AAA coverage
+- **Optimized** — Native CSS, minimal bundle
+- **Type-Safe** — Full TypeScript support
+- **Downloadable CV** — Resume available at `/cv.pdf`
 
 ---
 
-## 🚀 Quick Start
+## Sections
+
+| Section | Description |
+|---------|-------------|
+| **Hero / About** | Professional summary with typing animation and CV download |
+| **Experience** | Professional work history across 4 roles |
+| **Projects** | Freelance and independent projects |
+| **Skills** | 6 skill categories aligned with resume |
+| **Contact** | Email, GitHub, LinkedIn, Phone |
+
+---
+
+## Quick Start
 
 ```bash
 # Install
@@ -34,12 +47,12 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 📚 Documentation
+## Documentation
 
-- **[Documentation Hub](./docs/README.md)** - Complete navigation
-- **[Color System](./docs/design-system/colors.md)** - Color palette guide
-- **[Design System](./docs/design-system/README.md)** - Design principles
-- **[Accessibility](./docs/accessibility/README.md)** - WCAG compliance
+- **[Documentation Hub](./docs/README.md)** — Complete navigation
+- **[Color System](./docs/design-system/colors.md)** — Color palette guide
+- **[Design System](./docs/design-system/README.md)** — Design principles
+- **[Accessibility](./docs/accessibility/README.md)** — WCAG compliance
 
 ---
 
@@ -75,19 +88,21 @@ export function MyComponent() {
 
 ---
 
-## 📖 Tech Stack
+## Tech Stack
 
 - **Framework:** Next.js 15
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS v4
 - **Fonts:** Geist Sans & Mono
 - **Colors:** OKLCH
+- **Animation:** Framer Motion
+- **UI:** Radix UI, shadcn/ui
 
 ---
 
-## 📄 License
+## License
 
-MIT License - free to use in your projects!
+MIT License — free to use in your projects!
 
 ---
 

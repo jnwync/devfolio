@@ -20,6 +20,19 @@ export interface Experience {
   link?: string;
 }
 
+export interface Project {
+  id: string;
+  title: string;
+  type: 'freelance' | 'personal' | 'academic';
+  period: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  achievements: string[];
+  technologies: string[];
+  link?: string;
+}
+
 export interface Skill {
   name: string;
   proficiency: number; // 0-100
@@ -32,10 +45,17 @@ export interface SkillCategory {
   skills: Skill[];
 }
 
+export interface Education {
+  degree: string;
+  institution: string;
+  year: string;
+  coursework: string[];
+}
+
 export interface ContactLink {
   label: string;
   href: string;
-  icon: string; // Icon identifier: 'mail' | 'github' | 'linkedin' | 'phone'
+  icon: string; // Icon identifier: 'mail' | 'github' | 'linkedin' | 'phone' | 'globe'
   primary?: boolean;
 }
 
@@ -56,8 +76,10 @@ export interface PersonalInfo {
 export interface PortfolioData {
   personal: PersonalInfo;
   experiences: Experience[];
+  projects: Project[];
   featuredSkills: Skill[];
   skillCategories: SkillCategory[];
+  education: Education;
   contactLinks: ContactLink[];
 }
 
@@ -75,7 +97,7 @@ export const portfolioData: PortfolioData = {
     email: 'jonwayne.cabusbusan@gmail.com',
     phone: '+639452897584',
     location: 'Iloilo, Philippines',
-    bio: 'I craft clean, high-performance web experiences that solve real problems. From database optimization to accessible UI, I focus on building products that users love and businesses trust.',
+    bio: 'Motivated full-stack web developer with hands-on experience shipping production-grade applications across government, e-commerce, healthcare, and marketplace domains. Proficient in the Next.js / TypeScript ecosystem end-to-end — from building responsive UIs with React and TailwindCSS to designing RESTful APIs, managing relational and NoSQL databases, and deploying to cloud platforms.',
     roles: [
       'Full-Stack Web Developer',
       'React & Next.js Specialist',
@@ -87,143 +109,217 @@ export const portfolioData: PortfolioData = {
     },
   },
 
+  // ---------------------------------------------------------------------------
   // PROFESSIONAL EXPERIENCE
+  // ---------------------------------------------------------------------------
   experiences: [
     {
       id: 'packup',
-      company: 'PackUp (Suppliipack)',
-      role: 'Full-Stack Developer',
-      type: 'contract',
-      period: 'Jun 2024 - Dec 2024',
-      startDate: '2024-06',
-      endDate: '2024-12',
-      location: 'Hybrid',
-      description: 'Mobile-first web application enabling MSMEs to access wholesale packaging pricing with reduced MOQs.',
-      achievements: [
-        'Architected and deployed full-stack features from database schema to production UI',
-        'Optimized database queries with Prisma, reducing API response times',
-        'Built responsive component library used across 10+ views, ensuring design consistency',
-        'Collaborated with 3-person cross-functional team to deliver features on 2-week sprint cycles',
-      ],
-      impact: [],
-      technologies: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'Prisma', 'Firebase'],
-      link: 'https://www.packup.ph/',
-    },
-    {
-      id: 'apollo',
-      company: 'Wisdomous Inc. (Apollo Medical Group)',
-      role: 'Front-End Developer',
-      type: 'contract',
-      period: 'Jan 2024 - May 2024',
-      startDate: '2024-01',
-      endDate: '2024-05',
-      location: 'Remote',
-      description: 'Patient portal and hospital booking web application for healthcare facility management.',
-      achievements: [
-        'Architected and built the entire front-end stack for a patient-facing portal, owning UI/UX design, component architecture, and responsiveness',
-        'Designed and implemented a fully responsive, accessible UI using TailwindCSS, achieving 95+ Lighthouse accessibility scores',
-        'Integrated front-end with backend services, resolving data flow issues and correcting database schema design flaws',
-        'Collaborated in a 2-developer agile team, contributing to sprint planning, code reviews, and cross-stack problem solving',
-      ],
-      impact: [],
-      technologies: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'TailwindCSS'],
-    },
-    {
-      id: 'dti',
-      company: 'Department of Trade and Industry (DTI) Iloilo',
-      role: 'Full-Stack Developer',
-      type: 'academic',
-      period: 'Aug 2024 - May 2025',
-      startDate: '2024-08',
-      endDate: '2025-05',
-      location: 'Iloilo, Philippines',
-      description: 'Government-backed MSME e-commerce platform mapping and promoting regional industries.',
-      achievements: [
-        'Architected and deployed a full-stack government platform connecting local vendors to regional markets',
-        'Developed an interactive, map-based vendor discovery system, organized by district and municipality, with integrated Maps API for accurate location pinning',
-        'Implemented secure REST APIs and relational database schemas, supporting full CRUD workflows for administrators and vendors',
-        'Delivered fully responsive interface, aligned with public sector accessibility and usability standards',
-      ],
-      impact: [],
-      technologies: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'REST APIs'],
-      link: 'https://dti6-industry-map.vercel.app/',
-    },
-    {
-      id: 'baylo',
-      company: 'DemiGAD (Baylo Central)',
+      company: 'PackUp - Suppliipack',
       role: 'Full-Stack Developer',
       type: 'contract',
       period: 'Jun 2025 - Nov 2025',
       startDate: '2025-06',
       endDate: '2025-11',
       location: 'Hybrid',
-      description: 'E-commerce platform for MSMEs with integrated payment and inventory management.',
+      description: 'Mobile-first web application enabling MSMEs to access wholesale packaging at reduced minimum order quantities (MOQs), improving supply-chain accessibility for small businesses.',
       achievements: [
-        'Implemented market section features based on approved UI/UX designs, ensuring responsive layouts and consistency with overall system architecture',
-        'Built vendor-facing onboarding flows within the marketplace module, connecting frontend components to backend services in scope',
-        'Developed market dashboards for product listings and inventory management, aligned with existing data models and workflows',
-        'Contributed to sprint execution and agile ceremonies, collaborating with the team to deliver marketplace features on schedule',
+        'Built and maintained a mobile-first web app enabling MSMEs to access wholesale packaging at reduced MOQs, improving supply-chain accessibility for small businesses',
+        'Developed and deployed back-end API routes and database schemas, ensuring data integrity across sender and courier workflows',
+        'Collaborated on UI/UX design decisions and supported end-to-end production deployment, delivering a smooth, responsive experience on both mobile and desktop',
       ],
       impact: [],
-      technologies: ['React', 'Next.js', 'Express.js', 'MongoDB', 'Stripe'],
+      technologies: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'Prisma', 'Firebase'],
+      link: 'https://www.packup.ph/',
+    },
+    {
+      id: 'baylo',
+      company: 'DemiGAD - BayloCentral',
+      role: 'Full-Stack Developer',
+      type: 'contract',
+      period: 'Jun 2025 - Nov 2025',
+      startDate: '2025-06',
+      endDate: '2025-11',
+      location: 'Hybrid',
+      description: 'Next.js 15 + PostgreSQL e-commerce platform for MSMEs, covering product listings, cart, checkout, and a social feed with real-time updates.',
+      achievements: [
+        'Contributed full-stack features to a Next.js 15 + PostgreSQL e-commerce platform for MSMEs, covering product listings, cart, checkout, and a social feed with likes, comments, and real-time updates',
+        'Implemented Supabase Auth (JWT + OAuth) and integrated Prisma ORM with versioned migrations, maintaining a clean, type-safe database layer across 6 migration iterations',
+        'Participated in agile ceremonies (stand-ups, sprint reviews) and provided design feedback, driving continuous improvement of platform features and performance',
+      ],
+      impact: [],
+      technologies: ['Next.js', 'React', 'PostgreSQL', 'Supabase', 'Prisma', 'TypeScript'],
+    },
+    {
+      id: 'apollo',
+      company: 'Wisdomous Inc. - Apollo Medical Group',
+      role: 'Full-Stack Developer',
+      type: 'contract',
+      period: 'Jan 2025 - May 2025',
+      startDate: '2025-01',
+      endDate: '2025-05',
+      location: 'Remote',
+      description: 'Patient portal and hospital booking web application for healthcare facility management.',
+      achievements: [
+        'Led front-end development of a patient portal and hospital booking system, delivering a responsive UI/UX serving both patients and admin staff',
+        'Refactored back-end logic and optimized database structure, measurably reducing load times and enabling scalable, reliable performance under high-volume booking operations',
+        'Shipped to production in a 2-developer agile team, contributing to design discussions, sprint reviews, and end-to-end QA before release',
+      ],
+      impact: [],
+      technologies: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'TailwindCSS'],
+    },
+    {
+      id: 'dti',
+      company: 'DTI Iloilo - MSME Industry Map',
+      role: 'Full-Stack Developer',
+      type: 'academic',
+      period: 'Aug 2024 - May 2025',
+      startDate: '2024-08',
+      endDate: '2025-05',
+      location: 'Iloilo, Philippines',
+      description: 'Government-backed interactive MSME map for Iloilo, enabling DTI admins to register, visualize, and monitor regional businesses.',
+      achievements: [
+        'Built and deployed a government-backed interactive MSME map for Iloilo using Next.js, Firebase Firestore, and Google Maps API — enabling DTI admins to register, visualize, and monitor regional businesses',
+        'Designed a RESTful API layer with role-based access control (superadmin / admin), a two-step signup approval workflow, and cascading Firestore operations across related collections',
+        'Implemented Zod validation and end-to-end TypeScript type safety across API routes, form schemas, and Firestore utility abstractions, reducing runtime errors in production',
+      ],
+      impact: [],
+      technologies: ['Next.js', 'Firebase Firestore', 'Google Maps API', 'TypeScript', 'Zod', 'REST APIs'],
+      link: 'https://dti6-industry-map.vercel.app/',
     },
   ],
 
+  // ---------------------------------------------------------------------------
+  // PROJECTS
+  // ---------------------------------------------------------------------------
+  projects: [
+    {
+      id: 'reisky',
+      title: 'Reisky - Traditional Filipino Martial Arts Website',
+      type: 'freelance',
+      period: 'Jan 2026 - Feb 2026',
+      startDate: '2026-01',
+      endDate: '2026-02',
+      description: 'Multi-section marketing and class booking website for a traditional Filipino martial arts school, targeting students of all ages — from kids to adults.',
+      achievements: [
+        'Sole developer on a multi-section marketing and class booking website for a traditional Filipino martial arts school, built with Next.js',
+        'Designed the site to highlight the school\'s achievements including award-winning students with international competition results and upcoming events featuring international mentors and seminars',
+        'Achieved Lighthouse scores of 92 Performance / 99 Accessibility / 96 Best Practices / 100 SEO through semantic HTML, optimized assets, and Next.js image and metadata best practices',
+      ],
+      technologies: ['Next.js', 'React', 'TailwindCSS', 'TypeScript'],
+    },
+  ],
+
+  // ---------------------------------------------------------------------------
   // FEATURED SKILLS (shown in main skills section)
+  // ---------------------------------------------------------------------------
   featuredSkills: [
+    { name: 'TypeScript', proficiency: 90, yearsUsed: 2 },
+    { name: 'Next.js', proficiency: 90, yearsUsed: 2 },
     { name: 'React', proficiency: 90, yearsUsed: 2 },
-    { name: 'Next.js', proficiency: 85, yearsUsed: 2 },
-    { name: 'TypeScript', proficiency: 85, yearsUsed: 2 },
     { name: 'TailwindCSS', proficiency: 90, yearsUsed: 2 },
   ],
 
+  // ---------------------------------------------------------------------------
   // SKILL CATEGORIES
+  // ---------------------------------------------------------------------------
   skillCategories: [
     {
-      title: 'Frontend Development',
-      description: 'Modern JavaScript frameworks and libraries',
+      title: 'Languages',
+      description: 'Core programming languages',
       skills: [
-        { name: 'React', proficiency: 90, yearsUsed: 2 },
-        { name: 'Next.js', proficiency: 85, yearsUsed: 2 },
-        { name: 'React Native', proficiency: 75, yearsUsed: 1 },
-        { name: 'TypeScript', proficiency: 85, yearsUsed: 2 },
+        { name: 'TypeScript', proficiency: 90, yearsUsed: 2 },
         { name: 'JavaScript (ES6+)', proficiency: 90, yearsUsed: 3 },
-      ],
-    },
-    {
-      title: 'Styling & UI',
-      description: 'Component-driven design systems',
-      skills: [
-        { name: 'TailwindCSS', proficiency: 90, yearsUsed: 2 },
+        { name: 'HTML5', proficiency: 90, yearsUsed: 3 },
         { name: 'CSS3', proficiency: 85, yearsUsed: 3 },
-        { name: 'Responsive Design', proficiency: 90, yearsUsed: 3 },
-        { name: 'Accessibility (WCAG)', proficiency: 80, yearsUsed: 2 },
+        { name: 'SQL', proficiency: 80, yearsUsed: 2 },
       ],
     },
     {
-      title: 'Backend & Database',
-      description: 'Full-stack capabilities and data persistence',
+      title: 'Frontend',
+      description: 'Modern UI frameworks and libraries',
+      skills: [
+        { name: 'Next.js', proficiency: 90, yearsUsed: 2 },
+        { name: 'React', proficiency: 90, yearsUsed: 2 },
+        { name: 'React Native', proficiency: 75, yearsUsed: 1 },
+        { name: 'TailwindCSS', proficiency: 90, yearsUsed: 2 },
+        { name: 'Radix UI', proficiency: 80, yearsUsed: 1 },
+        { name: 'Framer Motion', proficiency: 80, yearsUsed: 1 },
+        { name: 'SWR', proficiency: 75, yearsUsed: 1 },
+        { name: 'Axios', proficiency: 80, yearsUsed: 2 },
+      ],
+    },
+    {
+      title: 'Backend',
+      description: 'Server-side technologies and APIs',
       skills: [
         { name: 'Node.js', proficiency: 80, yearsUsed: 2 },
         { name: 'Express.js', proficiency: 75, yearsUsed: 2 },
-        { name: 'PostgreSQL', proficiency: 75, yearsUsed: 2 },
-        { name: 'Prisma ORM', proficiency: 80, yearsUsed: 2 },
-        { name: 'Firebase', proficiency: 75, yearsUsed: 2 },
         { name: 'REST APIs', proficiency: 85, yearsUsed: 2 },
+        { name: 'WebSockets (Socket.IO)', proficiency: 70, yearsUsed: 1 },
+        { name: 'JWT', proficiency: 80, yearsUsed: 2 },
+        { name: 'OAuth 2.0', proficiency: 75, yearsUsed: 1 },
       ],
     },
     {
-      title: 'Tools & Workflow',
-      description: 'Professional development environment',
+      title: 'Databases',
+      description: 'Relational and NoSQL data stores',
       skills: [
-        { name: 'Git/GitHub', proficiency: 85, yearsUsed: 3 },
-        { name: 'Agile/Scrum', proficiency: 80, yearsUsed: 2 },
+        { name: 'PostgreSQL (Supabase)', proficiency: 80, yearsUsed: 2 },
+        { name: 'Prisma ORM', proficiency: 80, yearsUsed: 2 },
+        { name: 'Firebase Firestore', proficiency: 75, yearsUsed: 2 },
+        { name: 'Firebase Realtime DB', proficiency: 70, yearsUsed: 1 },
+      ],
+    },
+    {
+      title: 'Testing & DevOps',
+      description: 'Quality assurance and deployment pipelines',
+      skills: [
+        { name: 'Jest', proficiency: 70, yearsUsed: 1 },
+        { name: 'React Testing Library', proficiency: 70, yearsUsed: 1 },
         { name: 'Postman', proficiency: 85, yearsUsed: 2 },
         { name: 'ESLint', proficiency: 80, yearsUsed: 2 },
-        { name: 'VS Code', proficiency: 90, yearsUsed: 3 },
+        { name: 'Selenium', proficiency: 65, yearsUsed: 1 },
+        { name: 'Git / GitHub', proficiency: 85, yearsUsed: 3 },
+        { name: 'GitHub Actions (CI/CD)', proficiency: 70, yearsUsed: 1 },
+        { name: 'Docker', proficiency: 65, yearsUsed: 1 },
+        { name: 'Vercel', proficiency: 85, yearsUsed: 2 },
+        { name: 'Husky', proficiency: 70, yearsUsed: 1 },
+      ],
+    },
+    {
+      title: 'Practices',
+      description: 'Development methodologies and principles',
+      skills: [
+        { name: 'Agile / Scrum', proficiency: 80, yearsUsed: 2 },
+        { name: 'RESTful API Design', proficiency: 85, yearsUsed: 2 },
+        { name: 'Responsive Web Design', proficiency: 90, yearsUsed: 3 },
+        { name: 'UI/UX Principles', proficiency: 80, yearsUsed: 2 },
       ],
     },
   ],
+
+  // ---------------------------------------------------------------------------
+  // EDUCATION
+  // ---------------------------------------------------------------------------
+  education: {
+    degree: 'B.S. Software Engineering',
+    institution: 'Central Philippine University',
+    year: '2026',
+    coursework: [
+      'Data Structures',
+      'Algorithms',
+      'Web Application Development',
+      'Database Systems',
+      'Software Architecture',
+      'Software Development I-III',
+      'Software Testing',
+      'Software Quality Management',
+      'Network Protocols',
+      'Machine Learning',
+      'Engineering Data Analysis',
+    ],
+  },
 
   // ---------------------------------------------------------------------------
   // CONTACT LINKS
@@ -259,6 +355,10 @@ export const getExperienceById = (id: string): Experience | undefined => {
   return portfolioData.experiences.find((exp) => exp.id === id);
 };
 
+export const getProjectById = (id: string): Project | undefined => {
+  return portfolioData.projects.find((proj) => proj.id === id);
+};
+
 export const getSkillsByCategory = (categoryTitle: string): Skill[] => {
   const category = portfolioData.skillCategories.find(
     (cat) => cat.title.toLowerCase() === categoryTitle.toLowerCase()
@@ -288,4 +388,10 @@ export const getExperienceByType = (
 
 export const getRecentExperience = (limit: number = 3): Experience[] => {
   return portfolioData.experiences.slice(0, limit);
+};
+
+export const getProjectsByType = (
+  type: Project['type']
+): Project[] => {
+  return portfolioData.projects.filter((proj) => proj.type === type);
 };
