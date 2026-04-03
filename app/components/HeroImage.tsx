@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
 
 export default function HeroImage() {
@@ -13,18 +12,17 @@ export default function HeroImage() {
         <div className="aspect-square rounded-full bg-muted animate-pulse" />
       )}
 
-      {/* Image container with gradient background */}
+      {/* SVG container with gradient background */}
       <div 
         className={`hero-image-container aspect-square rounded-full overflow-hidden ${
           !isLoaded ? 'absolute inset-0 opacity-0' : ''
         }`}
       >
-        <Image
-          src="/images/hero/hero-profile.png"
+        <img
+          src="/images/hero/Cabusbusan-ID.svg"
           alt="Professional headshot of Jon Wayne Cabusbusan, Full-Stack Web Developer"
           width={600}
           height={600}
-          priority
           className={`hero-image w-full h-full object-cover transition-opacity duration-500 ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
