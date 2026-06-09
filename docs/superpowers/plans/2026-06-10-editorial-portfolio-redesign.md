@@ -76,6 +76,16 @@ heuristics. Fixes applied (`design: tighten hero fold, sharpen copy, trim experi
 - **Minor** — evidence proof #2 reframed ("Next.js + TypeScript" → "Frontend to deployment") so it
   no longer echoes the hero's core-stack strip.
 
+**Follow-up: `/impeccable typeset` — body font**
+
+The type system (Libre Baskerville display + clear serif/sans scale) was sound; the one weak link
+was the body face — Source Sans 3, a flat Adobe default carrying all body text, labels, and UI.
+Replaced with **Hanken Grotesk** (`type: replace body font with Hanken Grotesk`): a humanist
+grotesque with warm terminals and even rhythm that pairs with the Baskerville display and reads
+with more intention without losing legibility. Variable weights, `font-display: swap` with a
+metric-matched fallback (no CLS), and the hero fold is unaffected (re-verified CTA above fold at
+1366×768). Libre Baskerville retained as the display face.
+
 **Follow-up: hero image optimization**
 
 The portrait was a 1.1MB SVG that actually wrapped a base64 raster (no real vector benefit). It is
