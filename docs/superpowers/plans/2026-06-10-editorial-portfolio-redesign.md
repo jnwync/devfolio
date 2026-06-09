@@ -10,6 +10,57 @@
 
 ---
 
+## Implementation Status — ✅ COMPLETE (2026-06-10)
+
+All eight tasks implemented, verified, and committed on `main`. The page now reads as an
+editorial engineer dossier: warm OKLCH paper system, Libre Baskerville display + Source Sans 3
+body, masthead hero, evidence register, case-study work blocks, dossier experience timeline,
+grouped capability map, and a confident contact close. No AI-slop tells remain.
+
+**Verification evidence**
+
+- `npx tsc --noEmit` → PASS.
+- `npm run lint` → clean (0 problems).
+- `npm run build` → PASS (4 static pages, compiled ~1.3s).
+- Anti-pattern scan (gradient text, glow blobs, side-stripe borders, theme/cursor remnants) → no matches.
+- Browser audit at 1440px and 390px: no horizontal overflow (docW === viewW at 390px); mobile
+  menu opens/closes via button and Escape (`aria-expanded` toggles, menu unmounts); nav links
+  show the 2px focus-visible outline and buttons the shadcn focus ring; portrait and `/cv.pdf`
+  assets resolve.
+
+**Commits**
+
+- `style: establish editorial visual system` (Task 2, pre-session)
+- `feat: add editorial portfolio content model` (Task 1, pre-session)
+- `refactor: simplify navigation and shared UI` (Task 3)
+- `feat: build editorial hero dossier and evidence band` (Task 4)
+- `feat: present projects as case studies` (Task 5)
+- `feat: restructure experience and capabilities` (Task 6)
+- `feat: add editorial contact close` (Task 7)
+- `polish: fix hero portrait cached-image load and simplify` (Task 8)
+
+**Impeccable refinements (intentional deviations from the literal plan snippets)**
+
+1. **HeroImage** was simplified to a stateless **server component** that renders the local SVG
+   portrait directly over a `bg-muted` placeholder. The plan's `isLoaded` skeleton left the
+   portrait blank: the SVG is cached/`complete` before React attaches `onLoad`, so the handler
+   never fires. Removing the state machine fixed the bug and reduced client JS.
+2. **Brand icons** use `react-icons` (`FaGithub`, `FaLinkedin`) in Projects and Contacts instead
+   of lucide's deprecated `Github`/`Linkedin` exports. lucide is kept for UI glyphs (Mail,
+   ExternalLink, Copy, Check, FileDown, Phone, ArrowUpRight, Menu, X).
+3. **Hero** shows a compact "Core stack" strip from `featuredSkills` rather than duplicating
+   `proofPoints` chips — the proof points already render in the `EvidenceBand` directly below,
+   so repeating them would violate the "don't restate information" rule.
+4. **EvidenceBand** and **Skills** cards carry editorial index numerals (`01`–`04`) for a dossier
+   register feel, replacing the generic big-number metric template.
+5. Hero / Projects / Experience / Skills reveal animations guard `prefers-reduced-motion` via
+   `useReducedMotion`, in addition to the global reduced-motion CSS.
+6. Canonical Tailwind v4 class syntax adopted where flagged (`aspect-4/5`, `shadow-(--shadow-soft)`).
+7. The mobile nav menu includes the primary "Start a conversation" CTA so the conversion path
+   is reachable on small screens.
+
+---
+
 ## Source Spec
 
 - `docs/superpowers/specs/2026-06-10-editorial-portfolio-redesign-design.md`
@@ -46,7 +97,7 @@ This is one focused subsystem: a single-page portfolio redesign. It does not req
 **Files:**
 - Modify: `data/portfolio.ts`
 
-- [ ] **Step 1: Run the baseline type check**
+- [x] **Step 1: Run the baseline type check**
 
 Run:
 
@@ -56,7 +107,7 @@ npx tsc --noEmit
 
 Expected: PASS. If it fails before edits, record the existing error in the task notes and fix only errors caused by this task.
 
-- [ ] **Step 2: Replace the type definitions at the top of `data/portfolio.ts` with the editorial contract**
+- [x] **Step 2: Replace the type definitions at the top of `data/portfolio.ts` with the editorial contract**
 
 Use this shape while preserving all existing fields that downstream utilities still use:
 
@@ -169,7 +220,7 @@ export interface PortfolioData {
 }
 ```
 
-- [ ] **Step 3: Add `positioning` and `summary` to `personal`**
+- [x] **Step 3: Add `positioning` and `summary` to `personal`**
 
 Add these fields inside `portfolioData.personal`:
 
@@ -178,7 +229,7 @@ positioning: 'Full-stack engineer for production web systems that have to work f
 summary: 'I build responsive interfaces, API surfaces, and data workflows across government, healthcare, e-commerce, and marketplace products, with enough range to move from architecture through deployment.',
 ```
 
-- [ ] **Step 4: Add `proofPoints` after `personal`**
+- [x] **Step 4: Add `proofPoints` after `personal`**
 
 Add:
 
@@ -203,7 +254,7 @@ proofPoints: [
 ],
 ```
 
-- [ ] **Step 5: Add `scope` to each experience**
+- [x] **Step 5: Add `scope` to each experience**
 
 Use these values:
 
@@ -221,7 +272,7 @@ scope: 'Led patient portal and hospital booking UI work while supporting backend
 scope: 'Built government-backed MSME mapping workflows, admin management, GeoJSON data delivery, and role-based API protection.',
 ```
 
-- [ ] **Step 6: Add `context`, `responsibility`, `outcomes`, and `featured` to each project**
+- [x] **Step 6: Add `context`, `responsibility`, `outcomes`, and `featured` to each project**
 
 Use these additions:
 
@@ -247,7 +298,7 @@ outcomes: [
 featured: true,
 ```
 
-- [ ] **Step 7: Add `capabilityGroups` after `skillCategories`**
+- [x] **Step 7: Add `capabilityGroups` after `skillCategories`**
 
 Add:
 
@@ -280,7 +331,7 @@ capabilityGroups: [
 ],
 ```
 
-- [ ] **Step 8: Run the type check**
+- [x] **Step 8: Run the type check**
 
 Run:
 
@@ -290,7 +341,7 @@ npx tsc --noEmit
 
 Expected: PASS.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add data/portfolio.ts
@@ -303,7 +354,7 @@ git commit -m "feat: add editorial portfolio content model"
 - Modify: `app/layout.tsx`
 - Modify: `app/globals.css`
 
-- [ ] **Step 1: Update fonts and metadata in `app/layout.tsx`**
+- [x] **Step 1: Update fonts and metadata in `app/layout.tsx`**
 
 Replace Geist imports with:
 
@@ -368,7 +419,7 @@ Set the body class:
 className={`${displayFont.variable} ${bodyFont.variable} antialiased`}
 ```
 
-- [ ] **Step 2: Replace `app/globals.css` with editorial tokens**
+- [x] **Step 2: Replace `app/globals.css` with editorial tokens**
 
 Use Tailwind v4 CSS-first tokens and keep shadcn-compatible color names:
 
@@ -518,7 +569,7 @@ Add:
 }
 ```
 
-- [ ] **Step 3: Run checks**
+- [x] **Step 3: Run checks**
 
 ```bash
 npx tsc --noEmit
@@ -527,7 +578,7 @@ npm run lint
 
 Expected: both PASS.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add app/layout.tsx app/globals.css
@@ -545,7 +596,7 @@ git commit -m "style: establish editorial visual system"
 - Delete: `app/components/ThemeProvider.tsx`
 - Delete: `app/components/CursorSpotlight.tsx`
 
-- [ ] **Step 1: Update `buttonVariants` in `components/ui/button.tsx`**
+- [x] **Step 1: Update `buttonVariants` in `components/ui/button.tsx`**
 
 Use:
 
@@ -581,7 +632,7 @@ const buttonVariants = cva(
 );
 ```
 
-- [ ] **Step 2: Update `badgeVariants` in `components/ui/badge.tsx`**
+- [x] **Step 2: Update `badgeVariants` in `components/ui/badge.tsx`**
 
 Use:
 
@@ -608,7 +659,7 @@ const badgeVariants = cva(
 );
 ```
 
-- [ ] **Step 3: Update `Card` in `components/ui/card.tsx`**
+- [x] **Step 3: Update `Card` in `components/ui/card.tsx`**
 
 Change the root class to:
 
@@ -634,7 +685,7 @@ Change `CardFooter` to:
 "flex items-center px-5 pb-5 sm:px-6 sm:pb-6 [.border-t]:pt-6"
 ```
 
-- [ ] **Step 4: Replace `app/components/Navigation.tsx` with a theme-free nav**
+- [x] **Step 4: Replace `app/components/Navigation.tsx` with a theme-free nav**
 
 Use lucide icons instead of inline SVG:
 
@@ -824,7 +875,7 @@ export default function Navigation() {
 }
 ```
 
-- [ ] **Step 5: Update `ScrollProgress`**
+- [x] **Step 5: Update `ScrollProgress`**
 
 Change the progress bar class to:
 
@@ -832,13 +883,13 @@ Change the progress bar class to:
 className="fixed inset-x-0 top-0 z-60 h-0.5 origin-left bg-primary"
 ```
 
-- [ ] **Step 6: Delete unused effects and theme provider**
+- [x] **Step 6: Delete unused effects and theme provider**
 
 ```bash
 rm app/components/CursorSpotlight.tsx app/components/ThemeProvider.tsx
 ```
 
-- [ ] **Step 7: Run checks**
+- [x] **Step 7: Run checks**
 
 ```bash
 npx tsc --noEmit
@@ -847,7 +898,7 @@ npm run lint
 
 Expected: both PASS.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add components/ui/button.tsx components/ui/badge.tsx components/ui/card.tsx app/components/Navigation.tsx app/components/ScrollProgress.tsx app/layout.tsx app/components/CursorSpotlight.tsx app/components/ThemeProvider.tsx
@@ -862,7 +913,7 @@ git commit -m "refactor: simplify navigation and shared UI"
 - Create: `app/components/sections/EvidenceBand.tsx`
 - Modify: `app/page.tsx`
 
-- [ ] **Step 1: Replace `HeroImage` with an editorial portrait plate**
+- [x] **Step 1: Replace `HeroImage` with an editorial portrait plate**
 
 Use:
 
@@ -899,7 +950,7 @@ export default function HeroImage() {
 }
 ```
 
-- [ ] **Step 2: Replace `Hero` with the dossier layout**
+- [x] **Step 2: Replace `Hero` with the dossier layout**
 
 Use `Mail`, `BriefcaseBusiness`, `FileDown`, and `ArrowDown` from `lucide-react`. Read `personal`, `proofPoints`, and `featuredSkills` from `portfolioData`.
 
@@ -953,7 +1004,7 @@ CTA order:
 
 Render proof chips from `proofPoints.slice(0, 3)` and stack chips from `featuredSkills`.
 
-- [ ] **Step 3: Create `EvidenceBand.tsx`**
+- [x] **Step 3: Create `EvidenceBand.tsx`**
 
 Use:
 
@@ -978,7 +1029,7 @@ export default function EvidenceBand() {
 }
 ```
 
-- [ ] **Step 4: Insert the evidence band in `app/page.tsx`**
+- [x] **Step 4: Insert the evidence band in `app/page.tsx`**
 
 Add:
 
@@ -998,7 +1049,7 @@ Render:
 <Contact />
 ```
 
-- [ ] **Step 5: Run checks**
+- [x] **Step 5: Run checks**
 
 ```bash
 npx tsc --noEmit
@@ -1007,7 +1058,7 @@ npm run lint
 
 Expected: both PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add app/components/HeroImage.tsx app/components/sections/Hero.tsx app/components/sections/EvidenceBand.tsx app/page.tsx
@@ -1019,7 +1070,7 @@ git commit -m "feat: build editorial hero dossier"
 **Files:**
 - Modify: `app/components/sections/Projects.tsx`
 
-- [ ] **Step 1: Replace the equal card grid with case-study blocks**
+- [x] **Step 1: Replace the equal card grid with case-study blocks**
 
 Use these imports:
 
@@ -1127,7 +1178,7 @@ Render each project with:
 </motion.article>
 ```
 
-- [ ] **Step 2: Run checks**
+- [x] **Step 2: Run checks**
 
 ```bash
 npx tsc --noEmit
@@ -1136,7 +1187,7 @@ npm run lint
 
 Expected: both PASS.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add app/components/sections/Projects.tsx
@@ -1150,7 +1201,7 @@ git commit -m "feat: present projects as case studies"
 - Modify: `app/components/sections/Skills.tsx`
 - Modify: `app/components/sections/Education.tsx`
 
-- [ ] **Step 1: Rebuild `Experiences.tsx` as a compact dossier timeline**
+- [x] **Step 1: Rebuild `Experiences.tsx` as a compact dossier timeline**
 
 Keep Framer Motion and `Badge`. Render each experience as a two-column row:
 
@@ -1191,7 +1242,7 @@ Keep Framer Motion and `Badge`. Render each experience as a two-column row:
 </article>
 ```
 
-- [ ] **Step 2: Rebuild `Skills.tsx` as a capability map**
+- [x] **Step 2: Rebuild `Skills.tsx` as a capability map**
 
 Use `portfolioData.capabilityGroups`. Render:
 
@@ -1225,7 +1276,7 @@ Use `portfolioData.capabilityGroups`. Render:
 </section>
 ```
 
-- [ ] **Step 3: Restyle `Education.tsx`**
+- [x] **Step 3: Restyle `Education.tsx`**
 
 Use the same `section-shell`, `section-kicker`, and border style. Keep the existing coursework filtering. Render the degree as a horizontal editorial block rather than a large card:
 
@@ -1248,7 +1299,7 @@ Use the same `section-shell`, `section-kicker`, and border style. Keep the exist
 </div>
 ```
 
-- [ ] **Step 4: Run checks**
+- [x] **Step 4: Run checks**
 
 ```bash
 npx tsc --noEmit
@@ -1257,7 +1308,7 @@ npm run lint
 
 Expected: both PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add app/components/sections/Experiences.tsx app/components/sections/Skills.tsx app/components/sections/Education.tsx
@@ -1269,7 +1320,7 @@ git commit -m "feat: restructure experience and capabilities"
 **Files:**
 - Modify: `app/components/sections/Contacts.tsx`
 
-- [ ] **Step 1: Replace contact copy and layout**
+- [x] **Step 1: Replace contact copy and layout**
 
 Use lucide icons: `Copy`, `FileDown`, `Github`, `Linkedin`, `Mail`, `Phone`, `Check`.
 
@@ -1318,7 +1369,7 @@ Keep the copy email action with `aria-live="polite"`:
 
 Render secondary links as text rows in a bordered list instead of icon cards.
 
-- [ ] **Step 2: Remove `console.error` from clipboard failure**
+- [x] **Step 2: Remove `console.error` from clipboard failure**
 
 Replace the catch block with:
 
@@ -1328,7 +1379,7 @@ Replace the catch block with:
 }
 ```
 
-- [ ] **Step 3: Run checks**
+- [x] **Step 3: Run checks**
 
 ```bash
 npx tsc --noEmit
@@ -1337,7 +1388,7 @@ npm run lint
 
 Expected: both PASS.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add app/components/sections/Contacts.tsx
@@ -1349,7 +1400,7 @@ git commit -m "feat: add editorial contact close"
 **Files:**
 - Modify any file changed in Tasks 1-7 only when verification identifies an issue.
 
-- [ ] **Step 1: Run static checks**
+- [x] **Step 1: Run static checks**
 
 ```bash
 npx tsc --noEmit
@@ -1359,7 +1410,7 @@ npm run build
 
 Expected: all PASS.
 
-- [ ] **Step 2: Run anti-pattern searches**
+- [x] **Step 2: Run anti-pattern searches**
 
 ```bash
 rg -n "bg-clip-text|text-transparent|radial-gradient|blur-2xl|blur-3xl|from-accent/5|to-primary/5|border-l-[2-9]|border-r-[2-9]|CursorSpotlight|toggleTheme|ThemeProvider" app components data
@@ -1367,7 +1418,7 @@ rg -n "bg-clip-text|text-transparent|radial-gradient|blur-2xl|blur-3xl|from-acce
 
 Expected: no matches.
 
-- [ ] **Step 3: Run the Impeccable deterministic scan**
+- [x] **Step 3: Run the Impeccable deterministic scan**
 
 ```bash
 npx impeccable --json app components data
@@ -1375,7 +1426,7 @@ npx impeccable --json app components data
 
 Expected: exit code 0 or exit code 2 with only findings that are reviewed and resolved in this task.
 
-- [ ] **Step 4: Start the app**
+- [x] **Step 4: Start the app**
 
 ```bash
 npm run dev
@@ -1383,7 +1434,7 @@ npm run dev
 
 Expected: Next dev server starts and prints a local URL.
 
-- [ ] **Step 5: Inspect desktop in the in-app browser**
+- [x] **Step 5: Inspect desktop in the in-app browser**
 
 Open the local URL at a desktop viewport. Verify:
 
@@ -1394,7 +1445,7 @@ Open the local URL at a desktop viewport. Verify:
 - No text overflows buttons or bordered panels.
 - No section uses gradient text, glow blobs, or generic neon effects.
 
-- [ ] **Step 6: Inspect mobile in the in-app browser**
+- [x] **Step 6: Inspect mobile in the in-app browser**
 
 Use a narrow viewport around 390px wide. Verify:
 
@@ -1405,11 +1456,11 @@ Use a narrow viewport around 390px wide. Verify:
 - Capability cards stack cleanly.
 - Contact actions remain visible and readable.
 
-- [ ] **Step 7: Stop the dev server**
+- [x] **Step 7: Stop the dev server**
 
 Stop the running `npm run dev` process.
 
-- [ ] **Step 8: Commit polish fixes**
+- [x] **Step 8: Commit polish fixes**
 
 ```bash
 git add app components data
