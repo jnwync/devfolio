@@ -1,182 +1,165 @@
 'use client';
 
 import Image from 'next/image';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion, type Variants } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { portfolioData } from '@/data/portfolio';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+
+const typeLabels: Record<string, string> = {
+  freelance: 'Freelance',
+  personal: 'Personal',
+  academic: 'Academic',
+};
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 1, 0.5, 1] },
+  },
+};
 
 export default function Projects() {
-  const projects = portfolioData.projects;
-
-  const typeLabels = {
-    freelance: 'Freelance',
-    personal: 'Personal',
-    academic: 'Academic',
-  };
-
-  // Animation variants
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut',
-      },
-    },
-  };
+  const projects = [...portfolioData.projects].sort(
+    (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured))
+  );
 
   return (
     <section
       id="projects"
       aria-labelledby="projects-heading"
-      className="scroll-mt-20 border-t border-border py-20 md:py-32"
+      className="editorial-rule scroll-mt-20 py-20 md:py-28"
     >
-      <div className="mx-auto max-w-6xl px-6">
-        {/* Section Header */}
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="mb-16 space-y-4"
-        >
-          <p className="text-sm font-semibold uppercase tracking-widest text-accent">
-            Selected Work
+      <div className="section-shell">
+        <header className="mb-14 grid gap-5 md:grid-cols-[0.42fr_0.58fr] md:items-end">
+          <div>
+            <p className="section-kicker">Selected work</p>
+            <h2
+              id="projects-heading"
+              className="mt-4 text-balance font-serif text-4xl font-bold leading-tight md:text-5xl"
+            >
+              Case-study evidence, not just project tiles.
+            </h2>
+          </div>
+          <p className="max-w-2xl text-base leading-7 text-muted-foreground md:justify-self-end">
+            A compact record of systems I have designed, implemented, optimized, and
+            shipped across freelance and personal work.
           </p>
-          <h2 id="projects-heading" className="text-balance text-4xl font-bold md:text-5xl">
-            Projects
-          </h2>
-          <p className="max-w-2xl text-muted-foreground">
-            Independent and freelance projects showcasing end-to-end development, from concept through deployment.
-          </p>
-        </motion.header>
+        </header>
 
-        {/* Project Cards */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          className="space-y-12"
+          viewport={{ once: true, margin: '-80px' }}
+          className="space-y-8"
         >
           {projects.map((project) => (
             <motion.article
               key={project.id}
-              variants={cardVariants}
-              whileHover={{ y: -4 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="relative"
+              variants={itemVariants}
+              className={`border border-border bg-card ${
+                project.featured ? 'md:grid md:grid-cols-[0.95fr_1.05fr]' : ''
+              }`}
             >
-              <Card className="group relative overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-accent/50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)] before:absolute before:inset-0 before:bg-linear-to-br before:from-accent/5 before:to-primary/5 before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100">
+              <div className="border-b border-border p-6 md:border-b-0 md:border-r md:p-8">
+                <div className="flex flex-wrap items-center gap-3">
+                  <Badge variant={project.featured ? 'default' : 'outline'}>
+                    {typeLabels[project.type]}
+                  </Badge>
+                  {project.featured && (
+                    <Badge variant="secondary">Featured</Badge>
+                  )}
+                  <span className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                    {project.period}
+                  </span>
+                </div>
+
+                <h3 className="mt-6 font-serif text-3xl font-bold leading-tight text-foreground md:text-4xl">
+                  {project.title}
+                </h3>
+                <p className="mt-5 text-base leading-7 text-muted-foreground">
+                  {project.context}
+                </p>
+
                 {project.image && (
-                  <div className="relative -mt-6 w-full aspect-video border-b border-border bg-muted overflow-hidden">
+                  <div className="relative mt-6 aspect-video w-full overflow-hidden border border-border bg-muted">
                     <Image
                       src={project.image}
                       alt={`Screenshot of ${project.title}`}
                       fill
                       className="object-cover object-top"
-                      sizes="(max-width: 1200px) 100vw, 800px"
+                      sizes="(max-width: 768px) 100vw, 480px"
                     />
                   </div>
                 )}
-                <CardHeader>
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                    <div className="flex-1 space-y-1">
-                      <CardTitle className="text-2xl group-hover:text-accent transition-colors">
-                        {project.title}
-                      </CardTitle>
-                      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                        <time dateTime={`${project.startDate}/${project.endDate}`}>
-                          {project.period}
-                        </time>
-                        <span aria-hidden="true">•</span>
-                        <span>{typeLabels[project.type]}</span>
-                      </div>
-                    </div>
+              </div>
 
-                    {(project.github || project.link) && (
-                      <div className="flex items-center gap-3 shrink-0">
-                        {project.github && (
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="relative z-10 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.25)] hover:underline underline-offset-4 transition-all duration-300 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm"
-                            aria-label={`View ${project.title} source code on GitHub`}
-                          >
-                            <FaGithub className="w-4 h-4" aria-hidden="true" />
-                            <span className="hidden sm:inline">Source</span>
-                          </a>
-                        )}
-                        {project.link && (
-                          <a
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="relative z-10 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.25)] hover:underline underline-offset-4 transition-all duration-300 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm"
-                            aria-label={`Visit ${project.title} website`}
-                          >
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                              aria-hidden="true"
-                            >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                            <span className="hidden sm:inline">Visit Site</span>
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </div>
+              <div className="space-y-6 p-6 md:p-8">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">
+                    Responsibility
+                  </p>
+                  <p className="mt-2 text-base leading-7 text-foreground/85">
+                    {project.responsibility}
+                  </p>
+                </div>
 
-                  <CardDescription className="text-base leading-relaxed mt-3">
-                    {project.description}
-                  </CardDescription>
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  {/* Achievements */}
-                  <ul className="space-y-2" role="list">
-                    {project.achievements.map((achievement, idx) => (
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">
+                    Evidence
+                  </p>
+                  <ul className="mt-3 space-y-3" role="list">
+                    {project.outcomes.map((outcome) => (
                       <li
-                        key={idx}
-                        className="flex gap-3 text-sm leading-relaxed"
+                        key={outcome}
+                        className="grid grid-cols-[1.25rem_1fr] gap-3 text-sm leading-6 text-muted-foreground"
                       >
-                        <span className="text-accent mt-1.5 shrink-0" aria-hidden="true">▸</span>
-                        <span className="text-foreground/80">{achievement}</span>
+                        <span className="mt-3 h-px bg-primary" aria-hidden="true" />
+                        <span>{outcome}</span>
                       </li>
                     ))}
                   </ul>
+                </div>
 
-                  {/* Technologies */}
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {project.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="inline-block rounded-md bg-accent/5 px-3 py-1.5 text-xs font-medium text-foreground/70 border border-border hover:border-accent/30 hover:bg-accent/10 hover:text-foreground transition-colors"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((tech) => (
+                    <Badge key={tech} variant="secondary">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
+
+                {(project.link || project.github) && (
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    {project.link && (
+                      <Button asChild variant="outline" size="sm">
+                        <a href={project.link} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                          Visit site
+                        </a>
+                      </Button>
+                    )}
+                    {project.github && (
+                      <Button asChild variant="ghost" size="sm">
+                        <a href={project.github} target="_blank" rel="noopener noreferrer">
+                          <FaGithub className="h-4 w-4" aria-hidden="true" />
+                          Source
+                        </a>
+                      </Button>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
+                )}
+              </div>
             </motion.article>
           ))}
         </motion.div>
