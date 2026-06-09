@@ -1,34 +1,45 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Libre_Baskerville, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "./components/ThemeProvider";
-import CursorSpotlight from "./components/CursorSpotlight";
 import ScrollProgress from "./components/ScrollProgress";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const displayFont = Libre_Baskerville({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+  preload: true,
+});
+
+const bodyFont = Source_Sans_3({
+  variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
   preload: true,
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  title: "Jon Wayne Cabusbusan | Full-Stack Developer",
-  description: "Full-stack developer specializing in React, Next.js, and TypeScript. Building high-performance web applications with focus on accessibility and user experience.",
-  keywords: ["Full-Stack Developer", "React Developer", "Next.js", "TypeScript", "Web Development", "Frontend", "Backend"],
+  title: "Jon Wayne Cabusbusan | Full-Stack Engineer",
+  description:
+    "Full-stack engineer building production web systems across government, healthcare, e-commerce, and marketplace products with Next.js, TypeScript, APIs, databases, and cloud deployment.",
+  keywords: [
+    "Full-Stack Engineer",
+    "Next.js Developer",
+    "React Developer",
+    "TypeScript",
+    "Web Development",
+    "Frontend",
+    "Backend",
+    "Iloilo Philippines",
+  ],
   authors: [{ name: "Jon Wayne Cabusbusan" }],
   creator: "Jon Wayne Cabusbusan",
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Jon Wayne Cabusbusan | Full-Stack Developer",
-    description: "Full-stack developer specializing in React, Next.js, and TypeScript.",
+    title: "Jon Wayne Cabusbusan | Full-Stack Engineer",
+    description:
+      "Production web systems across government, healthcare, e-commerce, and marketplace products.",
     siteName: "Jon Wayne Cabusbusan Portfolio",
   },
 };
@@ -39,28 +50,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                const theme = localStorage.getItem('theme') || 
-                  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                if (theme === 'dark') document.documentElement.classList.add('dark');
-              } catch (e) {}
-            `,
-          }}
-        />
-      </head>
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${displayFont.variable} ${bodyFont.variable} antialiased`}
       >
         <ScrollProgress />
-        <CursorSpotlight />
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );
