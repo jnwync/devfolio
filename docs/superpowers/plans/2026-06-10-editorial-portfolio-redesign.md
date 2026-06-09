@@ -38,6 +38,16 @@ grouped capability map, and a confident contact close. No AI-slop tells remain.
 - `feat: restructure experience and capabilities` (Task 6)
 - `feat: add editorial contact close` (Task 7)
 - `polish: fix hero portrait cached-image load and simplify` (Task 8)
+- `perf: optimize hero portrait to served webp via next/image` (follow-up)
+
+**Follow-up: hero image optimization**
+
+The portrait was a 1.1MB SVG that actually wrapped a base64 raster (no real vector benefit). It is
+now a 70KB 4:5 WebP generated from the source photo with `sharp` and served through `next/image`
+(`priority`, responsive `sizes`), with `images.formats: ["image/avif", "image/webp"]` enabled in
+`next.config.ts` so clients negotiate the smallest format. The redundant 1.1MB SVG and 1.6MB source
+PNG were removed from the working tree (recoverable from git history). Served portrait weight
+dropped ~94%.
 
 **Impeccable refinements (intentional deviations from the literal plan snippets)**
 
