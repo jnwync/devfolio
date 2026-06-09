@@ -1,23 +1,14 @@
-'use client';
-
-import { useState } from 'react';
-
 export default function HeroImage() {
-  const [isLoaded, setIsLoaded] = useState(false);
-
   return (
     <figure className="relative mx-auto w-full max-w-sm border border-border bg-card p-3 shadow-(--shadow-soft) lg:mx-0">
-      {!isLoaded && <div className="aspect-4/5 animate-pulse bg-muted" aria-hidden="true" />}
-
-      <div className={isLoaded ? 'block' : 'absolute inset-3 opacity-0'}>
+      <div className="aspect-4/5 w-full overflow-hidden bg-muted">
+        {/* eslint-disable-next-line @next/next/no-img-element -- local SVG portrait; next/image SVG optimization needs dangerouslyAllowSVG */}
         <img
           src="/images/hero/Cabusbusan-ID.svg"
           alt="Professional headshot of Jon Wayne Cabusbusan"
           width={520}
           height={650}
-          className="aspect-4/5 w-full object-cover object-top"
-          onLoad={() => setIsLoaded(true)}
-          onError={() => setIsLoaded(true)}
+          className="h-full w-full object-cover object-top"
         />
       </div>
 
