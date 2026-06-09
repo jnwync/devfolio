@@ -29,12 +29,12 @@ export default function Hero() {
   return (
     <section
       id="about"
-      className="relative scroll-mt-20 overflow-hidden py-16 sm:py-20 lg:py-28"
+      className="relative scroll-mt-20 overflow-hidden py-12 sm:py-16 lg:py-20"
       aria-labelledby="hero-heading"
     >
       <div className="section-shell">
         {/* Masthead / folio line */}
-        <div className="mb-12 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-border pb-4">
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-border pb-4">
           <span className="text-xs font-bold uppercase tracking-[0.22em] text-foreground">
             {personal.name}
           </span>
@@ -47,12 +47,12 @@ export default function Hero() {
           </span>
         </div>
 
-        <div className="grid gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-end">
+        <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
           <motion.div
             variants={container}
             initial="hidden"
             animate="visible"
-            className="max-w-3xl space-y-8"
+            className="max-w-3xl space-y-6"
           >
             <motion.p variants={item} className="section-kicker">
               {personal.tagline}
@@ -61,7 +61,7 @@ export default function Hero() {
             <motion.h1
               variants={item}
               id="hero-heading"
-              className="max-w-4xl text-balance font-serif text-5xl font-bold leading-[0.98] text-foreground sm:text-6xl lg:text-7xl"
+              className="max-w-3xl font-serif text-[clamp(2.25rem,1.3rem+3.2vw,3.4rem)] font-bold leading-[1.05] text-foreground"
             >
               {personal.positioning}
             </motion.h1>
@@ -86,7 +86,7 @@ export default function Hero() {
                   View selected work
                 </a>
               </Button>
-              <Button asChild variant="ghost" size="lg">
+              <Button asChild variant="outline" size="lg">
                 <a href="/cv.pdf" download>
                   <FileDown className="h-5 w-5" aria-hidden="true" />
                   Download CV
@@ -121,7 +121,7 @@ export default function Hero() {
         <a
           href="#evidence"
           aria-label="Scroll to evidence"
-          className="mt-16 hidden w-fit items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary lg:inline-flex"
+          className="mt-12 hidden w-fit items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary lg:inline-flex"
         >
           <ArrowDown className="h-4 w-4" aria-hidden="true" />
           Scroll for the evidence

@@ -101,7 +101,7 @@ export default function ProfessionalExperience() {
                 </p>
 
                 <ul className="mt-5 grid gap-3" role="list">
-                  {exp.achievements.slice(0, 3).map((achievement) => (
+                  {exp.achievements.slice(0, 2).map((achievement) => (
                     <li
                       key={achievement}
                       className="grid grid-cols-[1.25rem_1fr] gap-3 text-sm leading-6 text-foreground/80"

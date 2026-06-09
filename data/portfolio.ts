@@ -119,7 +119,7 @@ export const portfolioData: PortfolioData = {
   personal: {
     name: 'Jon Wayne Cabusbusan',
     tagline: 'Full-Stack Web Developer',
-    positioning: 'Full-stack engineer for production web systems that have to work for real users.',
+    positioning: 'Full-stack engineer for production web systems people rely on.',
     summary: 'I build responsive interfaces, API surfaces, and data workflows across government, healthcare, e-commerce, and marketplace products, with enough range to move from architecture through deployment.',
     email: 'jonwayne.cabusbusan@gmail.com',
     phone: '+639452897584',
@@ -141,8 +141,8 @@ export const portfolioData: PortfolioData = {
       label: 'Government, healthcare, e-commerce, and marketplace platforms',
     },
     {
-      value: 'Next.js + TypeScript',
-      label: 'Frontend systems, API routes, data flows, and deployment',
+      value: 'Frontend to deployment',
+      label: 'Next.js and React UIs, REST APIs, relational and document data, and cloud delivery',
     },
     {
       value: 'Production delivery',
