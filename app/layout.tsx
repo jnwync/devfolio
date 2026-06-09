@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Libre_Baskerville, Source_Sans_3 } from "next/font/google";
+import { Libre_Baskerville, Hanken_Grotesk } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import ScrollProgress from "./components/ScrollProgress";
@@ -12,7 +12,7 @@ const displayFont = Libre_Baskerville({
   preload: true,
 });
 
-const bodyFont = Source_Sans_3({
+const bodyFont = Hanken_Grotesk({
   variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
