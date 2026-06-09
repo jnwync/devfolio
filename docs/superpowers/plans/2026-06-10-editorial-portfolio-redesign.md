@@ -59,6 +59,23 @@ The mobile-menu `height:auto` animation (flagged P2) was intentionally **kept** 
 `AnimatePresence` unmount keeps closed links out of the tab order, which outweighs the minor
 layout-animation cost a grid-rows refactor would trade for.
 
+**Follow-up: `/impeccable critique` (design review, 37/40 Excellent)**
+
+A UX design-director critique passed the anti-pattern verdict and scored 37/40 on Nielsen's
+heuristics. Fixes applied (`design: tighten hero fold, sharpen copy, trim experience density`):
+
+- **[P2] Hero fold** — the 7xl `text-balance` headline set in a narrow 1.12fr column wrapped to
+  ~5 lines and pushed the primary CTA below the fold on a 13–14" laptop. Replaced with a fluid
+  `clamp(2.25rem, 1.3rem + 3.2vw, 3.4rem)` headline in a wider `1.3fr` text column (3 lines), plus
+  tighter section padding. Verified at 1366×768: name, all three CTAs, core-stack, and portrait
+  all clear the fold.
+- **[P3] CV emphasis** — hero "Download CV" promoted ghost → outline (recruiters reach for it).
+- **[P3] Copy** — positioning sharpened from "…that have to work for real users" to
+  "…production web systems people rely on" (removes filler, shorter → helps the fold).
+- **[P3] Density** — experience trimmed to the 2 strongest bullets per role.
+- **Minor** — evidence proof #2 reframed ("Next.js + TypeScript" → "Frontend to deployment") so it
+  no longer echoes the hero's core-stack strip.
+
 **Follow-up: hero image optimization**
 
 The portrait was a 1.1MB SVG that actually wrapped a base64 raster (no real vector benefit). It is
