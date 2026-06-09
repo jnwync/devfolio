@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Libre_Baskerville, Source_Sans_3 } from "next/font/google";
+import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import ScrollProgress from "./components/ScrollProgress";
 
@@ -54,8 +55,10 @@ export default function RootLayout({
       <body
         className={`${displayFont.variable} ${bodyFont.variable} antialiased`}
       >
-        <ScrollProgress />
-        {children}
+        <MotionConfig reducedMotion="user">
+          <ScrollProgress />
+          {children}
+        </MotionConfig>
       </body>
     </html>
   );

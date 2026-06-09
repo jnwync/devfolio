@@ -123,7 +123,7 @@ export default function Hero() {
           aria-label="Scroll to evidence"
           className="mt-16 hidden w-fit items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary lg:inline-flex"
         >
-          <ArrowDown className="h-4 w-4 animate-bounce" aria-hidden="true" />
+          <ArrowDown className="h-4 w-4" aria-hidden="true" />
           Scroll for the evidence
         </a>
       </div>

@@ -78,7 +78,7 @@ export default function ProfessionalExperience() {
               </div>
 
               <div>
-                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
                   <h3 className="font-serif text-2xl font-bold text-foreground">
                     {exp.company}
                   </h3>
@@ -87,7 +87,7 @@ export default function ProfessionalExperience() {
                       href={exp.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-primary transition-colors hover:text-accent focus-visible:rounded-sm"
+                      className="-mx-1 inline-flex min-h-11 items-center gap-1.5 px-1 text-xs font-bold uppercase tracking-[0.12em] text-primary transition-colors hover:text-accent focus-visible:rounded-sm"
                       aria-label={`Visit ${exp.company}`}
                     >
                       <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
