@@ -1,6 +1,16 @@
 
 // PORTFOLIO DATA TYPES
 
+export interface ImpactItem {
+  metric: string;
+  description: string;
+}
+
+export interface ProofPoint {
+  value: string;
+  label: string;
+}
+
 export interface Experience {
   id: string;
   company: string;
@@ -11,11 +21,9 @@ export interface Experience {
   endDate: string;
   location?: string;
   description: string;
+  scope: string;
   achievements: string[];
-  impact?: {
-    metric: string;
-    description: string;
-  }[];
+  impact?: ImpactItem[];
   technologies: string[];
   link?: string;
 }
@@ -28,16 +36,20 @@ export interface Project {
   startDate: string;
   endDate: string;
   description: string;
+  context: string;
+  responsibility: string;
+  outcomes: string[];
   achievements: string[];
   technologies: string[];
   link?: string;
   github?: string;
   image?: string;
+  featured?: boolean;
 }
 
 export interface Skill {
   name: string;
-  proficiency: number; // 0-100
+  proficiency: number;
   yearsUsed: number;
 }
 
@@ -45,6 +57,13 @@ export interface SkillCategory {
   title: string;
   description: string;
   skills: Skill[];
+}
+
+export interface CapabilityGroup {
+  title: string;
+  summary: string;
+  evidence: string;
+  skills: string[];
 }
 
 export interface Education {
@@ -57,13 +76,15 @@ export interface Education {
 export interface ContactLink {
   label: string;
   href: string;
-  icon: string; // Icon identifier: 'mail' | 'github' | 'linkedin' | 'phone' | 'globe'
+  icon: string;
   primary?: boolean;
 }
 
 export interface PersonalInfo {
   name: string;
   tagline: string;
+  positioning: string;
+  summary: string;
   email: string;
   phone: string;
   location: string;
@@ -77,10 +98,12 @@ export interface PersonalInfo {
 
 export interface PortfolioData {
   personal: PersonalInfo;
+  proofPoints: ProofPoint[];
   experiences: Experience[];
   projects: Project[];
   featuredSkills: Skill[];
   skillCategories: SkillCategory[];
+  capabilityGroups: CapabilityGroup[];
   education: Education;
   contactLinks: ContactLink[];
 }
@@ -96,6 +119,8 @@ export const portfolioData: PortfolioData = {
   personal: {
     name: 'Jon Wayne Cabusbusan',
     tagline: 'Full-Stack Web Developer',
+    positioning: 'Full-stack engineer for production web systems that have to work for real users.',
+    summary: 'I build responsive interfaces, API surfaces, and data workflows across government, healthcare, e-commerce, and marketplace products, with enough range to move from architecture through deployment.',
     email: 'jonwayne.cabusbusan@gmail.com',
     phone: '+639452897584',
     location: 'Iloilo, Philippines',
@@ -109,6 +134,25 @@ export const portfolioData: PortfolioData = {
       message: 'Available for New Opportunities',
     },
   },
+
+  proofPoints: [
+    {
+      value: '4 product domains',
+      label: 'Government, healthcare, e-commerce, and marketplace platforms',
+    },
+    {
+      value: 'Next.js + TypeScript',
+      label: 'Frontend systems, API routes, data flows, and deployment',
+    },
+    {
+      value: 'Production delivery',
+      label: 'Architecture, implementation, QA, and launch support',
+    },
+    {
+      value: 'Iloilo, Philippines',
+      label: 'Available for remote, hybrid, contract, and full-time conversations',
+    },
+  ],
 
   // ---------------------------------------------------------------------------
   // PROFESSIONAL EXPERIENCE
@@ -124,6 +168,7 @@ export const portfolioData: PortfolioData = {
       endDate: '2025-11',
       location: 'Hybrid',
       description: 'Mobile-first web application enabling MSMEs to access wholesale packaging at reduced minimum order quantities (MOQs). Concurrent contract engagement alongside BayloCentral (Jun-Nov 2025).',
+      scope: 'Owned product/order APIs, role-aware admin flows, Firestore data operations, uploads, and lifecycle notifications for a packaging marketplace.',
       achievements: [
         'Built product and order API routes in Next.js 15 (full CRUD) with Firebase Admin SDK token verification and RBAC, enforcing admin vs. msme_user role separation',
         'Implemented a service layer encapsulating Firestore CRUD and triggering event-driven notifications across 5 order lifecycle events (NEW_ORDER_PLACED, PAYMENT_VERIFIED, ORDER_SHIPPED)',
@@ -146,6 +191,7 @@ export const portfolioData: PortfolioData = {
       endDate: '2025-11',
       location: 'Hybrid',
       description: 'Next.js 15 + PostgreSQL e-commerce platform for MSMEs, covering product listings, cart, checkout, and a social feed with real-time updates. Concurrent contract engagement alongside PackUp (Jun-Nov 2025).',
+      scope: 'Built marketplace browsing, social feed interactions, cart behavior, and seller dashboard pieces for an MSME e-commerce platform.',
       achievements: [
         'Built the full marketplace browsing experience — product listings, category navigation, detail pages, and search with autocomplete and filters using Next.js 15, Prisma ORM, PostgreSQL, and SWR',
         'Developed a social feed supporting 4 post formats (text, photo, video, event) with likes, comments, shares, and real-time updates; enforced duplicate-action prevention via unique constraints',
@@ -167,6 +213,7 @@ export const portfolioData: PortfolioData = {
       endDate: '2025-05',
       location: 'Remote',
       description: 'Patient portal and hospital booking web application for healthcare facility management.',
+      scope: 'Led patient portal and hospital booking UI work while supporting backend refactors and database improvements in a two-developer team.',
       achievements: [
         'Led frontend development of patient portal and hospital booking system — delivering responsive UI/UX serving both patients and admin staff',
         'Refactored backend logic and optimized database structure, measurably reducing load times and enabling reliable performance under high-volume booking operations',
@@ -187,6 +234,7 @@ export const portfolioData: PortfolioData = {
       endDate: '2025-05',
       location: 'Iloilo, Philippines',
       description: 'Government-backed interactive MSME map for Iloilo, enabling DTI admins to register, visualize, and monitor regional businesses.',
+      scope: 'Built government-backed MSME mapping workflows, admin management, GeoJSON data delivery, and role-based API protection.',
       achievements: [
         'Developed MSME and user management API routes in Next.js 14 (full CRUD with joined address data) and a GeoJSON endpoint for Iloilo map data, built on reusable Firestore utility abstractions',
         'Applied role-based access control (superadmin / admin) at the API layer with end-to-end TypeScript type safety and Zod validation on all form inputs',
@@ -212,12 +260,20 @@ export const portfolioData: PortfolioData = {
       startDate: '2026-01',
       endDate: '2026-02',
       description: 'Fully custom portfolio built from scratch with a focus on accessibility, a production-grade design system, and a centralized data architecture — no templates used.',
+      context: 'A personal portfolio that needs to work as a recruiter scan, a technical proof surface, and a polished professional identity.',
+      responsibility: 'Designed and implemented the full app, including content architecture, typed portfolio data, theme tokens, accessibility affordances, and motion behavior.',
+      outcomes: [
+        'Centralized the portfolio content into a typed data source so sections can change without component rewrites.',
+        'Built a WCAG-minded one-page flow with skip navigation, section labels, reduced-motion handling, and semantic landmarks.',
+        'Used Next.js 16, React 19, Tailwind v4, and Framer Motion to create a production-ready personal site.',
+      ],
       achievements: [
         'Built on Next.js 16 App Router and React 19 with Tailwind v4, using an oklch-based design token system covering full light/dark mode, semantic color roles, and smooth 200ms theme transitions with no FOUC',
         'Achieved WCAG 2.1 compliance throughout — skip-to-content link, aria-labelledby on every section, aria-live on dynamic content, and prefers-reduced-motion support across all Framer Motion animations',
         'Centralized all content in a single typed data file (portfolio.ts) with domain interfaces and utility functions, so every section updates from one place without touching component code',
       ],
       technologies: ['Next.js', 'React', 'TypeScript', 'TailwindCSS', 'Framer Motion', 'WCAG 2.1'],
+      featured: false,
     },
     {
       id: 'reisky',
@@ -227,6 +283,13 @@ export const portfolioData: PortfolioData = {
       startDate: '2026-01',
       endDate: '2026-03',
       description: 'Conversion-focused marketing site for a traditional Filipino martial arts school, featuring 40 statically generated pages with performance and accessibility as first-class priorities.',
+      context: 'A conversion-focused marketing site for a traditional Filipino martial arts school with many static content pages.',
+      responsibility: 'Delivered the static page system, component variants, performance work, SEO infrastructure, security headers, and monitoring setup.',
+      outcomes: [
+        'Delivered 40 statically generated pages across programs, events, athlete profiles, scheduling, and pricing.',
+        'Reached Lighthouse scores of 94 Performance, 96 Accessibility, 100 Best Practices, and 92 SEO.',
+        'Generated all pages in under 600ms with Server Components, optimized images, and lazy-loading behavior.',
+      ],
       achievements: [
         'Delivered 40 statically generated pages (programs, events, athlete profiles, scheduling, pricing) using Next.js 16, React 19, TypeScript strict mode, and Tailwind CSS v4 with generateStaticParams()',
         'Achieved Lighthouse scores of 94 Performance / 96 Accessibility / 100 Best Practices / 92 SEO through Server Components, Intersection Observer lazy loading, next/image optimization, and useReducedMotion hook — all pages generated in under 600ms',
@@ -235,6 +298,7 @@ export const portfolioData: PortfolioData = {
       ],
       technologies: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS v4', 'CVA', 'Framer Motion', 'Sentry', 'SSG'],
       link: 'https://reisky.vercel.app',
+      featured: true,
     },
   ],
 
@@ -343,6 +407,33 @@ export const portfolioData: PortfolioData = {
         { name: 'Design-to-Code', proficiency: 80, yearsUsed: 2 },
         { name: 'TDD', proficiency: 70, yearsUsed: 1 },
       ],
+    },
+  ],
+
+  capabilityGroups: [
+    {
+      title: 'Frontend systems',
+      summary: 'Responsive interfaces, component architecture, accessibility, and motion that supports the product instead of decorating it.',
+      evidence: 'Built Next.js and React interfaces for marketplaces, patient booking, government dashboards, and static marketing systems.',
+      skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Radix UI', 'shadcn/ui', 'Framer Motion'],
+    },
+    {
+      title: 'Backend and APIs',
+      summary: 'RESTful API routes, authentication checks, role-based access, service layers, and event-driven workflows.',
+      evidence: 'Implemented product/order APIs, RBAC boundaries, lifecycle notifications, and CRUD flows across Firebase and PostgreSQL-backed products.',
+      skills: ['Node.js', 'REST APIs', 'Firebase Admin SDK', 'JWT', 'OAuth 2.0', 'Express.js'],
+    },
+    {
+      title: 'Data and cloud',
+      summary: 'Relational and document data modeling, migrations, uploads, storage, serialization, and deployment workflows.',
+      evidence: 'Worked with PostgreSQL, Supabase, Prisma, Firestore, Firebase Storage, Vercel, and production migration flows.',
+      skills: ['PostgreSQL', 'Supabase', 'Prisma', 'Firestore', 'Firebase Storage', 'Vercel'],
+    },
+    {
+      title: 'Delivery and quality',
+      summary: 'End-to-end delivery from architecture through QA, with attention to accessibility, performance, SEO, and maintainability.',
+      evidence: 'Contributed independently and in small agile teams across production, freelance, contract, and government-backed systems.',
+      skills: ['WCAG 2.1', 'Core Web Vitals', 'Lighthouse', 'ESLint', 'GitHub Actions', 'Sentry'],
     },
   ],
 
