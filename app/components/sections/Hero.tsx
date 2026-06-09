@@ -1,135 +1,131 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion, type Variants } from 'framer-motion';
+import { ArrowDown, BriefcaseBusiness, FileDown, Mail } from 'lucide-react';
 import HeroImage from '../HeroImage';
 import { Button } from '@/components/ui/button';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Hero() {
-  const { personal } = portfolioData;
-  const [isVisible, setIsVisible] = useState(false);
+  const { personal, featuredSkills } = portfolioData;
+  const reduceMotion = useReducedMotion();
 
-  // Trigger entrance animations
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
+  const container: Variants = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: reduceMotion ? 0 : 0.08, delayChildren: 0.05 },
+    },
+  };
+
+  const item: Variants = {
+    hidden: { opacity: 0, y: reduceMotion ? 0 : 18 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.25, 1, 0.5, 1] },
+    },
+  };
 
   return (
-    <section 
+    <section
       id="about"
-      className="scroll-mt-20 relative min-h-dvh flex items-center overflow-hidden"
-      aria-label="Hero introduction"
+      className="relative scroll-mt-20 overflow-hidden py-16 sm:py-20 lg:py-28"
+      aria-labelledby="hero-heading"
     >
-      {/* Animated gradient mesh background */}
-      <div className="absolute inset-0 bg-background -z-10" />
-      <motion.div
-        className="absolute inset-0 -z-10 opacity-30"
-        style={{
-          background: `
-            radial-gradient(circle at 20% 50%, var(--accent) 0%, transparent 50%),
-            radial-gradient(circle at 80% 50%, var(--primary) 0%, transparent 50%)
-          `,
-          filter: 'blur(80px)',
-        }}
-        animate={{
-          backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
-      />
-      <div 
-        className="absolute inset-0 -z-10 opacity-[0.015]"
-        style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }}
-      />
-      <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-muted/30 -z-10" />
+      <div className="section-shell">
+        {/* Masthead / folio line */}
+        <div className="mb-12 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-border pb-4">
+          <span className="text-xs font-bold uppercase tracking-[0.22em] text-foreground">
+            {personal.name}
+          </span>
+          <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-70" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
+            </span>
+            {personal.availability.message}
+          </span>
+        </div>
 
-      {/* Main Container */}
-      <div className="w-full max-w-7xl mx-auto px-6 py-20 md:py-32">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          
-          {/* Left: Content */}
-          <div className="space-y-6 md:space-y-8">
-            {/* Name with gradient */}
-            <h1
-              className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight motion-safe:transition-all motion-safe:duration-700 ${
-                isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
-              }`}
-            >
-              <span className="bg-linear-to-r from-foreground via-accent to-foreground bg-clip-text text-transparent">
-                {personal.name}
-              </span>
-            </h1>
+        <div className="grid gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-end">
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            className="max-w-3xl space-y-8"
+          >
+            <motion.p variants={item} className="section-kicker">
+              {personal.tagline}
+            </motion.p>
 
-            {/* Role */}
-            <h2
-              className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-muted-foreground motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-200 ${
-                isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
-              }`}
+            <motion.h1
+              variants={item}
+              id="hero-heading"
+              className="max-w-4xl text-balance font-serif text-5xl font-bold leading-[0.98] text-foreground sm:text-6xl lg:text-7xl"
             >
-              I'm a{' '}
-              <span className="text-accent font-semibold">{personal.tagline}</span>
-            </h2>
+              {personal.positioning}
+            </motion.h1>
 
-            {/* Description */}
-            <p
-              className={`text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-300 ${
-                isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
-              }`}
+            <motion.p
+              variants={item}
+              className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl"
             >
-              {personal.bio}
-            </p>
+              {personal.summary}
+            </motion.p>
 
-            {/* CTAs */}
-            <div
-              className={`flex flex-col sm:flex-row gap-3 pt-2 motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-400 ${
-                isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
-              }`}
-            >
+            <motion.div variants={item} className="flex flex-wrap items-center gap-3">
               <Button asChild size="lg">
-                <a href="#experience" className="group">
-                  <span>View Experience</span>
-                  <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                <a href={`mailto:${personal.email}`}>
+                  <Mail className="h-5 w-5" aria-hidden="true" />
+                  Start a conversation
                 </a>
               </Button>
-              
-              <Button asChild variant="outline" size="default">
-                <a href="/cv.pdf" download className="group">
-                  <span>Download CV</span>
-                  <span className="transition-transform group-hover:translate-y-0.5">↓</span>
+              <Button asChild variant="outline" size="lg">
+                <a href="#projects">
+                  <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" />
+                  View selected work
                 </a>
               </Button>
-            </div>
-          </div>
+              <Button asChild variant="ghost" size="lg">
+                <a href="/cv.pdf" download>
+                  <FileDown className="h-5 w-5" aria-hidden="true" />
+                  Download CV
+                </a>
+              </Button>
+            </motion.div>
 
-          {/* Right: Image */}
-          <div
-            className={`relative order-first lg:order-last motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-100 ${
-              isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-8'
-            }`}
+            <motion.div variants={item} className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-border pt-6">
+              <span className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                Core stack
+              </span>
+              <span className="h-3 w-px bg-border" aria-hidden="true" />
+              <ul className="flex flex-wrap gap-x-4 gap-y-1" role="list">
+                {featuredSkills.map((skill) => (
+                  <li key={skill.name} className="text-sm font-bold text-foreground">
+                    {skill.name}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1], delay: 0.15 }}
           >
             <HeroImage />
-          </div>
-
+          </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div
-          className={`absolute bottom-8 left-1/2 -translate-x-1/2 motion-safe:transition-all motion-safe:duration-700 motion-safe:delay-500 max-lg:hidden ${
-            isVisible ? 'opacity-100 motion-safe:translate-y-0' : 'opacity-0 motion-safe:translate-y-4'
-          }`}
+        <a
+          href="#evidence"
+          aria-label="Scroll to evidence"
+          className="mt-16 hidden w-fit items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary lg:inline-flex"
         >
-          <div className="flex flex-col items-center gap-2 text-muted-foreground">
-            <span className="text-xs tracking-wider uppercase">Scroll</span>
-            <div className="h-6 w-px bg-linear-to-b from-accent to-transparent animate-pulse" />
-          </div>
-        </div>
+          <ArrowDown className="h-4 w-4 animate-bounce" aria-hidden="true" />
+          Scroll for the evidence
+        </a>
       </div>
     </section>
   );

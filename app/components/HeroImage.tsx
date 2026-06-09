@@ -6,41 +6,25 @@ export default function HeroImage() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto">
-      {/* Loading skeleton */}
-      {!isLoaded && (
-        <div className="aspect-square rounded-full bg-muted animate-pulse" />
-      )}
+    <figure className="relative mx-auto w-full max-w-sm border border-border bg-card p-3 shadow-(--shadow-soft) lg:mx-0">
+      {!isLoaded && <div className="aspect-4/5 animate-pulse bg-muted" aria-hidden="true" />}
 
-      {/* SVG container with gradient background */}
-      <div 
-        className={`hero-image-container aspect-square rounded-full overflow-hidden ${
-          !isLoaded ? 'absolute inset-0 opacity-0' : ''
-        }`}
-      >
+      <div className={isLoaded ? 'block' : 'absolute inset-3 opacity-0'}>
         <img
           src="/images/hero/Cabusbusan-ID.svg"
-          alt="Professional headshot of Jon Wayne Cabusbusan, Full-Stack Web Developer"
-          width={600}
-          height={600}
-          className={`hero-image w-full h-full object-cover transition-opacity duration-500 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-          onLoad={() => {
-            setIsLoaded(true);
-          }}
-          onError={(e) => {
-            console.error('Failed to load image:', e);
-            setIsLoaded(true);
-          }}
+          alt="Professional headshot of Jon Wayne Cabusbusan"
+          width={520}
+          height={650}
+          className="aspect-4/5 w-full object-cover object-top"
+          onLoad={() => setIsLoaded(true)}
+          onError={() => setIsLoaded(true)}
         />
       </div>
-      
-      {/* Subtle accent glow */}
-      <div 
-        className="absolute -inset-4 sm:-inset-6 md:-inset-8 bg-accent/5 rounded-full blur-2xl -z-10 pointer-events-none" 
-        aria-hidden="true"
-      />
-    </div>
+
+      <figcaption className="mt-3 flex items-center justify-between gap-3 border-t border-border pt-3 text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
+        <span>Iloilo, PH</span>
+        <span>Full-stack web systems</span>
+      </figcaption>
+    </figure>
   );
 }
