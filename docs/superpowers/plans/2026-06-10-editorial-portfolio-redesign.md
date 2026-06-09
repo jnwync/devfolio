@@ -40,6 +40,25 @@ grouped capability map, and a confident contact close. No AI-slop tells remain.
 - `polish: fix hero portrait cached-image load and simplify` (Task 8)
 - `perf: optimize hero portrait to served webp via next/image` (follow-up)
 
+**Follow-up: `/impeccable audit` (score 19→20/20)**
+
+A code-level audit scored the build 19/20 (Excellent). Fixes applied (`a11y: fix accent
+contrast and respect reduced-motion`):
+
+- **[P1] Contrast** — accent label text measured 4.18–4.39:1 (below AA 4.5). `--accent`
+  darkened to `oklch(0.55 0.125 48)` → 4.73:1 on background, 4.97:1 on card. Verified with an
+  OKLCH→sRGB WCAG contrast script.
+- **[P2] Reduced motion** — the global CSS `prefers-reduced-motion` rule only neutralizes CSS
+  animations, not Framer Motion's JS transforms. Wrapped the tree in
+  `<MotionConfig reducedMotion="user">` so all scroll reveals drop their translation when the
+  user opts out.
+- **[P3]** Removed `animate-bounce` from the hero scroll arrow; gave the (future) experience
+  "Visit" link a 44px touch target; deleted the unused `--accent-rgb` token.
+
+The mobile-menu `height:auto` animation (flagged P2) was intentionally **kept** — its
+`AnimatePresence` unmount keeps closed links out of the tab order, which outweighs the minor
+layout-animation cost a grid-rows refactor would trade for.
+
 **Follow-up: hero image optimization**
 
 The portrait was a 1.1MB SVG that actually wrapped a base64 raster (no real vector benefit). It is
