@@ -5,18 +5,18 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold transition-[transform,background-color,border-color,color,opacity] duration-200 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex min-h-11 touch-manipulation items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold transition-[transform,background-color,border-color,color,opacity,box-shadow] duration-200 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/92 active:translate-y-px",
+          "bg-primary text-primary-foreground shadow-[0_12px_28px_oklch(0.36_0.085_148/0.18)] hover:-translate-y-0.5 hover:bg-primary/92 hover:shadow-[0_18px_38px_oklch(0.36_0.085_148/0.2)] active:translate-y-px",
         outline:
-          "border border-border bg-background text-foreground hover:border-primary hover:text-primary active:translate-y-px",
+          "border border-border bg-background text-foreground hover:-translate-y-0.5 hover:border-primary hover:text-primary hover:shadow-(--shadow-soft) active:translate-y-px",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 active:translate-y-px",
+          "bg-secondary text-secondary-foreground hover:-translate-y-0.5 hover:bg-secondary/80 hover:shadow-(--shadow-soft) active:translate-y-px",
         ghost:
-          "text-foreground hover:bg-secondary/70 hover:text-primary active:translate-y-px",
+          "text-foreground hover:-translate-y-0.5 hover:bg-secondary/70 hover:text-primary active:translate-y-px",
         link:
           "min-h-0 rounded-none px-0 py-0 text-primary underline-offset-4 hover:underline focus-visible:ring-0 focus-visible:underline",
       },

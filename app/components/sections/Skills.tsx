@@ -32,7 +32,7 @@ export default function Skills() {
           <p className="section-kicker">Capabilities</p>
           <h2
             id="skills-heading"
-            className="mt-4 text-balance font-serif text-4xl font-bold leading-tight md:text-5xl"
+            className="section-heading"
           >
             The stack, organized by the work it supports.
           </h2>
@@ -46,14 +46,14 @@ export default function Skills() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
+          viewport={{ once: true, amount: 0.08 }}
           className="grid gap-5 md:grid-cols-2"
         >
           {capabilityGroups.map((group, index) => (
             <motion.article
               key={group.title}
               variants={itemVariants}
-              className="flex flex-col border border-border bg-card p-6 sm:p-8"
+              className="premium-panel premium-hover flex flex-col p-6 hover:border-primary/35 sm:p-8"
             >
               <div className="flex items-baseline gap-3">
                 <span
@@ -69,11 +69,8 @@ export default function Skills() {
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
                 {group.summary}
               </p>
-              <p className="mt-5 border-t border-border pt-5 text-sm leading-6 text-foreground/80">
-                {group.evidence}
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {group.skills.map((skill) => (
+              <div className="mt-6 flex flex-wrap gap-2 border-t border-border pt-5">
+                {group.skills.slice(0, 5).map((skill) => (
                   <Badge key={skill} variant="secondary">
                     {skill}
                   </Badge>

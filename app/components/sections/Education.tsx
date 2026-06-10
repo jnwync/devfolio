@@ -7,10 +7,15 @@ import { Badge } from '@/components/ui/badge';
 export default function Education() {
   const { education } = portfolioData;
 
-  // Highlight the most relevant courses — skip generic module names
-  const featuredCoursework = education.coursework.filter(
-    (course) => !course.includes('I-III') && !course.includes('Engineering Data Analysis')
-  );
+  // Surface only the courses that signal something to a hiring reader —
+  // skip table-stakes module names (Data Structures, Algorithms, etc.).
+  const featuredCoursework = [
+    'Web Application Development',
+    'Database Systems',
+    'Software Architecture',
+    'Software Testing',
+    'Machine Learning',
+  ].filter((course) => education.coursework.includes(course));
 
   return (
     <section
@@ -23,7 +28,7 @@ export default function Education() {
           <p className="section-kicker">Education</p>
           <h2
             id="education-heading"
-            className="mt-4 text-balance font-serif text-4xl font-bold leading-tight md:text-5xl"
+            className="section-heading"
           >
             The academic foundation.
           </h2>
@@ -32,9 +37,9 @@ export default function Education() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
+          viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-          className="grid gap-8 border border-border bg-card p-6 md:grid-cols-[0.42fr_0.58fr] md:p-8"
+          className="premium-panel grid gap-8 p-6 md:grid-cols-[0.42fr_0.58fr] md:p-8"
         >
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">

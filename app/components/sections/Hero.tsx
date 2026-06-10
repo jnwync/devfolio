@@ -29,12 +29,12 @@ export default function Hero() {
   return (
     <section
       id="about"
-      className="relative scroll-mt-20 overflow-hidden py-12 sm:py-16 lg:py-20"
+      className="relative scroll-mt-20 overflow-hidden py-10 sm:py-16 lg:py-20"
       aria-labelledby="hero-heading"
     >
       <div className="section-shell">
         {/* Masthead / folio line */}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-border pb-4">
+        <div className="mb-7 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-border pb-4 sm:mb-8">
           <span className="text-xs font-bold uppercase tracking-[0.22em] text-foreground">
             {personal.name}
           </span>
@@ -61,47 +61,52 @@ export default function Hero() {
             <motion.h1
               variants={item}
               id="hero-heading"
-              className="max-w-3xl font-serif text-[clamp(2.25rem,1.3rem+3.2vw,3.4rem)] font-bold leading-[1.05] text-foreground"
+              className="max-w-3xl font-serif text-[clamp(2rem,1.38rem+4.3vw,2.4rem)] font-bold leading-[1.05] text-foreground sm:text-[clamp(2.25rem,1.3rem+3.2vw,3.4rem)] sm:leading-[1.04]"
             >
               {personal.positioning}
             </motion.h1>
 
             <motion.p
               variants={item}
-              className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl"
+              className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-xl sm:leading-8"
             >
               {personal.summary}
             </motion.p>
 
-            <motion.div variants={item} className="flex flex-wrap items-center gap-3">
-              <Button asChild size="lg">
+            <motion.div variants={item} className="grid gap-3 sm:flex sm:flex-wrap sm:items-center">
+              <Button asChild size="lg" className="w-full sm:w-auto">
                 <a href={`mailto:${personal.email}`}>
                   <Mail className="h-5 w-5" aria-hidden="true" />
                   Start a conversation
                 </a>
               </Button>
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
                 <a href="#projects">
                   <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" />
                   View selected work
                 </a>
               </Button>
-              <Button asChild variant="outline" size="lg">
-                <a href="/cv.pdf" download>
-                  <FileDown className="h-5 w-5" aria-hidden="true" />
-                  Download CV
-                </a>
-              </Button>
+              <a
+                href="/cv.pdf"
+                download
+                className="inline-flex min-h-11 items-center justify-center gap-2 px-1 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground sm:justify-start"
+              >
+                <FileDown className="h-4 w-4" aria-hidden="true" />
+                Download CV
+              </a>
             </motion.div>
 
-            <motion.div variants={item} className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-border pt-6">
+            <motion.div
+              variants={item}
+              className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 border-t border-border pt-6 text-sm"
+            >
               <span className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
                 Core stack
               </span>
-              <span className="h-3 w-px bg-border" aria-hidden="true" />
-              <ul className="flex flex-wrap gap-x-4 gap-y-1" role="list">
-                {featuredSkills.map((skill) => (
-                  <li key={skill.name} className="text-sm font-bold text-foreground">
+              <ul className="flex flex-wrap items-center gap-x-2.5 gap-y-1" role="list">
+                {featuredSkills.map((skill, i) => (
+                  <li key={skill.name} className="flex items-center gap-2.5 font-bold text-foreground">
+                    {i > 0 && <span className="text-border" aria-hidden="true">·</span>}
                     {skill.name}
                   </li>
                 ))}
@@ -121,7 +126,7 @@ export default function Hero() {
         <a
           href="#evidence"
           aria-label="Scroll to evidence"
-          className="mt-12 hidden w-fit items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary lg:inline-flex"
+          className="mt-12 hidden min-h-11 w-fit items-center gap-2 rounded-md pr-3 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary lg:inline-flex"
         >
           <ArrowDown className="h-4 w-4" aria-hidden="true" />
           Scroll for the evidence

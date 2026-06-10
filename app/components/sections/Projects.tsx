@@ -45,7 +45,7 @@ export default function Projects() {
             <p className="section-kicker">Selected work</p>
             <h2
               id="projects-heading"
-              className="mt-4 text-balance font-serif text-4xl font-bold leading-tight md:text-5xl"
+              className="section-heading"
             >
               Case-study evidence, not just project tiles.
             </h2>
@@ -60,19 +60,19 @@ export default function Projects() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
+          viewport={{ once: true, amount: 0.08 }}
           className="space-y-8"
         >
           {projects.map((project) => (
             <motion.article
               key={project.id}
               variants={itemVariants}
-              className={`border border-border bg-card ${
+              className={`premium-panel premium-hover ${
                 project.featured ? 'md:grid md:grid-cols-[0.95fr_1.05fr]' : ''
               }`}
             >
               <div className="border-b border-border p-6 md:border-b-0 md:border-r md:p-8">
-                <div className="flex flex-wrap items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2.5">
                   <Badge variant={project.featured ? 'default' : 'outline'}>
                     {typeLabels[project.type]}
                   </Badge>
@@ -84,7 +84,7 @@ export default function Projects() {
                   </span>
                 </div>
 
-                <h3 className="mt-6 font-serif text-3xl font-bold leading-tight text-foreground md:text-4xl">
+                <h3 className="mt-6 max-w-xl font-serif text-2xl font-bold leading-tight text-foreground sm:text-3xl md:text-4xl">
                   {project.title}
                 </h3>
                 <p className="mt-5 text-base leading-7 text-muted-foreground">
@@ -92,7 +92,7 @@ export default function Projects() {
                 </p>
 
                 {project.image && (
-                  <div className="relative mt-6 aspect-video w-full overflow-hidden border border-border bg-muted">
+                  <div className="relative mt-6 aspect-video w-full overflow-hidden border border-border bg-muted shadow-(--shadow-soft)">
                     <Image
                       src={project.image}
                       alt={`Screenshot of ${project.title}`}
@@ -118,13 +118,13 @@ export default function Projects() {
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">
                     Evidence
                   </p>
-                  <ul className="mt-3 space-y-3" role="list">
+                  <ul className="mt-3 space-y-3.5" role="list">
                     {project.outcomes.map((outcome) => (
                       <li
                         key={outcome}
-                        className="grid grid-cols-[1.25rem_1fr] gap-3 text-sm leading-6 text-muted-foreground"
+                        className="grid grid-cols-[0.875rem_1fr] gap-3 text-sm leading-6 text-muted-foreground"
                       >
-                        <span className="mt-3 h-px bg-primary" aria-hidden="true" />
+                        <span className="evidence-marker" aria-hidden="true" />
                         <span>{outcome}</span>
                       </li>
                     ))}
@@ -132,7 +132,7 @@ export default function Projects() {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech) => (
+                  {project.technologies.slice(0, 5).map((tech) => (
                     <Badge key={tech} variant="secondary">
                       {tech}
                     </Badge>
@@ -143,8 +143,8 @@ export default function Projects() {
                   <div className="flex flex-wrap gap-3 pt-2">
                     {project.link && (
                       <Button asChild variant="outline" size="sm">
-                        <a href={project.link} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="group/button">
+                          <ExternalLink className="h-4 w-4 transition-transform group-hover/button:-translate-y-0.5 group-hover/button:translate-x-0.5" aria-hidden="true" />
                           Visit site
                         </a>
                       </Button>

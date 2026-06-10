@@ -4,9 +4,9 @@ export default function EvidenceBand() {
   return (
     <section id="evidence" className="editorial-rule bg-card/70" aria-label="Portfolio evidence at a glance">
       <div className="section-shell">
-        <dl className="grid gap-0 divide-y divide-border border-x border-border bg-card md:grid-cols-4 md:divide-x md:divide-y-0">
+        <dl className="premium-panel grid gap-0 divide-y divide-border md:grid-cols-4 md:divide-x md:divide-y-0">
           {portfolioData.proofPoints.map((point, index) => (
-            <div key={point.value} className="flex flex-col gap-2 p-5 sm:p-6">
+            <div key={point.value} className="premium-hover flex flex-col gap-2 p-5 hover:bg-secondary/35 sm:p-6">
               <span
                 className="text-xs font-bold uppercase tracking-[0.16em] text-accent"
                 aria-hidden="true"

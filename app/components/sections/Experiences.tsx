@@ -41,7 +41,7 @@ export default function ProfessionalExperience() {
             <p className="section-kicker">Experience</p>
             <h2
               id="experience-heading"
-              className="mt-4 text-balance font-serif text-4xl font-bold leading-tight md:text-5xl"
+              className="section-heading"
             >
               A short record of shipped work.
             </h2>
@@ -56,7 +56,7 @@ export default function ProfessionalExperience() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
+          viewport={{ once: true, amount: 0.08 }}
         >
           {experiences.map((exp) => (
             <motion.article
@@ -71,10 +71,10 @@ export default function ProfessionalExperience() {
                 >
                   {exp.period}
                 </time>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Badge variant="outline">{typeLabels[exp.type]}</Badge>
-                  {exp.location && <Badge variant="secondary">{exp.location}</Badge>}
-                </div>
+                <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-accent">
+                  {typeLabels[exp.type]}
+                  {exp.location ? ` · ${exp.location}` : ''}
+                </p>
               </div>
 
               <div>
@@ -104,25 +104,22 @@ export default function ProfessionalExperience() {
                   {exp.achievements.slice(0, 2).map((achievement) => (
                     <li
                       key={achievement}
-                      className="grid grid-cols-[1.25rem_1fr] gap-3 text-sm leading-6 text-foreground/80"
+                      className="grid grid-cols-[0.875rem_1fr] gap-3 text-sm leading-6 text-foreground/80"
                     >
-                      <span className="mt-3 h-px bg-accent" aria-hidden="true" />
+                      <span className="evidence-marker bg-accent" aria-hidden="true" />
                       <span>{achievement}</span>
                     </li>
                   ))}
                 </ul>
 
                 {exp.impact && exp.impact.length > 0 && (
-                  <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-6">
                     {exp.impact.map((metric) => (
-                      <div
-                        key={`${metric.metric}-${metric.description}`}
-                        className="border border-border bg-secondary/50 p-4"
-                      >
-                        <dt className="font-serif text-2xl font-bold text-foreground">
+                      <div key={`${metric.metric}-${metric.description}`}>
+                        <dt className="font-serif text-3xl font-bold leading-none text-foreground">
                           {metric.metric}
                         </dt>
-                        <dd className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                        <dd className="mt-2 max-w-[24ch] text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
                           {metric.description}
                         </dd>
                       </div>
@@ -131,7 +128,7 @@ export default function ProfessionalExperience() {
                 )}
 
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {exp.technologies.map((tech) => (
+                  {exp.technologies.slice(0, 5).map((tech) => (
                     <Badge key={tech} variant="secondary">
                       {tech}
                     </Badge>

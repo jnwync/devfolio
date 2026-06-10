@@ -50,13 +50,13 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
+            viewport={{ once: true, amount: 0.08 }}
             transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
           >
             <p className="section-kicker">Contact</p>
             <h2
               id="contact-heading"
-              className="mt-4 text-balance font-serif text-4xl font-bold leading-tight md:text-5xl"
+              className="section-heading"
             >
               Start with the role, the product, or the problem.
             </h2>
@@ -98,7 +98,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
+            viewport={{ once: true, amount: 0.08 }}
             transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1], delay: 0.1 }}
           >
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
@@ -114,7 +114,7 @@ export default function Contact() {
                       href={link.href}
                       target={isExternal ? '_blank' : undefined}
                       rel={isExternal ? 'noopener noreferrer' : undefined}
-                      className="group flex items-center gap-4 py-4 transition-colors hover:text-primary focus-visible:rounded-sm"
+                      className="group flex min-h-14 items-center gap-4 py-4 transition-colors hover:text-primary focus-visible:rounded-sm"
                     >
                       {Icon && (
                         <Icon
