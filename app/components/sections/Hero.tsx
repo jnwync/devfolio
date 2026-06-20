@@ -3,6 +3,7 @@
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
 import { ArrowDown, BriefcaseBusiness, FileDown, Mail } from 'lucide-react';
 import HeroImage from '../HeroImage';
+import Magnetic from '../motion/Magnetic';
 import { Button } from '@/components/ui/button';
 import { portfolioData } from '@/data/portfolio';
 
@@ -26,13 +27,34 @@ export default function Hero() {
     },
   };
 
+  const headline: Variants = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: reduceMotion ? 0 : 0.045, delayChildren: 0.12 },
+    },
+  };
+
+  const word: Variants = {
+    hidden: { y: reduceMotion ? 0 : '115%' },
+    visible: {
+      y: 0,
+      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
+  const headlineWords = personal.positioning.split(' ');
+
   return (
     <section
       id="about"
       className="relative scroll-mt-20 overflow-hidden py-10 sm:py-16 lg:py-20"
       aria-labelledby="hero-heading"
     >
-      <div className="section-shell">
+      <span aria-hidden="true" className="ghost-word right-[-3vw] top-[34%] hidden text-[clamp(8rem,19vw,17rem)] sm:block">
+        jnwync
+      </span>
+      <div aria-hidden="true" className="grain-layer" />
+      <div className="section-shell relative z-10">
         {/* Masthead / folio line */}
         <div className="mb-7 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-border pb-4 sm:mb-8">
           <span className="text-xs font-bold uppercase tracking-[0.22em] text-foreground">
@@ -59,11 +81,17 @@ export default function Hero() {
             </motion.p>
 
             <motion.h1
-              variants={item}
+              variants={headline}
               id="hero-heading"
-              className="max-w-3xl font-serif text-[clamp(2rem,1.38rem+4.3vw,2.4rem)] font-bold leading-[1.05] text-foreground sm:text-[clamp(2.25rem,1.3rem+3.2vw,3.4rem)] sm:leading-[1.04]"
+              className="max-w-3xl font-serif text-[clamp(2rem,1.38rem+4.3vw,2.4rem)] font-bold leading-[1.08] text-foreground sm:text-[clamp(2.25rem,1.3rem+3.2vw,3.4rem)] sm:leading-[1.07]"
             >
-              {personal.positioning}
+              {headlineWords.map((w, i) => (
+                <span key={`${w}-${i}`} className="line-mask">
+                  <motion.span variants={word} className="inline-block pb-[0.06em] pr-[0.26em]">
+                    {w}
+                  </motion.span>
+                </span>
+              ))}
             </motion.h1>
 
             <motion.p
@@ -74,12 +102,14 @@ export default function Hero() {
             </motion.p>
 
             <motion.div variants={item} className="grid gap-3 sm:flex sm:flex-wrap sm:items-center">
-              <Button asChild size="lg" className="w-full sm:w-auto">
-                <a href={`mailto:${personal.email}`}>
-                  <Mail className="h-5 w-5" aria-hidden="true" />
-                  Start a conversation
-                </a>
-              </Button>
+              <Magnetic className="w-full sm:w-auto" strength={0.4}>
+                <Button asChild size="lg" className="w-full">
+                  <a href={`mailto:${personal.email}`}>
+                    <Mail className="h-5 w-5" aria-hidden="true" />
+                    Start a conversation
+                  </a>
+                </Button>
+              </Magnetic>
               <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
                 <a href="#projects">
                   <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" />

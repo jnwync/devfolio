@@ -3,6 +3,7 @@
 import { motion, type Variants } from 'framer-motion';
 import { portfolioData } from '@/data/portfolio';
 import { Badge } from '@/components/ui/badge';
+import SectionMark from '../SectionMark';
 
 const containerVariants: Variants = {
   hidden: {},
@@ -25,11 +26,12 @@ export default function Skills() {
     <section
       id="skills"
       aria-labelledby="skills-heading"
-      className="editorial-rule scroll-mt-20 py-20 md:py-28"
+      className="editorial-rule relative scroll-mt-20 overflow-hidden py-20 md:py-28"
     >
-      <div className="section-shell">
+      <SectionMark index="03" />
+      <div className="section-shell relative z-10">
         <header className="mb-14 max-w-3xl">
-          <p className="section-kicker">Capabilities</p>
+          <p className="section-kicker">03 — Capabilities</p>
           <h2
             id="skills-heading"
             className="section-heading"
@@ -47,34 +49,36 @@ export default function Skills() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.08 }}
-          className="grid gap-5 md:grid-cols-2"
+          className="border-t border-border"
         >
           {capabilityGroups.map((group, index) => (
             <motion.article
               key={group.title}
               variants={itemVariants}
-              className="premium-panel premium-hover flex flex-col p-6 hover:border-primary/35 sm:p-8"
+              className="group grid gap-x-10 gap-y-4 border-b border-border py-8 md:grid-cols-[0.4fr_0.6fr] md:py-10"
             >
-              <div className="flex items-baseline gap-3">
+              <div className="flex items-baseline gap-4">
                 <span
-                  className="font-serif text-sm font-bold text-accent"
+                  className="font-serif text-2xl font-bold leading-none text-accent transition-transform duration-300 ease-(--ease-out-quart) group-hover:-translate-y-0.5"
                   aria-hidden="true"
                 >
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="font-serif text-2xl font-bold text-foreground">
+                <h3 className="font-serif text-2xl font-bold leading-tight text-foreground md:text-3xl">
                   {group.title}
                 </h3>
               </div>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                {group.summary}
-              </p>
-              <div className="mt-6 flex flex-wrap gap-2 border-t border-border pt-5">
-                {group.skills.slice(0, 5).map((skill) => (
-                  <Badge key={skill} variant="secondary">
-                    {skill}
-                  </Badge>
-                ))}
+              <div>
+                <p className="max-w-2xl text-base leading-7 text-muted-foreground">
+                  {group.summary}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {group.skills.slice(0, 6).map((skill) => (
+                    <Badge key={skill} variant="secondary">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </motion.article>
           ))}

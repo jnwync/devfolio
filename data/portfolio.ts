@@ -273,6 +273,7 @@ export const portfolioData: PortfolioData = {
         'Centralized all content in a single typed data file (portfolio.ts) with domain interfaces and utility functions, so every section updates from one place without touching component code',
       ],
       technologies: ['Next.js', 'React', 'TypeScript', 'TailwindCSS', 'Framer Motion', 'WCAG 2.1'],
+      image: '/images/projects/devfolio-home.png',
       featured: false,
     },
     {
@@ -298,6 +299,7 @@ export const portfolioData: PortfolioData = {
       ],
       technologies: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS v4', 'CVA', 'Framer Motion', 'Sentry', 'SSG'],
       link: 'https://reisky.vercel.app',
+      image: '/images/projects/reisky-home.png',
       featured: true,
     },
   ],

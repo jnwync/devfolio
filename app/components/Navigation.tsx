@@ -18,6 +18,7 @@ const NAVIGATION_SETTLE_FALLBACK_MS = 1200;
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('about');
   const [pendingSection, setPendingSection] = useState<string | null>(null);
   const pendingSectionRef = useRef<string | null>(null);
@@ -117,6 +118,13 @@ export default function Navigation() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 16);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (!element) return;
@@ -171,7 +179,11 @@ export default function Navigation() {
       </a>
 
       <nav
-        className="sticky top-0 z-50 border-b border-border bg-background/92 backdrop-blur-md"
+        className={`sticky top-0 z-50 border-b backdrop-blur-md transition-[background-color,box-shadow,border-color] duration-300 ease-(--ease-out-quart) ${
+          scrolled || isOpen
+            ? 'border-border bg-background/95 shadow-[0_8px_30px_oklch(0.23_0.04_75/0.09)]'
+            : 'border-transparent bg-background/80'
+        }`}
         aria-label="Main navigation"
       >
         <div className="section-shell">
@@ -182,7 +194,7 @@ export default function Navigation() {
               className="inline-flex min-h-11 items-center rounded-md pr-3 font-serif text-xl font-bold text-foreground transition-colors hover:text-primary focus-visible:rounded-sm"
               aria-label="Jon Wayne Cabusbusan - Home"
             >
-              JWC
+              jnwync
             </a>
 
             <div className="hidden items-center gap-1.5 md:flex">

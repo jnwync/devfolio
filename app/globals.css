@@ -32,6 +32,7 @@
   --shadow-lift: 0 24px 70px oklch(0.22 0.045 70 / 0.12);
   --shadow-press: 0 14px 34px oklch(0.24 0.045 70 / 0.1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
@@ -156,6 +157,29 @@
   }
 }
 
+/* Cursor-aware spotlight: a soft warm glow tracks the pointer across a card.
+   Sits behind content (z-index -1 within the card's isolation context). */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out-quart);
+  background: radial-gradient(
+    340px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    oklch(0.55 0.125 48 / 0.09),
+    transparent 62%
+  );
+}
+
+@media (hover: hover) {
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+}
+
 .portrait-card {
   @apply relative isolate;
 }
@@ -167,8 +191,48 @@
   z-index: -1;
   border: 1px solid oklch(0.82 0.035 78 / 0.85);
   background:
-    linear-gradient(135deg, oklch(0.925 0.035 82 / 0.72), oklch(0.993 0.01 78 / 0.45));
+    linear-gradient(135deg, oklch(0.926 0.035 82 / 0.72), oklch(0.993 0.01 78 / 0.46));
   box-shadow: var(--shadow-press);
+}
+
+/* Film-grain texture layer. Decorative, non-interactive, reduced-motion safe. */
+.grain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Page-wide paper grain: a fixed, static texture the whole page is "printed on". */
+.page-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.34;
+  mix-blend-mode: soft-light;
+}
+
+/* Oversized ghosted typographic backdrop for layered depth. */
+.ghost-word {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--font-display), serif;
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  color: oklch(0.36 0.085 148 / 0.05);
+  z-index: 0;
+}
+
+/* Word-mask reveal: clips each headline word so it rises into view. */
+.line-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
 }
 
 /* Screen reader only utility (if not provided by Tailwind) */

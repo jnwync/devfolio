@@ -7,6 +7,8 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import type { IconType } from 'react-icons';
 import { portfolioData } from '@/data/portfolio';
 import { Button } from '@/components/ui/button';
+import Magnetic from '../motion/Magnetic';
+import SectionMark from '../SectionMark';
 
 const iconMap: Record<string, IconType> = {
   github: FaGithub,
@@ -43,9 +45,10 @@ export default function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="editorial-rule scroll-mt-20 py-20 md:py-28"
+      className="editorial-rule relative scroll-mt-20 overflow-hidden py-20 md:py-28"
     >
-      <div className="section-shell">
+      <SectionMark index="05" />
+      <div className="section-shell relative z-10">
         <div className="grid gap-12 lg:grid-cols-[0.55fr_0.45fr] lg:gap-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -53,10 +56,10 @@ export default function Contact() {
             viewport={{ once: true, amount: 0.08 }}
             transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
           >
-            <p className="section-kicker">Contact</p>
+            <p className="section-kicker">05 — Contact</p>
             <h2
               id="contact-heading"
-              className="section-heading"
+              className="mt-4 text-balance font-serif text-4xl font-bold leading-[1.04] text-foreground sm:text-5xl lg:text-6xl"
             >
               Start with the role, the product, or the problem.
             </h2>
@@ -67,12 +70,14 @@ export default function Contact() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg">
-                <a href={`mailto:${email}`}>
-                  <Mail className="h-5 w-5" aria-hidden="true" />
-                  Email Jon Wayne
-                </a>
-              </Button>
+              <Magnetic strength={0.4}>
+                <Button asChild size="lg">
+                  <a href={`mailto:${email}`}>
+                    <Mail className="h-5 w-5" aria-hidden="true" />
+                    Email Jon Wayne
+                  </a>
+                </Button>
+              </Magnetic>
               <Button asChild variant="outline" size="lg">
                 <a href="/cv.pdf" download>
                   <FileDown className="h-5 w-5" aria-hidden="true" />

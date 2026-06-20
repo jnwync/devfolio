@@ -4,6 +4,7 @@ import { motion, type Variants } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
 import { portfolioData } from '@/data/portfolio';
 import { Badge } from '@/components/ui/badge';
+import SectionMark from '../SectionMark';
 
 const typeLabels: Record<string, string> = {
   contract: 'Contract',
@@ -33,12 +34,13 @@ export default function ProfessionalExperience() {
     <section
       id="experience"
       aria-labelledby="experience-heading"
-      className="editorial-rule scroll-mt-20 py-20 md:py-28"
+      className="editorial-rule relative scroll-mt-20 py-20 md:py-28"
     >
-      <div className="section-shell">
+      <SectionMark index="02" />
+      <div className="section-shell relative z-10">
         <header className="mb-14 grid gap-5 md:grid-cols-[0.42fr_0.58fr] md:items-end">
           <div>
-            <p className="section-kicker">Experience</p>
+            <p className="section-kicker">02 — Experience</p>
             <h2
               id="experience-heading"
               className="section-heading"
@@ -58,15 +60,20 @@ export default function ProfessionalExperience() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.08 }}
         >
-          {experiences.map((exp) => (
+          {experiences.map((exp) => {
+            const year = exp.period.match(/\b(20\d{2})\b/)?.[0] ?? '';
+            return (
             <motion.article
               key={exp.id}
               variants={itemVariants}
-              className="grid gap-5 border-t border-border py-8 md:grid-cols-[0.32fr_0.68fr] md:gap-10"
+              className="grid gap-5 border-t border-border py-8 md:grid-cols-[0.32fr_0.68fr] md:items-start md:gap-10"
             >
-              <div>
+              <div className="md:sticky md:top-28 md:self-start">
+                <p className="font-serif text-4xl font-bold leading-none text-foreground sm:text-5xl">
+                  {year}
+                </p>
                 <time
-                  className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground"
+                  className="mt-3 block text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground"
                   dateTime={`${exp.startDate}/${exp.endDate}`}
                 >
                   {exp.period}
@@ -136,7 +143,8 @@ export default function ProfessionalExperience() {
                 </div>
               </div>
             </motion.article>
-          ))}
+            );
+          })}
         </motion.div>
       </div>
     </section>

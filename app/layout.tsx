@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Libre_Baskerville, Hanken_Grotesk } from "next/font/google";
+import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import ScrollProgress from "./components/ScrollProgress";
 
-const displayFont = Libre_Baskerville({
+const displayFont = Bodoni_Moda({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
   display: "swap",
   preload: true,
 });
@@ -55,6 +56,7 @@ export default function RootLayout({
       <body
         className={`${displayFont.variable} ${bodyFont.variable} antialiased`}
       >
+        <div aria-hidden="true" className="page-grain pointer-events-none fixed inset-0 -z-10" />
         <MotionConfig reducedMotion="user">
           <ScrollProgress />
           {children}
