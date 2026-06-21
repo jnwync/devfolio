@@ -438,8 +438,8 @@ export const portfolioData: PortfolioData = {
       skills: ['WCAG 2.1', 'Core Web Vitals', 'Lighthouse', 'ESLint', 'GitHub Actions', 'Sentry'],
     },
     {
-      title: 'AI-augmented engineering',
-      summary: 'A modern, AI-native workflow: specification-driven development, MCP-enabled tooling, and structured planning across agent-based assistants — backed by automated testing, documentation, code review, and human validation as the quality gate, so AI raises delivery speed and code quality without replacing engineering judgment.',
+      title: 'Agentic engineering',
+      summary: 'An agentic, spec-driven workflow — MCP-enabled tooling and structured planning across agent-based assistants — backed by automated testing, documentation, code review, and human validation as the quality gate, so AI accelerates delivery and code quality without replacing engineering judgment.',
       evidence: 'Agent-based and AI-assisted tools used day to day inside a disciplined process — planning, implementation, and review kept under human oversight.',
       skills: ['Claude Code', 'Cursor', 'GitHub Copilot', 'Codex', 'OpenCode', 'MCP workflows'],
     },
