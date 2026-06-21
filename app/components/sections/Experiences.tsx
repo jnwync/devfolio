@@ -1,201 +1,151 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion, type Variants } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
 import { portfolioData } from '@/data/portfolio';
+import { Badge } from '@/components/ui/badge';
+import SectionMark from '../SectionMark';
+
+const typeLabels: Record<string, string> = {
+  contract: 'Contract',
+  freelance: 'Freelance',
+  internship: 'Internship',
+  academic: 'Academic',
+};
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 1, 0.5, 1] },
+  },
+};
 
 export default function ProfessionalExperience() {
   const experiences = portfolioData.experiences;
 
-  const typeLabels = {
-    contract: 'Contract',
-    freelance: 'Freelance',
-    internship: 'Internship',
-    academic: 'Academic',
-  };
-
-  // Animation variants
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut',
-      },
-    },
-  };
-
   return (
-    <section 
-      id="experience" 
-      aria-labelledby="experience-heading" 
-      className="scroll-mt-20 border-t border-border py-20 md:py-32"
+    <section
+      id="experience"
+      aria-labelledby="experience-heading"
+      className="editorial-rule relative scroll-mt-20 py-20 md:py-28"
     >
-      <div className="mx-auto max-w-6xl px-6">
-        {/* Section Header */}
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="mb-16 space-y-4"
+      <SectionMark index="02" />
+      <div className="section-shell relative z-10">
+        <header className="mb-14 grid gap-5 md:grid-cols-[0.42fr_0.58fr] md:items-end">
+          <div>
+            <p className="section-kicker">02 — Experience</p>
+            <h2
+              id="experience-heading"
+              className="section-heading"
+            >
+              A short record of shipped work.
+            </h2>
+          </div>
+          <p className="max-w-2xl text-base leading-7 text-muted-foreground md:justify-self-end">
+            Contract and academic engagements across marketplace, e-commerce, healthcare,
+            and government products — each delivered in small, agile teams.
+          </p>
+        </header>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.08 }}
         >
-          <p className="text-sm font-semibold uppercase tracking-widest text-accent">
-            Career Journey
-          </p>
-          <h2 id="experience-heading" className="text-balance text-4xl font-bold md:text-5xl">
-            Professional Experience
-          </h2>
-          <p className="max-w-2xl text-muted-foreground">
-            Proven track record delivering web and mobile solutions across contract, freelance, and capstone projects in agile, remote-first environments.
-          </p>
-        </motion.header>
-
-        {/* Experience Timeline */}
-        <div className="relative">
-          {/* Timeline line (hidden on mobile) */}
-          <div 
-            className="absolute left-0 top-0 bottom-0 w-px bg-linear-to-b from-border via-border to-transparent hidden md:block" 
-            aria-hidden="true"
-          />
-
-          {/* Experience Cards */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            className="space-y-12"
-          >
-            {experiences.map((exp, index) => (
-              <motion.article
-                key={exp.id}
-                variants={cardVariants}
-                whileHover={{ y: -4 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                className="relative md:pl-8"
-              >
-                {/* Timeline dot (hidden on mobile) */}
-                <div 
-                  className="absolute left-0 top-6 hidden md:block"
-                  aria-hidden="true"
+          {experiences.map((exp) => {
+            const year = exp.period.match(/\b(20\d{2})\b/)?.[0] ?? '';
+            return (
+            <motion.article
+              key={exp.id}
+              variants={itemVariants}
+              className="grid gap-5 border-t border-border py-8 md:grid-cols-[0.32fr_0.68fr] md:items-start md:gap-10"
+            >
+              <div className="md:sticky md:top-28 md:self-start">
+                <p className="font-serif text-4xl font-bold leading-none text-foreground sm:text-5xl">
+                  {year}
+                </p>
+                <time
+                  className="mt-3 block text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground"
+                  dateTime={`${exp.startDate}/${exp.endDate}`}
                 >
-                  <div className="relative">
-                    <div className="w-2 h-2 rounded-full bg-accent -translate-x-[3.5px]" />
-                    <div className="absolute inset-0 w-2 h-2 rounded-full bg-accent/20 animate-ping -translate-x-[3.5px]" />
-                  </div>
+                  {exp.period}
+                </time>
+                <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-accent">
+                  {typeLabels[exp.type]}
+                  {exp.location ? ` · ${exp.location}` : ''}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+                  <h3 className="font-serif text-2xl font-bold text-foreground">
+                    {exp.company}
+                  </h3>
+                  {exp.link && (
+                    <a
+                      href={exp.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="-mx-1 inline-flex min-h-11 items-center gap-1.5 px-1 text-xs font-bold uppercase tracking-[0.12em] text-primary transition-colors hover:text-accent focus-visible:rounded-sm"
+                      aria-label={`Visit ${exp.company}`}
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                      Visit
+                    </a>
+                  )}
                 </div>
+                <p className="mt-1 text-sm font-bold text-primary">{exp.role}</p>
+                <p className="mt-4 max-w-3xl text-base leading-7 text-muted-foreground">
+                  {exp.scope}
+                </p>
 
-                <Card className="group relative overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-accent/50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)] before:absolute before:inset-0 before:bg-linear-to-br before:from-accent/5 before:to-primary/5 before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100">
-                  <CardHeader>
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                      <div className="flex-1 space-y-1">
-                        <CardTitle className="text-2xl group-hover:text-accent transition-colors">
-                          {exp.company}
-                        </CardTitle>
-                        <div className="flex flex-col gap-1 text-sm">
-                          <span className="font-semibold text-foreground">{exp.role}</span>
-                          <div className="flex flex-wrap items-center gap-2 text-muted-foreground">
-                            <time dateTime={`${exp.startDate}/${exp.endDate}`}>
-                              {exp.period}
-                            </time>
-                            <span aria-hidden="true">•</span>
-                            <span>{typeLabels[exp.type]}</span>
-                            {exp.location && (
-                              <>
-                                <span aria-hidden="true">•</span>
-                                <span>{exp.location}</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
+                <ul className="mt-5 grid gap-3" role="list">
+                  {exp.achievements.slice(0, 2).map((achievement) => (
+                    <li
+                      key={achievement}
+                      className="grid grid-cols-[0.875rem_1fr] gap-3 text-sm leading-6 text-foreground/80"
+                    >
+                      <span className="evidence-marker bg-accent" aria-hidden="true" />
+                      <span>{achievement}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {exp.impact && exp.impact.length > 0 && (
+                  <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-6">
+                    {exp.impact.map((metric) => (
+                      <div key={`${metric.metric}-${metric.description}`}>
+                        <dt className="font-serif text-3xl font-bold leading-none text-foreground">
+                          {metric.metric}
+                        </dt>
+                        <dd className="mt-2 max-w-[24ch] text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                          {metric.description}
+                        </dd>
                       </div>
-                      
-                      {exp.link && (
-                        <a
-                          href={exp.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="relative z-10 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.25)] hover:underline underline-offset-4 transition-all duration-300 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 rounded-sm shrink-0"
-                          aria-label={`Visit ${exp.company} website`}
-                        >
-                          <svg 
-                            className="w-4 h-4" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                          </svg>
-                          <span className="hidden sm:inline">Visit Site</span>
-                        </a>
-                      )}
-                    </div>
+                    ))}
+                  </dl>
+                )}
 
-                    <CardDescription className="text-base leading-relaxed mt-3">
-                      {exp.description}
-                    </CardDescription>
-                  </CardHeader>
-
-                  <CardContent className="space-y-4">
-                    {/* Achievements */}
-                    <ul className="space-y-2" role="list">
-                      {exp.achievements.map((achievement, idx) => (
-                        <li 
-                          key={idx} 
-                          className="flex gap-3 text-sm leading-relaxed"
-                        >
-                          <span className="text-accent mt-1.5 shrink-0" aria-hidden="true">▸</span>
-                          <span className="text-foreground/80">{achievement}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* Impact Metrics */}
-                    {exp.impact && exp.impact.length > 0 && (
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
-                        {exp.impact.map((item, idx) => (
-                          <div 
-                            key={idx}
-                            className="flex flex-col gap-1 p-3 rounded-lg bg-accent/5 border border-accent/10 hover:border-accent/30 hover:bg-accent/10 transition-colors"
-                          >
-                            <span className="text-2xl font-bold text-accent">{item.metric}</span>
-                            <span className="text-xs text-muted-foreground">{item.description}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Technologies */}
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {exp.technologies.map((tech) => (
-                        <span 
-                          key={tech}
-                          className="inline-block rounded-md bg-accent/5 px-3 py-1.5 text-xs font-medium text-foreground/70 border border-border hover:border-accent/30 hover:bg-accent/10 hover:text-foreground transition-colors"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.article>
-            ))}
-          </motion.div>
-        </div>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {exp.technologies.slice(0, 5).map((tech) => (
+                    <Badge key={tech} variant="secondary">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </motion.article>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );

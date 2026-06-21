@@ -1,46 +1,30 @@
-'use client';
-
-import { useState } from 'react';
+import Image from 'next/image';
 
 export default function HeroImage() {
-  const [isLoaded, setIsLoaded] = useState(false);
-
   return (
-    <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto">
-      {/* Loading skeleton */}
-      {!isLoaded && (
-        <div className="aspect-square rounded-full bg-muted animate-pulse" />
-      )}
-
-      {/* SVG container with gradient background */}
-      <div 
-        className={`hero-image-container aspect-square rounded-full overflow-hidden ${
-          !isLoaded ? 'absolute inset-0 opacity-0' : ''
-        }`}
+    <figure className="portrait-card premium-hover group mx-auto w-full max-w-sm border border-border bg-card p-3 shadow-(--shadow-soft) lg:mx-0">
+      <span
+        aria-hidden="true"
+        className="absolute -right-10 top-12 hidden rotate-90 border border-border bg-background/85 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-muted-foreground shadow-(--shadow-soft) lg:block"
       >
-        <img
-          src="/images/hero/Cabusbusan-ID.svg"
-          alt="Professional headshot of Jon Wayne Cabusbusan, Full-Stack Web Developer"
-          width={600}
-          height={600}
-          className={`hero-image w-full h-full object-cover transition-opacity duration-500 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-          onLoad={() => {
-            setIsLoaded(true);
-          }}
-          onError={(e) => {
-            console.error('Failed to load image:', e);
-            setIsLoaded(true);
-          }}
+        Verified profile
+      </span>
+      <div className="aspect-4/5 w-full overflow-hidden bg-muted">
+        <Image
+          src="/images/hero/hero-portrait.webp"
+          alt="Professional headshot of Jon Wayne Cabusbusan"
+          width={864}
+          height={1080}
+          priority
+          sizes="(max-width: 1024px) 90vw, 360px"
+          className="h-full w-full object-cover object-top transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.025]"
         />
       </div>
-      
-      {/* Subtle accent glow */}
-      <div 
-        className="absolute -inset-4 sm:-inset-6 md:-inset-8 bg-accent/5 rounded-full blur-2xl -z-10 pointer-events-none" 
-        aria-hidden="true"
-      />
-    </div>
+
+      <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-border pt-3 text-xs font-bold uppercase leading-5 tracking-[0.12em] text-muted-foreground">
+        <span>Iloilo, PH</span>
+        <span>Full-stack web systems</span>
+      </figcaption>
+    </figure>
   );
 }

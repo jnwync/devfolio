@@ -1,7 +1,8 @@
-import ProfessionalExperience from './components/sections/Experiences';
-import Hero from './components/sections/Hero';
 import Navigation from './components/Navigation';
+import Hero from './components/sections/Hero';
+import EvidenceBand from './components/sections/EvidenceBand';
 import Projects from './components/sections/Projects';
+import ProfessionalExperience from './components/sections/Experiences';
 import Skills from './components/sections/Skills';
 import Education from './components/sections/Education';
 import Contact from './components/sections/Contacts';
@@ -11,8 +12,9 @@ export default function Home() {
     <main id="main-content">
       <Navigation />
       <Hero />
-      <ProfessionalExperience />
+      <EvidenceBand />
       <Projects />
+      <ProfessionalExperience />
       <Skills />
       <Education />
       <Contact />

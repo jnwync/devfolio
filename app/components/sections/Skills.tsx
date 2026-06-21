@@ -2,141 +2,85 @@
 
 import { motion, type Variants } from 'framer-motion';
 import { portfolioData } from '@/data/portfolio';
+import { Badge } from '@/components/ui/badge';
+import SectionMark from '../SectionMark';
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 1, 0.5, 1] },
+  },
+};
 
 export default function Skills() {
-
-  const featuredSkills = portfolioData.featuredSkills;
-  const skillCategories = portfolioData.skillCategories;
-
-  // Animation variants with proper typing
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut',
-      },
-    },
-  };
-
-  const badgeVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.3,
-        ease: 'easeOut',
-      },
-    },
-  };
+  const { capabilityGroups } = portfolioData;
 
   return (
-    <section 
-      id="skills" 
-      aria-labelledby="skills-heading" 
-      className="scroll-mt-20 border-t border-border py-20 md:py-32"
+    <section
+      id="skills"
+      aria-labelledby="skills-heading"
+      className="editorial-rule relative scroll-mt-20 overflow-hidden py-20 md:py-28"
     >
-      <div className="mx-auto max-w-6xl px-6">
-        {/* Section Header */}
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="mb-16 space-y-4"
-        >
-          <p className="text-sm font-semibold uppercase tracking-widest text-accent">
-            Technical Stack
-          </p>
-          <h2 id="skills-heading" className="text-balance text-4xl font-bold md:text-5xl">
-            Skills & Technologies
+      <SectionMark index="03" />
+      <div className="section-shell relative z-10">
+        <header className="mb-14 max-w-3xl">
+          <p className="section-kicker">03 — Capabilities</p>
+          <h2
+            id="skills-heading"
+            className="section-heading"
+          >
+            The stack, organized by the work it supports.
           </h2>
-          <p className="max-w-2xl text-muted-foreground">
-            Production-ready expertise in modern web development, from pixel-perfect frontends to scalable backend systems.
+          <p className="mt-5 text-base leading-7 text-muted-foreground">
+            Skills are grouped by delivery surface so readers can connect technology
+            choices to product outcomes — not arbitrary proficiency bars.
           </p>
-        </motion.header>
+        </header>
 
-        {/* Primary Stack */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-          className="mb-12"
-        >
-          <h3 className="text-sm font-semibold text-foreground mb-6">Primary Stack</h3>
-          <div className="flex flex-wrap gap-3">
-            {featuredSkills.map((skill, index) => (
-              <motion.span
-                key={skill.name}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, ease: 'easeOut', delay: 0.1 + index * 0.05 }}
-                className="inline-block rounded-md border border-accent/40 bg-accent/5 px-4 py-2 text-sm font-semibold text-accent hover:border-accent hover:bg-accent/10 transition-colors"
-              >
-                {skill.name}
-              </motion.span>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Skill Categories */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          className="grid gap-8 md:grid-cols-2"
+          viewport={{ once: true, amount: 0.08 }}
+          className="border-t border-border"
         >
-          {skillCategories.map((category, index) => (
-            <motion.div
-              key={category.title}
+          {capabilityGroups.map((group, index) => (
+            <motion.article
+              key={group.title}
               variants={itemVariants}
-              className="group"
+              className="group grid gap-x-10 gap-y-4 border-b border-border py-8 md:grid-cols-[0.4fr_0.6fr] md:py-10"
             >
-              {/* Visual separator for second row on desktop */}
-              {index >= 2 && (
-                <div className="hidden md:block border-t border-border/50 mb-6 -mt-2" aria-hidden="true" />
-              )}
-              
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-foreground mb-1">
-                  {category.title}
+              <div className="flex items-baseline gap-4">
+                <span
+                  className="font-serif text-2xl font-bold leading-none text-accent transition-transform duration-300 ease-(--ease-out-quart) group-hover:-translate-y-0.5"
+                  aria-hidden="true"
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 className="font-serif text-2xl font-bold leading-tight text-foreground md:text-3xl">
+                  {group.title}
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  {category.description}
-                </p>
               </div>
-              
-              <motion.div
-                variants={containerVariants}
-                className="flex flex-wrap gap-2"
-              >
-                {category.skills.map((skill, index) => (
-                  <motion.span
-                    key={skill.name}
-                    variants={badgeVariants}
-                    className="inline-block rounded-md bg-muted px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent/10 hover:text-accent transition-colors"
-                  >
-                    {skill.name}
-                  </motion.span>
-                ))}
-              </motion.div>
-            </motion.div>
+              <div>
+                <p className="max-w-2xl text-base leading-7 text-muted-foreground">
+                  {group.summary}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {group.skills.slice(0, 6).map((skill) => (
+                    <Badge key={skill} variant="secondary">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </motion.article>
           ))}
         </motion.div>
       </div>

@@ -1,25 +1,66 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from './ThemeProvider';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+const links = [
+  { name: 'Profile', href: '#about' },
+  { name: 'Work', href: '#projects' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Capabilities', href: '#skills' },
+  { name: 'Contact', href: '#contact' },
+];
+
+const MOBILE_MENU_EXIT_MS = 220;
+const NAVIGATION_SETTLE_FALLBACK_MS = 1200;
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('about'); 
-  const { theme, toggleTheme, mounted } = useTheme();
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('about');
+  const [pendingSection, setPendingSection] = useState<string | null>(null);
+  const pendingSectionRef = useRef<string | null>(null);
+  const settleTimerRef = useRef<number | null>(null);
+  const scrollEndCleanupRef = useRef<(() => void) | null>(null);
+  const visibleActiveSection = pendingSection ?? activeSection;
 
-  const links = [
-    { name: 'About', href: '#about' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Contact', href: '#contact' },
-  ];
+  const clearSettleWatchers = () => {
+    if (settleTimerRef.current) {
+      window.clearTimeout(settleTimerRef.current);
+      settleTimerRef.current = null;
+    }
+
+    if (scrollEndCleanupRef.current) {
+      scrollEndCleanupRef.current();
+      scrollEndCleanupRef.current = null;
+    }
+  };
+
+  const releaseNavigationIntent = (sectionId: string) => {
+    if (pendingSectionRef.current !== sectionId) return;
+
+    clearSettleWatchers();
+    pendingSectionRef.current = null;
+    setActiveSection(sectionId);
+    setPendingSection(null);
+  };
+
+  const watchScrollSettled = (sectionId: string) => {
+    clearSettleWatchers();
+
+    const handleScrollEnd = () => releaseNavigationIntent(sectionId);
+    window.addEventListener('scrollend', handleScrollEnd, { once: true });
+    scrollEndCleanupRef.current = () => window.removeEventListener('scrollend', handleScrollEnd);
+
+    settleTimerRef.current = window.setTimeout(() => {
+      releaseNavigationIntent(sectionId);
+    }, NAVIGATION_SETTLE_FALLBACK_MS);
+  };
 
   useEffect(() => {
     const sections = new Map<string, number>();
-    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -30,25 +71,24 @@ export default function Navigation() {
           }
         });
 
-        // Find the section with the highest intersection ratio
+        if (pendingSectionRef.current) return;
+
         if (sections.size > 0) {
-          const mostVisible = Array.from(sections.entries()).reduce((max, current) => 
+          const mostVisible = Array.from(sections.entries()).reduce((max, current) =>
             current[1] > max[1] ? current : max
           );
           setActiveSection(mostVisible[0]);
         }
       },
-      { 
-        rootMargin: '-80px 0px -80px 0px',
-        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], 
+      {
+        rootMargin: '-88px 0px -45% 0px',
+        threshold: [0, 0.2, 0.4, 0.6, 0.8, 1],
       }
     );
 
     links.forEach((link) => {
       const element = document.querySelector(link.href);
-      if (element) {
-        observer.observe(element);
-      }
+      if (element) observer.observe(element);
     });
 
     return () => {
@@ -57,188 +97,190 @@ export default function Navigation() {
     };
   }, []);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      const sectionId = href.slice(1); // Remove the '#' to get the id
-      setActiveSection(sectionId); // Immediately update active section
-      setIsOpen(false); // Close mobile menu first
-      
-      // Small delay to ensure menu close animation completes
-      setTimeout(() => {
-        // Get actual nav height dynamically
-        const nav = document.querySelector('nav');
-        const navHeight = nav?.getBoundingClientRect().height || 64;
-        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-        const offsetPosition = elementPosition - navHeight;
+  useEffect(() => {
+    return () => {
+      if (settleTimerRef.current) {
+        window.clearTimeout(settleTimerRef.current);
+      }
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }, 100);
-    }
-  };
+      if (scrollEndCleanupRef.current) {
+        scrollEndCleanupRef.current();
+      }
+    };
+  }, []);
 
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false);
     };
+
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 16);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (href: string) => {
+    const element = document.querySelector(href);
+    if (!element) return;
+
+    const navBar = document.querySelector('[data-nav-bar]');
+    const navHeight = navBar?.getBoundingClientRect().height || 72;
+    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    window.scrollTo({
+      top: Math.max(elementPosition - navHeight, 0),
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  };
+
+  const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    event.preventDefault();
+    const element = document.querySelector(href);
+    if (!element) return;
+
+    const shouldDelayScroll = isOpen;
+    const sectionId = href.slice(1);
+
+    pendingSectionRef.current = sectionId;
+    setPendingSection(sectionId);
+    setActiveSection(sectionId);
+
+    if (shouldDelayScroll) {
+      window.requestAnimationFrame(() => {
+        setIsOpen(false);
+
+        window.setTimeout(() => {
+          scrollToSection(href);
+          watchScrollSettled(sectionId);
+        }, MOBILE_MENU_EXIT_MS);
+      });
+      return;
+    }
+
+    setIsOpen(false);
+    scrollToSection(href);
+    watchScrollSettled(sectionId);
+  };
+
   return (
     <>
-      {/* Skip to main content link for keyboard users */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:px-4 focus:py-2 focus:bg-accent focus:text-accent-foreground focus:rounded-md focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
       >
         Skip to main content
       </a>
-      
-      <nav 
-        className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md supports-backdrop-filter:bg-background/80"
+
+      <nav
+        className={`sticky top-0 z-50 border-b backdrop-blur-md transition-[background-color,box-shadow,border-color] duration-300 ease-(--ease-out-quart) ${
+          scrolled || isOpen
+            ? 'border-border bg-background/95 shadow-[0_8px_30px_oklch(0.23_0.04_75/0.09)]'
+            : 'border-transparent bg-background/80'
+        }`}
         aria-label="Main navigation"
       >
-      <div className="mx-auto max-w-6xl px-6 py-4">
-        <div className="flex items-center justify-between">
-          <a 
-            href="#about" 
-            onClick={(e) => handleLinkClick(e, '#about')}
-            className="text-2xl font-bold text-accent hover:text-accent/80 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded-sm"
-            aria-label="Jon Wayne Cabusbusan - Home"
-          >
-            jnwync
-          </a>
+        <div className="section-shell">
+          <div data-nav-bar className="flex min-h-18 items-center justify-between gap-4">
+            <a
+              href="#about"
+              onClick={(event) => handleLinkClick(event, '#about')}
+              className="inline-flex min-h-11 items-center rounded-md pr-3 font-serif text-xl font-bold text-foreground transition-colors hover:text-primary focus-visible:rounded-sm"
+              aria-label="Jon Wayne Cabusbusan - Home"
+            >
+              jnwync
+            </a>
 
-          <div className="hidden gap-1 md:flex items-center">
-            {links.map((link) => {
-              const isActive = activeSection === link.href.slice(1);
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.href)}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-md focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
-                    isActive
-                      ? 'text-accent'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  {link.name}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeSection"
-                      className="absolute inset-0 bg-accent/10 rounded-md -z-10"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
+            <div className="hidden items-center gap-1.5 md:flex">
+              {links.map((link) => {
+                const sectionId = link.href.slice(1);
+                const isActive = visibleActiveSection === sectionId;
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(event) => handleLinkClick(event, link.href)}
+                    className={`relative inline-flex min-h-11 items-center rounded-md px-3 text-sm font-bold transition-colors ${
+                      isActive ? 'bg-secondary/70 text-primary shadow-[inset_0_0_0_1px_oklch(0.82_0.035_78/0.7)]' : 'text-muted-foreground hover:bg-secondary/45 hover:text-foreground'
+                    }`}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {link.name}
+                    {isActive && (
+                      <motion.span
+                        layoutId="activeSection"
+                        className="absolute inset-x-3 -bottom-0.5 h-px bg-primary"
+                        transition={{ duration: 0.2, ease: [0.25, 1, 0.5, 1] }}
+                      />
+                    )}
+                  </a>
+                );
+              })}
+
+              <Button asChild size="sm" className="ml-3">
+                <a href="#contact" onClick={(event) => handleLinkClick(event, '#contact')}>
+                  Start a conversation
                 </a>
-              );
-            })}
+              </Button>
+            </div>
 
             <button
-              onClick={toggleTheme}
-              className="ml-2 p-3 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/10 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            >
-              {!mounted ? (
-                <div className="w-5 h-5" /> 
-              ) : theme === 'dark' ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              )}
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2 md:hidden">
-            <button
-              onClick={toggleTheme}
-              className="p-3 rounded-md text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            >
-              {!mounted ? (
-                <div className="w-5 h-5" />
-              ) : theme === 'dark' ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              )}
-            </button>
-
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-3 rounded-md text-foreground hover:bg-accent/10 transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+              type="button"
+              onClick={() => setIsOpen((value) => !value)}
+              className="inline-flex h-12 w-12 items-center justify-center rounded-md border border-border text-foreground transition-colors hover:border-primary hover:text-primary md:hidden"
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
             >
-              <div className="flex flex-col gap-1.5 w-6">
-                <motion.div
-                  animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-                  className="h-0.5 w-6 bg-foreground origin-center"
-                />
-                <motion.div
-                  animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
-                  className="h-0.5 w-6 bg-foreground"
-                />
-                <motion.div
-                  animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-                  className="h-0.5 w-6 bg-foreground origin-center"
-                />
-              </div>
+              {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
             </button>
           </div>
-        </div>
 
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              id="mobile-menu"
-              initial={{ maxHeight: 0, opacity: 0 }}
-              animate={{ maxHeight: 500, opacity: 1 }}
-              exit={{ maxHeight: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="overflow-hidden md:hidden"
-            >
-              <div className="flex flex-col gap-1 pt-4 pb-2">
-                {links.map((link) => {
-                  const isActive = activeSection === link.href.slice(1);
-                  return (
-                    <a
-                      key={link.name}
-                      href={link.href}
-                      onClick={(e) => handleLinkClick(e, link.href)}
-                      className={`px-4 py-3 text-sm font-medium rounded-md transition-colors focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 ${
-                        isActive
-                          ? 'text-accent bg-accent/10'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-accent/5'
-                      }`}
-                      aria-current={isActive ? 'page' : undefined}
-                    >
-                      {link.name}
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                id="mobile-menu"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.22, ease: [0.25, 1, 0.5, 1] }}
+                className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto md:hidden"
+              >
+                <div className="grid gap-2 border-t border-border py-4">
+                  {links.map((link) => {
+                    const sectionId = link.href.slice(1);
+                    const isActive = visibleActiveSection === sectionId;
+                    return (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        onClick={(event) => handleLinkClick(event, link.href)}
+                        className={`flex min-h-12 items-center rounded-md px-3 text-sm font-bold transition-colors ${
+                          isActive ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
+                        }`}
+                        aria-current={isActive ? 'page' : undefined}
+                      >
+                        {link.name}
+                      </a>
+                    );
+                  })}
+                  <Button asChild size="default" className="mt-2">
+                    <a href="#contact" onClick={(event) => handleLinkClick(event, '#contact')}>
+                      Start a conversation
                     </a>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </nav>
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </nav>
     </>
   );
 }
