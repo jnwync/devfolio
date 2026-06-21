@@ -120,11 +120,11 @@ export const portfolioData: PortfolioData = {
     name: 'Jon Wayne Cabusbusan',
     tagline: 'Full-Stack Web Developer',
     positioning: 'Full-stack engineer for production web systems people rely on.',
-    summary: 'I build responsive interfaces, API surfaces, and data workflows across government, healthcare, e-commerce, and marketplace products, with enough range to move from architecture through deployment.',
+    summary: 'I build responsive interfaces, API surfaces, and data workflows across government, healthcare, e-commerce, and marketplace products, with enough range to move from architecture through deployment. I work spec-first and use modern AI-assisted tooling to move quickly, keeping automated tests and code review as the quality gate.',
     email: 'jonwayne.cabusbusan@gmail.com',
     phone: '+639452897584',
     location: 'Iloilo, Philippines',
-    bio: 'Full-stack web developer with hands-on experience shipping production-grade applications across government, e-commerce, healthcare, and marketplace platforms. Proficient in the Next.js / TypeScript ecosystem end-to-end — from building responsive UIs with React and Tailwind CSS to designing RESTful APIs, managing relational and NoSQL databases, and deploying to cloud platforms. Comfortable contributing independently from architecture through deployment in agile, cross-functional teams.',
+    bio: 'Full-stack web developer with hands-on experience shipping production-grade applications across government, e-commerce, healthcare, and marketplace platforms. Proficient in the Next.js / TypeScript ecosystem end-to-end — from building responsive UIs with React and Tailwind CSS to designing RESTful APIs, managing relational and NoSQL databases, and deploying to cloud platforms. Comfortable contributing independently from architecture through deployment in agile, cross-functional teams. Works in a disciplined, AI-assisted workflow — specification-driven development, MCP-enabled tooling, and structured planning, with automated testing, code review, and human validation kept as the quality gate — to improve delivery speed without trading away code quality or maintainability.',
     roles: [
       'Full-Stack Web Developer',
       'React & Next.js Specialist',
@@ -146,7 +146,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       value: 'Production delivery',
-      label: 'Architecture, implementation, QA, and launch support',
+      label: 'Architecture to launch with a spec-driven, AI-assisted workflow and human review at every gate',
     },
     {
       value: 'Iloilo, Philippines',
@@ -436,6 +436,12 @@ export const portfolioData: PortfolioData = {
       summary: 'End-to-end delivery from architecture through QA, with attention to accessibility, performance, SEO, and maintainability.',
       evidence: 'Contributed independently and in small agile teams across production, freelance, contract, and government-backed systems.',
       skills: ['WCAG 2.1', 'Core Web Vitals', 'Lighthouse', 'ESLint', 'GitHub Actions', 'Sentry'],
+    },
+    {
+      title: 'Agentic engineering',
+      summary: 'An agentic, spec-driven workflow — MCP-enabled tooling and structured planning across agent-based assistants — backed by automated testing, documentation, code review, and human validation as the quality gate, so AI accelerates delivery and code quality without replacing engineering judgment.',
+      evidence: 'Agent-based and AI-assisted tools used day to day inside a disciplined process — planning, implementation, and review kept under human oversight.',
+      skills: ['Claude Code', 'Cursor', 'GitHub Copilot', 'Codex', 'OpenCode', 'MCP workflows'],
     },
   ],
 
