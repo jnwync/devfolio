@@ -45,6 +45,7 @@ export interface Project {
   github?: string;
   image?: string;
   featured?: boolean;
+  caseStudyPath?: string;
 }
 
 export interface Skill {
@@ -158,6 +159,28 @@ export const portfolioData: PortfolioData = {
   // PROFESSIONAL EXPERIENCE
   // ---------------------------------------------------------------------------
   experiences: [
+    {
+      id: 'reisky',
+      company: 'Reisky Martial Arts',
+      role: 'Freelance Full-Stack Developer',
+      type: 'freelance',
+      period: 'Jan 2026 - Mar 2026',
+      startDate: '2026-01',
+      endDate: '2026-03',
+      location: 'Remote · Surrey, BC',
+      description: 'Solo freelance engagement: a production website and headless-CMS platform for a Filipino martial arts studio.',
+      scope: 'Sole architect, designer, and developer — design system through data layer, on Next.js 16 and Sanity, deploying on Vercel.',
+      achievements: [
+        'Architected an env-switched dual data source so the site ships on static data and adopts the Sanity CMS as a zero-downtime feature flag — no rewrite, no big-bang cutover.',
+        'Drove the product to Lighthouse Accessibility 100 across all 12 routes (mobile and desktop) against WCAG 2.1 AA, backed by a 55-test unit and E2E suite.',
+      ],
+      impact: [
+        { metric: '100', description: 'Accessibility score across all 12 routes (mobile + desktop)' },
+        { metric: 'Solo', description: 'Sole architect, designer, and developer' },
+      ],
+      technologies: ['Next.js 16', 'React 19', 'TypeScript', 'Sanity CMS', 'GROQ', 'Vercel'],
+      link: 'https://reisky.vercel.app',
+    },
     {
       id: 'packup',
       company: 'PackUp - Suppliipack',
@@ -278,29 +301,31 @@ export const portfolioData: PortfolioData = {
     },
     {
       id: 'reisky',
-      title: 'Reisky - Traditional Filipino Martial Arts Website',
+      title: 'Reisky — Filipino Martial Arts Studio Platform',
       type: 'freelance',
       period: 'Jan 2026 - Mar 2026',
       startDate: '2026-01',
       endDate: '2026-03',
-      description: 'Conversion-focused marketing site for a traditional Filipino martial arts school, featuring 40 statically generated pages with performance and accessibility as first-class priorities.',
-      context: 'A conversion-focused marketing site for a traditional Filipino martial arts school with many static content pages.',
-      responsibility: 'Delivered the static page system, component variants, performance work, SEO infrastructure, security headers, and monitoring setup.',
+      description: 'Solo freelance build of a production website and headless-CMS platform for a Filipino martial arts studio (Surrey, BC), architected around an env-switched dual data source so the site ships on static data and adopts a live Sanity CMS as a zero-downtime feature flag.',
+      context: 'A real client engagement: the studio needed editable content, but the site had to ship before any CMS was provisioned. Sole architect, designer, and developer — design system through data layer.',
+      responsibility: 'Owned the full stack end-to-end — brand and design system, a 74-component library, the env-switched service layer, a typed Sanity/GROQ content pipeline, 6 API routes, and production hardening — deploying on Vercel.',
       outcomes: [
-        'Delivered 40 statically generated pages across programs, events, athlete profiles, scheduling, and pricing.',
-        'Reached Lighthouse scores of 94 Performance, 96 Accessibility, 100 Best Practices, and 92 SEO.',
-        'Generated all pages in under 600ms with Server Components, optimized images, and lazy-loading behavior.',
+        'Env-switched dual data layer: 12 service modules route at runtime between a live Sanity CMS (GROQ) and static fallback data behind one flag — CMS adoption is a zero-downtime config change, not a rewrite.',
+        'End-to-end type safety: 50 Sanity schema types → TypeGen → 12 unit-tested anti-corruption mappers → hand-authored domain types, keeping the CMS shape out of application code.',
+        'Accessibility 100 across all 12 routes (mobile + desktop), Best Practices 96, SEO 92 — verified by a Lighthouse audit sweep against WCAG 2.1 AA.',
+        'Designed the brand and token-driven design system (74 components) and engineered 6 API routes, a Stripe webhook, Sentry across 3 runtimes, and a 55-test unit + E2E suite.',
       ],
       achievements: [
-        'Delivered 40 statically generated pages (programs, events, athlete profiles, scheduling, pricing) using Next.js 16, React 19, TypeScript strict mode, and Tailwind CSS v4 with generateStaticParams()',
-        'Achieved Lighthouse scores of 94 Performance / 96 Accessibility / 100 Best Practices / 92 SEO through Server Components, Intersection Observer lazy loading, next/image optimization, and useReducedMotion hook — all pages generated in under 600ms',
-        'Built a reusable component library with CVA (class-variance-authority) for type-safe variant composition, centralized Framer Motion animation variants, and Husky pre-commit hooks enforcing ESLint, TypeScript, and Prettier',
-        'Implemented full SEO infrastructure (dynamic sitemap.xml, JSON-LD LocalBusiness schema, OpenGraph tags), security headers (X-Frame-Options, Referrer-Policy, Permissions-Policy), honeypot spam protection, and Sentry error monitoring across client, server, and edge runtimes',
+        'Architected an env-switched dual data source: 10 of 12 services route at runtime between a GROQ-backed Sanity CMS and static fallback data behind a single feature flag, making CMS adoption a zero-downtime, type-safe config change rather than a rewrite.',
+        'Built an end-to-end type-safe content pipeline (Sanity schema extract → TypeGen → 1,547 LOC of generated types → 12 unit-tested anti-corruption mappers → domain types), with an embedded Sanity Studio and live visual editing.',
+        'Implemented 6 API route handlers (contact, free-trial, booking, Stripe webhook, draft-mode toggling) with server-side validation and honeypot spam protection; instrumented Sentry across client, server, and edge runtimes.',
+        'Drove the product to Lighthouse Accessibility 100 across all 12 routes on mobile and desktop by remediating WCAG 2.1 AA issues (contrast, heading order, ARIA table semantics, Label-in-Name, target size); enforced a zero-warning ESLint + strict-type + pre-commit toolchain over ~34k LOC.',
       ],
-      technologies: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS v4', 'CVA', 'Framer Motion', 'Sentry', 'SSG'],
+      technologies: ['Next.js 16', 'React 19', 'TypeScript', 'Sanity CMS', 'GROQ', 'Tailwind CSS v4', 'Stripe', 'Playwright', 'Vitest', 'Sentry'],
       link: 'https://reisky.vercel.app',
       image: '/images/projects/reisky-home.png',
       featured: true,
+      caseStudyPath: '/work/reisky',
     },
   ],
 
