@@ -2,8 +2,9 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, type Variants } from 'framer-motion';
-import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import SectionMark from '../SectionMark';
 import { portfolioData, type Project } from '@/data/portfolio';
@@ -200,8 +201,16 @@ export default function Projects() {
                   ))}
                 </div>
 
-                {(project.link || project.github) && (
+                {(project.caseStudyPath || project.link || project.github) && (
                   <div className="flex flex-wrap gap-3 pt-2">
+                    {project.caseStudyPath && (
+                      <Button asChild size="sm">
+                        <Link href={project.caseStudyPath} className="group/button">
+                          Read case study
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover/button:translate-x-0.5" aria-hidden="true" />
+                        </Link>
+                      </Button>
+                    )}
                     {project.link && (
                       <Button asChild variant="outline" size="sm">
                         <a href={project.link} target="_blank" rel="noopener noreferrer" className="group/button">
