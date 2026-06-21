@@ -146,7 +146,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       value: 'Production delivery',
-      label: 'Architecture, implementation, QA, and launch support',
+      label: 'Architecture to launch with a spec-driven, AI-assisted workflow and human review at every gate',
     },
     {
       value: 'Iloilo, Philippines',
@@ -433,9 +433,15 @@ export const portfolioData: PortfolioData = {
     },
     {
       title: 'Delivery and quality',
-      summary: 'End-to-end delivery from architecture through QA, with accessibility, performance, SEO, and maintainability treated as first-class. Uses a spec-driven, AI-assisted workflow with automated testing and code review as the quality gate.',
+      summary: 'End-to-end delivery from architecture through QA, with attention to accessibility, performance, SEO, and maintainability.',
       evidence: 'Contributed independently and in small agile teams across production, freelance, contract, and government-backed systems.',
       skills: ['WCAG 2.1', 'Core Web Vitals', 'Lighthouse', 'ESLint', 'GitHub Actions', 'Sentry'],
+    },
+    {
+      title: 'AI-augmented engineering',
+      summary: 'A modern, AI-native workflow: specification-driven development, MCP-enabled tooling, and structured planning across agent-based assistants — backed by automated testing, documentation, code review, and human validation as the quality gate, so AI raises delivery speed and code quality without replacing engineering judgment.',
+      evidence: 'Agent-based and AI-assisted tools used day to day inside a disciplined process — planning, implementation, and review kept under human oversight.',
+      skills: ['Claude Code', 'Cursor', 'GitHub Copilot', 'Codex', 'OpenCode', 'MCP workflows'],
     },
   ],
 
