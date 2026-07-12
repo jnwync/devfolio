@@ -117,9 +117,9 @@ export const portfolioData: PortfolioData = {
   // ---------------------------------------------------------------------------
   personal: {
     name: 'Jon Wayne Cabusbusan',
-    tagline: 'Full-Stack Web Developer',
-    positioning: 'Full-Stack Web Developer building production web systems with Next.js, TypeScript, React, and PostgreSQL.',
-    summary: 'Full-stack web developer experienced in delivering production-oriented applications across responsive React interfaces, REST APIs, relational and NoSQL databases, authentication, authorization, business workflows, automated testing, and cloud deployment. Strong in TypeScript, Next.js, React, Node.js, PostgreSQL, Drizzle ORM, Prisma, Firebase, and Supabase, with hands-on experience in shared validation contracts, RBAC, secure file handling, real-time collaboration, accessibility, and containerized development.',
+    tagline: 'Production web systems',
+    positioning: 'Full-Stack Web Developer building systems people rely on.',
+    summary: 'I build responsive React products, typed APIs, secure workflows, and tested data systems from interface to deployment.',
     email: 'jonwayne.cabusbusan@gmail.com',
     phone: '+63 945 289 7584',
     location: 'Iloilo, Philippines',

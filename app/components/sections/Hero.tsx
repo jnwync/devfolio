@@ -1,14 +1,14 @@
 'use client';
 
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
-import { ArrowDown, BriefcaseBusiness, FileDown, Mail } from 'lucide-react';
+import { BriefcaseBusiness, Mail } from 'lucide-react';
 import HeroImage from '../HeroImage';
 import Magnetic from '../motion/Magnetic';
 import { Button } from '@/components/ui/button';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Hero() {
-  const { personal, featuredSkills } = portfolioData;
+  const { personal } = portfolioData;
   const reduceMotion = useReducedMotion();
 
   const container: Variants = {
@@ -74,16 +74,12 @@ export default function Hero() {
             variants={container}
             initial="hidden"
             animate="visible"
-            className="max-w-3xl space-y-6"
+            className="max-w-3xl space-y-5"
           >
-            <motion.p variants={item} className="section-kicker">
-              {personal.tagline}
-            </motion.p>
-
             <motion.h1
               variants={headline}
               id="hero-heading"
-              className="max-w-3xl font-serif text-[clamp(2rem,1.38rem+4.3vw,2.4rem)] font-bold leading-[1.08] text-foreground sm:text-[clamp(2.25rem,1.3rem+3.2vw,3.4rem)] sm:leading-[1.07]"
+              className="max-w-2xl font-serif text-[clamp(2rem,1.38rem+4.3vw,2.4rem)] font-bold leading-[1.08] text-foreground sm:text-[clamp(2.25rem,1.3rem+3.2vw,3.4rem)] sm:leading-[1.07]"
             >
               {headlineWords.map((w, i) => (
                 <span key={`${w}-${i}`} className="line-mask">
@@ -96,7 +92,7 @@ export default function Hero() {
 
             <motion.p
               variants={item}
-              className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-xl sm:leading-8"
+              className="max-w-xl text-base leading-7 text-muted-foreground"
             >
               {personal.summary}
             </motion.p>
@@ -116,31 +112,6 @@ export default function Hero() {
                   View selected work
                 </a>
               </Button>
-              <a
-                href="/cv.pdf"
-                download
-                className="inline-flex min-h-11 items-center justify-center gap-2 px-1 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground sm:justify-start"
-              >
-                <FileDown className="h-4 w-4" aria-hidden="true" />
-                Download CV
-              </a>
-            </motion.div>
-
-            <motion.div
-              variants={item}
-              className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 border-t border-border pt-6 text-sm"
-            >
-              <span className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
-                Core stack
-              </span>
-              <ul className="flex flex-wrap items-center gap-x-2.5 gap-y-1" role="list">
-                {featuredSkills.map((skill, i) => (
-                  <li key={skill.name} className="flex items-center gap-2.5 font-bold text-foreground">
-                    {i > 0 && <span className="text-border" aria-hidden="true">·</span>}
-                    {skill.name}
-                  </li>
-                ))}
-              </ul>
             </motion.div>
           </motion.div>
 
@@ -152,15 +123,6 @@ export default function Hero() {
             <HeroImage />
           </motion.div>
         </div>
-
-        <a
-          href="#evidence"
-          aria-label="Scroll to evidence"
-          className="mt-12 hidden min-h-11 w-fit items-center gap-2 rounded-md pr-3 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary lg:inline-flex"
-        >
-          <ArrowDown className="h-4 w-4" aria-hidden="true" />
-          Scroll for the evidence
-        </a>
       </div>
     </section>
   );

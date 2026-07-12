@@ -63,11 +63,15 @@ test('keeps Reisky aligned with the CV and features recruiter-relevant work', ()
 test('uses the recruiter-searchable headline and CV-backed About copy', () => {
   assert.equal(
     portfolioData.personal.positioning,
-    'Full-Stack Web Developer building production web systems with Next.js, TypeScript, React, and PostgreSQL.'
+    'Full-Stack Web Developer building systems people rely on.'
   );
-  assert.match(portfolioData.personal.summary, /relational and NoSQL databases/);
-  assert.match(portfolioData.personal.summary, /authentication, authorization/);
-  assert.match(portfolioData.personal.summary, /containerized development/);
+  assert.equal(
+    portfolioData.personal.summary,
+    'I build responsive React products, typed APIs, secure workflows, and tested data systems from interface to deployment.'
+  );
+  assert.match(portfolioData.personal.bio, /relational and NoSQL databases/);
+  assert.match(portfolioData.personal.bio, /authentication, authorization/);
+  assert.match(portfolioData.personal.bio, /containerized development/);
 });
 
 test('publishes an OKRa case study with CV-backed proof points', () => {
