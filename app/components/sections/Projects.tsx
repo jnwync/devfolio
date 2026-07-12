@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, type Variants } from 'framer-motion';
@@ -13,7 +12,8 @@ import { Button } from '@/components/ui/button';
 
 const typeLabels: Record<string, string> = {
   freelance: 'Freelance',
-  personal: 'Personal',
+  professional: 'Professional',
+  startup: 'Startup',
   academic: 'Academic',
 };
 
@@ -85,23 +85,6 @@ export default function Projects() {
     (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured))
   );
 
-  // Cursor-aware spotlight: only on hover-capable devices, coalesced to one
-  // update per frame so rapid pointer moves never pile up work.
-  const spotlightFrame = useRef<number | null>(null);
-  const handleSpotlight = (event: React.MouseEvent<HTMLElement>) => {
-    if (!window.matchMedia('(hover: hover)').matches) return;
-    const el = event.currentTarget;
-    const rect = el.getBoundingClientRect();
-    const x = `${event.clientX - rect.left}px`;
-    const y = `${event.clientY - rect.top}px`;
-    if (spotlightFrame.current !== null) cancelAnimationFrame(spotlightFrame.current);
-    spotlightFrame.current = requestAnimationFrame(() => {
-      el.style.setProperty('--spot-x', x);
-      el.style.setProperty('--spot-y', y);
-      spotlightFrame.current = null;
-    });
-  };
-
   return (
     <section
       id="projects"
@@ -122,7 +105,7 @@ export default function Projects() {
           </div>
           <p className="max-w-2xl text-base leading-7 text-muted-foreground md:justify-self-end">
             A compact record of systems I have designed, implemented, optimized, and
-            shipped across freelance and personal work.
+            shipped across freelance, professional, startup, and academic client work.
           </p>
         </header>
 
@@ -137,8 +120,7 @@ export default function Projects() {
             <motion.article
               key={project.id}
               variants={itemVariants}
-              onMouseMove={handleSpotlight}
-              className={`spotlight premium-panel premium-hover ${
+              className={`premium-panel premium-hover ${
                 project.featured ? 'md:grid md:grid-cols-[0.95fr_1.05fr]' : ''
               }`}
             >

@@ -25,6 +25,28 @@ function displayValue(href: string): string {
     .replace(/\/$/, '');
 }
 
+async function copyText(value: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return true;
+    }
+  } catch {
+    // Fall through to the compatibility path for stricter browser contexts.
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = value;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  const copied = document.execCommand('copy');
+  textarea.remove();
+  return copied;
+}
+
 export default function Contact() {
   const [copied, setCopied] = useState(false);
   const { personal, contactLinks } = portfolioData;
@@ -32,12 +54,9 @@ export default function Contact() {
   const directory = contactLinks.filter((link) => !link.primary);
 
   const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(email);
+    if (await copyText(email)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
     }
   };
 
@@ -64,9 +83,9 @@ export default function Contact() {
               Start with the role, the product, or the problem.
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">
-              I am open to full-time, contract, and project conversations where
-              thoughtful full-stack execution matters. Tell me what you are building and
-              what you need shipped.
+              I am open to full-time, contract, and selected freelance full-stack
+              development opportunities. Tell me what you are building and what you need
+              shipped.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -145,7 +164,7 @@ export default function Contact() {
               })}
             </ul>
             <p className="mt-6 text-sm leading-6 text-muted-foreground">
-              Based in {personal.location} — available for remote, hybrid, contract, and
+              Based in {personal.location}. Available for remote, hybrid, contract, and
               full-time conversations.
             </p>
           </motion.div>

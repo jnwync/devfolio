@@ -37,19 +37,18 @@ export interface CaseStudy {
 export const reiskyCaseStudy: CaseStudy = {
   projectId: 'reisky',
   title: 'Reisky — Filipino Martial Arts Studio Platform',
-  client: 'Reisky Martial Arts · Surrey, BC',
-  role: 'Solo Developer (Freelance)',
-  period: 'Jan 2026 – Mar 2026',
-  liveUrl: 'https://reisky.vercel.app',
+  client: 'Reisky Martial Arts · Surrey, BC, Canada',
+  role: 'Freelance Full-Stack Developer',
+  period: 'Jan 2026 – Apr 2026',
   summary:
-    'A production website and headless-CMS platform for a Filipino martial arts studio, designed and engineered solo. Its defining decision is an env-switched dual data source: every service runs identically against a live Sanity CMS or static fallback data, so the site shipped immediately and adopts the CMS as a single feature flag — no rewrite, no big-bang cutover.',
+    'A production website and headless-CMS platform for a Filipino martial arts studio, designed and built end-to-end as an international freelance client project in Surrey, BC, Canada.',
   metrics: [
     { value: '100', label: 'Lighthouse Accessibility — all 12 routes, mobile + desktop' },
-    { value: '50', label: 'Sanity schema types, fully typed end-to-end via TypeGen' },
-    { value: '55', label: 'Automated tests — 44 Vitest unit + 11 Playwright E2E' },
-    { value: '~34k', label: 'Lines of strict-mode TypeScript' },
-    { value: '74', label: 'React components in a 4-tier hierarchy' },
-    { value: '6', label: 'API route handlers, incl. a Stripe webhook + draft mode' },
+    { value: '50', label: 'Sanity schema types connected to TypeGen' },
+    { value: '55', label: 'Automated tests in the project suite' },
+    { value: '~34K', label: 'Lines of strict-mode TypeScript' },
+    { value: '74', label: 'React components' },
+    { value: '6', label: 'API route handlers' },
   ],
   stack: [
     'Next.js 16',
@@ -57,71 +56,130 @@ export const reiskyCaseStudy: CaseStudy = {
     'TypeScript (strict)',
     'Sanity CMS',
     'GROQ',
-    'Tailwind CSS v4',
-    'CVA',
-    'Framer Motion',
-    'Stripe',
-    'Playwright',
-    'Vitest',
-    'Sentry',
-    'Vercel',
+    'TypeGen',
   ],
   sections: [
     {
       heading: 'The brief',
-      body: 'A real client engagement. The studio needed content it could edit itself, but the site had to launch before any CMS was provisioned — and the budget could not absorb a later rewrite to "add a CMS." I was the sole architect, designer, and developer, so the call on how to reconcile "ship now" with "editable later" was mine to make.',
+      body: 'Reisky Martial Arts was an international freelance client project for a Filipino martial arts studio in Surrey, BC, Canada. The work was a production website and headless-CMS platform built end-to-end in strict-mode TypeScript on Next.js 16 and React 19.',
     },
     {
       heading: 'Architecture — an env-switched dual data source',
-      body: 'Rather than couple the launch to CMS readiness, I wrote every data-access service once and let it route at runtime. A single feature flag decides the source: a live Sanity CMS via typed GROQ, or static fallback data. The whole site runs identically either way, so the migration is a config change — the Strangler-Fig pattern applied to a CMS adoption with zero downtime risk and full type safety on both branches.',
-      code: "// lib/api/* — written once, routes at runtime\nif (isSanityEnabled()) {\n  return mapEvents(await client.fetch(eventsQuery)); // live GROQ\n}\nreturn staticEvents; // typed fallback — same shape, same types",
+      body: 'The platform uses 12 service-layer modules that route at runtime between Sanity CMS (GROQ) and static fallback data behind a single feature flag. That keeps the CMS path and fallback path aligned behind one application contract.',
       bullets: [
-        'Type-safe pipeline end-to-end: Sanity schema → TypeGen → 1,547 LOC of generated types → 12 unit-tested mappers → hand-authored domain types.',
-        'Mappers act as an anti-corruption layer: the CMS document shape is never allowed to leak into application code — domain types are the contract.',
-        'A server/client boundary keeps next/headers-dependent live-query code server-only; client components receive data through a provider, avoiding a common App Router class of bug.',
+        '12 service-layer modules route between Sanity CMS (GROQ) and static fallback data.',
+        'A single feature flag controls the active data source.',
+        'The architecture supports a tested CMS pipeline without rewriting the site around a different data shape.',
       ],
     },
     {
-      heading: 'Technical decisions & tradeoffs',
-      body: 'Strangler-Fig over a big-bang cutover: the static site earns value on day one while the CMS is provisioned incrementally behind the flag, so launch and CMS readiness are decoupled. The cost is maintaining two data paths — paid down by writing the service layer once and type-checking both branches, so they cannot silently diverge.',
+      heading: 'Type-safe content pipeline',
+      body: 'The content pipeline connects 50 Sanity schema types to TypeGen and then to 12 unit-tested anti-corruption mappers that produce domain types for the application.',
       bullets: [
-        'Domain types as the contract, not the CMS shape — schema changes surface as type errors at the mapper boundary instead of runtime bugs in pages.',
-        'An embedded Sanity Studio with live visual editing gives the client a real authoring experience, not just a read API.',
+        '50 Sanity schema types are represented in the CMS model.',
+        'TypeGen supports the type-safe bridge between CMS content and application code.',
+        '12 unit-tested anti-corruption mappers translate content into domain types.',
       ],
     },
     {
-      heading: 'Challenges solved',
-      body: 'Two problems worth calling out, both diagnosed and fixed.',
+      heading: 'Build scope',
+      body: 'The production build covered a sizeable application surface for a freelance client project.',
       bullets: [
-        'Build-time failure: generateStaticParams reached a draftMode()-bound live fetcher, which has no request scope at build time. Fixed by switching build-time slug enumeration to a plain published client.fetch, unblocking the production CMS build.',
-        'Accessibility remediation to a verified 100 site-wide: an audit surfaced real WCAG 2.1 AA regressions — color contrast, heading order, ARIA table semantics, Label-in-Name, and target size — each fixed and re-verified across all 12 routes on mobile and desktop (24/24).',
+        '~34K LOC in strict-mode TypeScript.',
+        '23 routes and 74 React components.',
+        '6 API route handlers.',
       ],
     },
     {
-      heading: 'Design & frontend',
-      body: 'I authored the brand and the design system, not just the implementation. A token-driven theme (color, type, spacing, motion) lives as CSS custom properties and is consumed through a CVA-based component library — a single source of truth across 74 components organized primitives → sections → layout → forms.',
+      heading: 'Quality and accessibility',
+      body: 'The project established a 55-test suite and reached strong Lighthouse results across every route.',
       bullets: [
-        'Centralized Framer Motion variants with prefers-reduced-motion honored on every animation — brand expression balanced against WCAG-conscious restraint.',
-        'Server Components by default; "use client" scoped only to hooks, browser APIs, and motion, keeping the client bundle lean.',
-      ],
-    },
-    {
-      heading: 'Quality & workflow',
-      body: 'Quality is enforced by tooling, not vigilance. A deliberate test pyramid — fast unit tests on the riskiest logic (the mappers) plus a thin E2E layer across four viewports — sits behind a zero-warning ESLint gate, strict TypeScript (no any), and Husky pre-commit hooks. The build itself was developed in an agentic, spec-driven workflow with automated tests and review as the quality gate.',
-      bullets: [
-        'Lighthouse Best Practices 96 and SEO 92, alongside the verified Accessibility 100.',
-        'Production hardening: Sentry across client/server/edge runtimes, security headers, honeypot spam protection, and server-side validation on form routes.',
+        '55-test suite.',
+        'Lighthouse Accessibility 100 across all 12 routes on mobile + desktop.',
+        'Lighthouse Best Practices 96 and SEO 92.',
       ],
     },
     {
       heading: 'Outcome',
-      body: 'A production-ready platform built solo, end-to-end — design system through data layer. The env-switched CMS integration is built and tested and is slated for production rollout; because every future content type plugs into the same service + mapper layer, the CMS is reusable infrastructure rather than a one-off. The capabilities above are what was built; business metrics will follow once the site is live.',
+      body: 'The result is a production website and headless-CMS platform that demonstrates end-to-end delivery across frontend, API routes, CMS data modeling, typed content mapping, testing, accessibility, and deployment.',
+    },
+  ],
+};
+
+export const okraCaseStudy: CaseStudy = {
+  projectId: 'okra',
+  title: 'OKRa — Internal Work Tracking Platform',
+  client: 'Mashup Technology Ventures Inc.',
+  role: 'Software Engineering Intern / Full-Stack Developer (OJT)',
+  period: 'May 2026 – Jul 2026',
+  summary:
+    'A department-first collaborative work-tracking platform built during a software engineering internship, connecting shared workspaces, workflow columns, tickets, permissions, attachments, realtime updates, and administrative oversight.',
+  metrics: [
+    { value: '32', label: 'Current route handlers across frontend and API workflows' },
+    { value: '21', label: 'Database migrations supporting the platform data model' },
+    { value: '83', label: 'Automated test files across API, database, auth, UI, accessibility, and E2E workflows' },
+  ],
+  stack: [
+    'Next.js App Router',
+    'React',
+    'TypeScript',
+    'PostgreSQL',
+    'Drizzle ORM',
+    'Zod',
+    'Auth.js/NextAuth',
+    'S3-compatible storage',
+    'Server-Sent Events',
+  ],
+  sections: [
+    {
+      heading: 'The brief',
+      body: 'OKRa is a department-first collaborative work-tracking platform for organizing workspaces, workflow columns, tickets, cross-department sharing, comments, labels, activity history, invitations, attachments, and administrative oversight.',
+    },
+    {
+      heading: 'Full-stack delivery',
+      body: 'The work connected reusable React workflows, Next.js route handlers, shared TypeScript/Zod contracts, and a PostgreSQL/Drizzle data model.',
+      bullets: [
+        '32 current route handlers across frontend and API workflows.',
+        '21 database migrations supporting the platform data model.',
+        'Shared validation contracts kept frontend and backend behavior aligned.',
+      ],
+    },
+    {
+      heading: 'Authentication and authorization',
+      body: 'The platform required security-sensitive access control across users, workspaces, and administrative workflows.',
+      bullets: [
+        'Auth.js credential sessions with session versioning and route protection.',
+        'Role- and workspace-scoped permissions for protected workflows.',
+        'Password and invite flows, database-backed rate limiting, and administrative safeguards.',
+      ],
+    },
+    {
+      heading: 'Storage and realtime behavior',
+      body: 'File handling and collaboration workflows were designed around failure-aware server behavior and timely board updates.',
+      bullets: [
+        'S3-compatible attachment and avatar storage with upload validation and per-kind size controls.',
+        'Staged persistence, protected preview/download behavior, missing-object handling, and recovery states.',
+        'Realtime board updates through Server-Sent Events and PostgreSQL LISTEN/NOTIFY.',
+      ],
+    },
+    {
+      heading: 'Quality and maintainability',
+      body: 'The project established a broad automated test surface covering both application behavior and user-facing quality concerns.',
+      bullets: [
+        '83 automated test files across API routes, database behavior, shared schemas, authentication, responsive UI, accessibility, keyboard interaction, and end-to-end workflows.',
+        'Clear monorepo boundaries separating the Next.js application, PostgreSQL/Drizzle database package, and shared TypeScript/Zod contracts.',
+      ],
+    },
+    {
+      heading: 'Outcome',
+      body: 'The result is a production-oriented work platform demonstrating end-to-end engineering across product workflows, data modeling, security, file handling, realtime behavior, testing, and maintainable project boundaries.',
     },
   ],
 };
 
 export const caseStudies: Record<string, CaseStudy> = {
   reisky: reiskyCaseStudy,
+  okra: okraCaseStudy,
 };
 
 export const getCaseStudy = (projectId: string): CaseStudy | undefined =>

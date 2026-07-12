@@ -32,7 +32,7 @@ export default function EvidenceBand() {
             <motion.div
               key={point.value}
               variants={cellVariants}
-              className="premium-hover flex flex-col gap-2 p-5 hover:bg-secondary/35 sm:p-6"
+              className="premium-hover flex min-h-32 flex-col gap-2 p-5 hover:bg-secondary/35 sm:min-h-36 sm:p-6"
             >
               <span
                 className="text-xs font-bold uppercase tracking-[0.16em] text-accent"
@@ -40,10 +40,10 @@ export default function EvidenceBand() {
               >
                 {String(index + 1).padStart(2, '0')}
               </span>
-              <dt className="font-serif text-xl font-bold leading-tight text-foreground">
+              <dt className="max-w-[12ch] font-serif text-xl font-bold leading-tight text-foreground">
                 {point.value}
               </dt>
-              <dd className="text-sm leading-6 text-muted-foreground">{point.label}</dd>
+              <dd className="max-w-[30ch] text-sm leading-6 text-muted-foreground">{point.label}</dd>
             </motion.div>
           ))}
         </motion.dl>

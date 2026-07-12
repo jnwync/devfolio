@@ -9,7 +9,7 @@ const links = [
   { name: 'Profile', href: '#about' },
   { name: 'Work', href: '#projects' },
   { name: 'Experience', href: '#experience' },
-  { name: 'Capabilities', href: '#skills' },
+  { name: 'Skills', href: '#skills' },
   { name: 'Contact', href: '#contact' },
 ];
 
@@ -181,7 +181,7 @@ export default function Navigation() {
       <nav
         className={`sticky top-0 z-50 border-b backdrop-blur-md transition-[background-color,box-shadow,border-color] duration-300 ease-(--ease-out-quart) ${
           scrolled || isOpen
-            ? 'border-border bg-background/95 shadow-[0_8px_30px_oklch(0.23_0.04_75/0.09)]'
+            ? 'border-border bg-background/95 shadow-(--shadow-nav)'
             : 'border-transparent bg-background/80'
         }`}
         aria-label="Main navigation"
@@ -207,9 +207,9 @@ export default function Navigation() {
                     href={link.href}
                     onClick={(event) => handleLinkClick(event, link.href)}
                     className={`relative inline-flex min-h-11 items-center rounded-md px-3 text-sm font-bold transition-colors ${
-                      isActive ? 'bg-secondary/70 text-primary shadow-[inset_0_0_0_1px_oklch(0.82_0.035_78/0.7)]' : 'text-muted-foreground hover:bg-secondary/45 hover:text-foreground'
+                      isActive ? 'bg-secondary/70 text-primary shadow-(--shadow-active)' : 'text-muted-foreground hover:bg-secondary/45 hover:text-foreground'
                     }`}
-                    aria-current={isActive ? 'page' : undefined}
+                    aria-current={isActive ? 'location' : undefined}
                   >
                     {link.name}
                     {isActive && (
@@ -264,7 +264,7 @@ export default function Navigation() {
                         className={`flex min-h-12 items-center rounded-md px-3 text-sm font-bold transition-colors ${
                           isActive ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
                         }`}
-                        aria-current={isActive ? 'page' : undefined}
+                        aria-current={isActive ? 'location' : undefined}
                       >
                         {link.name}
                       </a>

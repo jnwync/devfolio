@@ -66,6 +66,8 @@ The hero should include:
   - Secondary: view selected work.
   - Utility: download CV.
 
+The hero background should feel layered and printed, not flat: use a faint paper grain, a soft warm top wash, subtle tonal panel changes, and restrained shadow/elevation cues. Keep that depth localized to the hero so the rest of the page stays calm.
+
 The current headshot may be reworked or removed if it does not support the editorial direction. If retained, it should feel integrated into the dossier, not like a generic circular profile image with glow.
 
 ### Evidence Band

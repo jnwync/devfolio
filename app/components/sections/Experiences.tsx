@@ -10,6 +10,8 @@ const typeLabels: Record<string, string> = {
   contract: 'Contract',
   freelance: 'Freelance',
   internship: 'Internship',
+  startup: 'Student-led startup',
+  professional: 'Project-based',
   academic: 'Academic',
 };
 
@@ -49,8 +51,9 @@ export default function ProfessionalExperience() {
             </h2>
           </div>
           <p className="max-w-2xl text-base leading-7 text-muted-foreground md:justify-self-end">
-            Contract and academic engagements across marketplace, e-commerce, healthcare,
-            and government products — each delivered in small, agile teams.
+            Formal industry work, OJT, freelance client projects, student-led startups,
+            and academic client engagements across work tracking, healthcare, e-commerce,
+            marketplace, and government products.
           </p>
         </header>
 

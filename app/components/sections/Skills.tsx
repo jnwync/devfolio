@@ -31,7 +31,7 @@ export default function Skills() {
       <SectionMark index="03" />
       <div className="section-shell relative z-10">
         <header className="mb-14 max-w-3xl">
-          <p className="section-kicker">03 — Capabilities</p>
+          <p className="section-kicker">03 — Skills</p>
           <h2
             id="skills-heading"
             className="section-heading"
@@ -55,7 +55,7 @@ export default function Skills() {
             <motion.article
               key={group.title}
               variants={itemVariants}
-              className="group grid gap-x-10 gap-y-4 border-b border-border py-8 md:grid-cols-[0.4fr_0.6fr] md:py-10"
+              className="group grid gap-x-10 gap-y-5 border-b border-border py-8 md:grid-cols-[0.4fr_0.6fr] md:py-10"
             >
               <div className="flex items-baseline gap-4">
                 <span
@@ -72,7 +72,7 @@ export default function Skills() {
                 <p className="max-w-2xl text-base leading-7 text-muted-foreground">
                   {group.summary}
                 </p>
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-5 flex max-w-3xl flex-wrap gap-2">
                   {group.skills.slice(0, 6).map((skill) => (
                     <Badge key={skill} variant="secondary">
                       {skill}
