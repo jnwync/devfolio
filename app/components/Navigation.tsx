@@ -179,10 +179,10 @@ export default function Navigation() {
       </a>
 
       <nav
-        className={`sticky top-0 z-50 border-b backdrop-blur-md transition-[background-color,box-shadow,border-color] duration-300 ease-(--ease-out-quart) ${
+        className={`sticky top-0 z-50 border-b transition-[background-color,border-color] duration-200 ${
           scrolled || isOpen
-            ? 'border-border bg-background/95 shadow-(--shadow-nav)'
-            : 'border-transparent bg-background/80'
+            ? 'border-border bg-background'
+            : 'border-transparent bg-background'
         }`}
         aria-label="Main navigation"
       >
@@ -207,7 +207,7 @@ export default function Navigation() {
                     href={link.href}
                     onClick={(event) => handleLinkClick(event, link.href)}
                     className={`relative inline-flex min-h-11 items-center rounded-md px-3 text-sm font-bold transition-colors ${
-                      isActive ? 'bg-secondary/70 text-primary shadow-(--shadow-active)' : 'text-muted-foreground hover:bg-secondary/45 hover:text-foreground'
+                      isActive ? 'bg-secondary/70 text-primary' : 'text-muted-foreground hover:bg-secondary/45 hover:text-foreground'
                     }`}
                     aria-current={isActive ? 'location' : undefined}
                   >
@@ -225,7 +225,7 @@ export default function Navigation() {
 
               <Button asChild size="sm" className="ml-3">
                 <a href="#contact" onClick={(event) => handleLinkClick(event, '#contact')}>
-                  Start a conversation
+                  Contact
                 </a>
               </Button>
             </div>
@@ -272,7 +272,7 @@ export default function Navigation() {
                   })}
                   <Button asChild size="default" className="mt-2">
                     <a href="#contact" onClick={(event) => handleLinkClick(event, '#contact')}>
-                      Start a conversation
+                      Contact
                     </a>
                   </Button>
                 </div>

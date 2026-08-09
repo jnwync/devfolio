@@ -50,24 +50,25 @@ test('publishes the CV-authoritative OKRa period without unpublished duration cl
   assert.equal(JSON.stringify(portfolioData).includes('300 hrs'), false);
 });
 
-test('keeps Reisky aligned with the CV and features recruiter-relevant work', () => {
+test('keeps Reisky aligned with the CV and selects only complete case studies', () => {
   const reisky = portfolioData.experiences.find(({ id }) => id === 'reisky');
-  const featuredProjects = portfolioData.projects
-    .filter(({ featured }) => featured)
+  const selectedProjects = portfolioData.projects
+    .filter(({ caseStudyPath }) => caseStudyPath)
     .map(({ id }) => id);
 
   assert.equal(reisky?.period, 'Jan 2026 - Apr 2026');
-  assert.deepEqual([...featuredProjects], ['reisky', 'okra', 'apollo']);
+  assert.deepEqual([...selectedProjects], ['reisky', 'okra']);
+  assert.equal(portfolioData.projects.some(({ featured }) => featured), false);
 });
 
-test('uses the recruiter-searchable headline and CV-backed About copy', () => {
+test('uses balanced audience positioning and concise homepage copy', () => {
   assert.equal(
     portfolioData.personal.positioning,
-    'Full-Stack Web Developer building systems people rely on.'
+    'Full-stack developer for products that need to ship.'
   );
   assert.equal(
     portfolioData.personal.summary,
-    'I build responsive React products, typed APIs, secure workflows, and tested data systems from interface to deployment.'
+    'I build production web systems across interface, APIs, data, authentication, testing, and deployment — for client teams and product organizations.'
   );
   assert.match(portfolioData.personal.bio, /relational and NoSQL databases/);
   assert.match(portfolioData.personal.bio, /authentication, authorization/);
@@ -101,4 +102,8 @@ test('keeps project interactions restrained and case-study presentation shared',
     readFileSync(new URL('../app/work/okra/page.tsx', import.meta.url), 'utf8'),
     /CaseStudyLayout/
   );
+  assert.doesNotMatch(projectsSource, /Featured/);
+  assert.match(projectsSource, /filter\(\(project\) => project\.caseStudyPath\)/);
+  assert.doesNotMatch(navigationSource, /Start a conversation/);
+  assert.doesNotMatch(stylesSource, /background-image:\s*\n\s*linear-gradient/);
 });

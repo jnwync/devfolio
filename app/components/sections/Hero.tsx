@@ -1,9 +1,8 @@
 'use client';
 
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
-import { BriefcaseBusiness, Mail } from 'lucide-react';
+import { BriefcaseBusiness, ClipboardList } from 'lucide-react';
 import HeroImage from '../HeroImage';
-import Magnetic from '../motion/Magnetic';
 import { Button } from '@/components/ui/button';
 import { portfolioData } from '@/data/portfolio';
 
@@ -11,38 +10,14 @@ export default function Hero() {
   const { personal } = portfolioData;
   const reduceMotion = useReducedMotion();
 
-  const container: Variants = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: reduceMotion ? 0 : 0.08, delayChildren: 0.05 },
-    },
-  };
-
   const item: Variants = {
-    hidden: { opacity: 0, y: reduceMotion ? 0 : 18 },
+    hidden: { opacity: 0, y: reduceMotion ? 0 : 16 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: [0.25, 1, 0.5, 1] },
+      transition: { duration: 0.55, ease: [0.25, 1, 0.5, 1] },
     },
   };
-
-  const headline: Variants = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: reduceMotion ? 0 : 0.045, delayChildren: 0.12 },
-    },
-  };
-
-  const word: Variants = {
-    hidden: { y: reduceMotion ? 0 : '115%' },
-    visible: {
-      y: 0,
-      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-    },
-  };
-
-  const headlineWords = personal.positioning.split(' ');
 
   return (
     <section
@@ -50,75 +25,57 @@ export default function Hero() {
       className="relative scroll-mt-20 overflow-hidden py-10 sm:py-16 lg:py-20"
       aria-labelledby="hero-heading"
     >
-      <span aria-hidden="true" className="ghost-word right-[-3vw] top-[34%] hidden text-[clamp(8rem,19vw,17rem)] sm:block">
-        jnwync
-      </span>
       <div aria-hidden="true" className="grain-layer" />
       <div className="section-shell relative z-10">
-        {/* Masthead / folio line */}
         <div className="mb-7 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-border pb-4 sm:mb-8">
           <span className="text-xs font-bold uppercase tracking-[0.22em] text-foreground">
             {personal.name}
           </span>
           <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
-            <span className="relative flex h-2 w-2" aria-hidden="true">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
-            </span>
+            <span className="h-2 w-2 rounded-full bg-success" aria-hidden="true" />
             {personal.availability.message}
           </span>
         </div>
 
         <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
           <motion.div
-            variants={container}
             initial="hidden"
             animate="visible"
+            variants={{ visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.08 } } }}
             className="max-w-3xl space-y-5"
           >
             <motion.h1
-              variants={headline}
+              variants={item}
               id="hero-heading"
-              className="max-w-2xl font-serif text-[clamp(2rem,1.38rem+4.3vw,2.4rem)] font-bold leading-[1.08] text-foreground sm:text-[clamp(2.25rem,1.3rem+3.2vw,3.4rem)] sm:leading-[1.07]"
+              className="max-w-2xl font-serif text-[clamp(2.15rem,1.4rem+4.4vw,4.5rem)] font-bold leading-[1.04] text-foreground"
             >
-              {headlineWords.map((w, i) => (
-                <span key={`${w}-${i}`} className="line-mask">
-                  <motion.span variants={word} className="inline-block pb-[0.06em] pr-[0.26em]">
-                    {w}
-                  </motion.span>
-                </span>
-              ))}
+              {personal.positioning}
             </motion.h1>
 
-            <motion.p
-              variants={item}
-              className="max-w-xl text-base leading-7 text-muted-foreground"
-            >
+            <motion.p variants={item} className="max-w-xl text-base leading-7 text-muted-foreground">
               {personal.summary}
             </motion.p>
 
             <motion.div variants={item} className="grid gap-3 sm:flex sm:flex-wrap sm:items-center">
-              <Magnetic className="w-full sm:w-auto" strength={0.4}>
-                <Button asChild size="lg" className="w-full">
-                  <a href={`mailto:${personal.email}`}>
-                    <Mail className="h-5 w-5" aria-hidden="true" />
-                    Start a conversation
-                  </a>
-                </Button>
-              </Magnetic>
-              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
+              <Button asChild size="lg" className="w-full sm:w-auto">
                 <a href="#projects">
                   <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" />
-                  View selected work
+                  See client work
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
+                <a href="#experience">
+                  <ClipboardList className="h-5 w-5" aria-hidden="true" />
+                  Review hiring experience
                 </a>
               </Button>
             </motion.div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: reduceMotion ? 0 : 24 }}
+            initial={{ opacity: 0, y: reduceMotion ? 0 : 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1], delay: 0.15 }}
+            transition={{ duration: 0.65, ease: [0.25, 1, 0.5, 1], delay: 0.12 }}
           >
             <HeroImage />
           </motion.div>

@@ -17,7 +17,7 @@ export default function HeroImage() {
           height={1080}
           priority
           sizes="(max-width: 1024px) 90vw, 360px"
-          className="h-full w-full object-cover object-top transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.025]"
+          className="h-full w-full object-cover object-top"
         />
       </div>
 

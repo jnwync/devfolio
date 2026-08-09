@@ -21,6 +21,7 @@ export interface Experience {
   endDate: string;
   location?: string;
   description: string;
+  homepageSummary: string;
   scope: string;
   achievements: string[];
   impact?: ImpactItem[];
@@ -36,6 +37,8 @@ export interface Project {
   startDate: string;
   endDate: string;
   description: string;
+  homepageSummary: string;
+  homepageOutcome: string;
   context: string;
   responsibility: string;
   outcomes: string[];
@@ -44,7 +47,6 @@ export interface Project {
   link?: string;
   github?: string;
   image?: string;
-  featured?: boolean;
   caseStudyPath?: string;
 }
 
@@ -81,6 +83,7 @@ export interface ContactLink {
 
 export interface PersonalInfo {
   name: string;
+  githubUsername: string;
   tagline: string;
   positioning: string;
   summary: string;
@@ -117,9 +120,10 @@ export const portfolioData: PortfolioData = {
   // ---------------------------------------------------------------------------
   personal: {
     name: 'Jon Wayne Cabusbusan',
+    githubUsername: 'jnwync',
     tagline: 'Production web systems',
-    positioning: 'Full-Stack Web Developer building systems people rely on.',
-    summary: 'I build responsive React products, typed APIs, secure workflows, and tested data systems from interface to deployment.',
+    positioning: 'Full-stack developer for products that need to ship.',
+    summary: 'I build production web systems across interface, APIs, data, authentication, testing, and deployment — for client teams and product organizations.',
     email: 'jonwayne.cabusbusan@gmail.com',
     phone: '+63 945 289 7584',
     location: 'Iloilo, Philippines',
@@ -136,20 +140,20 @@ export const portfolioData: PortfolioData = {
 
   proofPoints: [
     {
-      value: 'OKRa',
-      label: 'Full-stack work-tracking platform with 32 route handlers, PostgreSQL/Drizzle, Auth.js, RBAC, secure attachments, and automated testing',
+      value: 'End-to-end ownership',
+      label: 'Interface, APIs, data, authentication, testing, and deployment in one delivery loop',
     },
     {
-      value: '~34K LOC',
-      label: 'Reisky production site across 23 routes, 74 React components, and 6 API route handlers',
+      value: 'Reliable delivery',
+      label: 'Accessible flows, secure defaults, and release-ready checks built into the work',
     },
     {
-      value: '55 tests',
-      label: 'Automated tests established for Reisky across the production website and headless-CMS platform',
+      value: 'Shipped in context',
+      label: 'Client work, product teams, startups, and academic partnerships',
     },
     {
-      value: 'Next.js + TypeScript',
-      label: 'End-to-end delivery across UI, REST APIs, RBAC, CMS pipelines, testing, and deployment',
+      value: 'Production-minded',
+      label: 'Type-safe systems designed to remain understandable after launch',
     },
   ],
 
@@ -166,6 +170,7 @@ export const portfolioData: PortfolioData = {
       startDate: '2026-05',
       endDate: '2026-07',
       description: 'Internal department-first work tracking platform for workspaces, tickets, workflow columns, cross-department sharing, comments, attachments, invites, and admin oversight.',
+      homepageSummary: 'Built a collaborative work-tracking platform with workspace permissions, realtime updates, attachments, and administrative workflows.',
       scope: 'Built and contributed full-stack features across the Next.js App Router, PostgreSQL/Drizzle data model, Auth.js/NextAuth authentication, RBAC, secure attachments, and realtime board updates.',
       achievements: [
         'Built a department-first collaborative work-tracking platform spanning workspaces, workflow columns, tickets, cross-department sharing, comments, labels, activity history, invitations, attachments, and administrative oversight.',
@@ -191,6 +196,7 @@ export const portfolioData: PortfolioData = {
       endDate: '2026-04',
       location: 'Surrey, BC, Canada',
       description: 'Solo freelance engagement: a production website and headless-CMS platform for a Filipino martial arts studio.',
+      homepageSummary: 'Delivered a production marketing site and CMS platform for a martial arts studio, from content architecture through launch.',
       scope: 'Designed and built a production website end-to-end on Next.js 16, React 19, strict-mode TypeScript, Sanity CMS, GROQ, and a tested dual-source content pipeline.',
       achievements: [
         'Designed and built a production website end-to-end: ~34K LOC across 23 routes, 74 React components, and 6 API route handlers in strict-mode TypeScript on Next.js 16 / React 19.',
@@ -214,6 +220,7 @@ export const portfolioData: PortfolioData = {
       startDate: '2025-06',
       endDate: '2025-11',
       description: 'Student-led startup project for product, order, and notification workflows in a packaging marketplace.',
+      homepageSummary: 'Built product, order, and notification workflows for a packaging marketplace with protected admin operations.',
       scope: 'Built product and order API routes, service-layer logic, admin-only Firebase Admin SDK/RBAC protection, event-driven notifications, and atomic Firestore transaction safeguards.',
       achievements: [
         'Built product and order API routes in Next.js 15 with full CRUD, order placement, updates, deletion, and admin-only Firebase Admin SDK/RBAC protection.',
@@ -235,6 +242,7 @@ export const portfolioData: PortfolioData = {
       startDate: '2025-06',
       endDate: '2025-11',
       description: 'Student-led startup marketplace platform for MSMEs, covering browsing flows, social feed interactions, cart functionality, and seller dashboard contributions.',
+      homepageSummary: 'Built marketplace browsing, social feed, cart, and seller workflows for an MSME commerce platform.',
       scope: 'Built marketplace browsing, social feed interactions, cart behavior, and seller dashboard pieces for an MSME e-commerce platform.',
       achievements: [
         'Built marketplace browsing flows — product listings, category navigation, detail pages, search, autocomplete, and filters — using Next.js 15, Prisma ORM, PostgreSQL, and SWR.',
@@ -256,6 +264,7 @@ export const portfolioData: PortfolioData = {
       startDate: '2025-01',
       endDate: '2025-05',
       description: 'Patient portal and hospital booking web application for healthcare facility management.',
+      homepageSummary: 'Led frontend delivery and backend improvements for a patient portal and hospital booking system.',
       scope: 'Led patient portal and hospital booking UI work while supporting backend refactors and database improvements in a two-developer team.',
       achievements: [
         'Led frontend development of a patient portal and hospital booking system, delivering responsive UI/UX for patients and admin staff.',
@@ -277,6 +286,7 @@ export const portfolioData: PortfolioData = {
       endDate: '2025-05',
       location: 'Iloilo, Philippines',
       description: 'Government-backed interactive MSME map for Iloilo, enabling DTI admins to register, visualize, and monitor regional businesses.',
+      homepageSummary: 'Built map, admin, and API workflows for an MSME industry map delivered with an external government client.',
       scope: 'Developed MSME and user management APIs, GeoJSON map data delivery, role-based API access, an interactive MSME map, and an admin dashboard for an external academic client partnership.',
       achievements: [
         'Developed MSME and user management API routes in Next.js 14 and a GeoJSON endpoint for Iloilo map data, built on reusable Firestore utility abstractions.',
@@ -303,6 +313,8 @@ export const portfolioData: PortfolioData = {
       startDate: '2026-01',
       endDate: '2026-04',
       description: 'International client project for Reisky Martial Arts in Surrey, BC, Canada.',
+      homepageSummary: 'A production website and headless-CMS platform designed and built end-to-end for a Filipino martial arts studio.',
+      homepageOutcome: 'Gave the client a maintainable content system with a tested fallback path and Lighthouse Accessibility 100 across all routes.',
       context: 'Production website and headless-CMS platform for a Filipino martial arts studio, designed and built end-to-end as a freelance client project.',
       responsibility: 'Designed and built the site across 23 routes, 74 React components, and 6 API route handlers in strict-mode TypeScript on Next.js 16 / React 19.',
       outcomes: [
@@ -318,7 +330,6 @@ export const portfolioData: PortfolioData = {
       ],
       technologies: ['Next.js 16', 'React 19', 'TypeScript', 'Sanity CMS', 'GROQ', 'TypeGen'],
       image: '/images/projects/reisky-home.png',
-      featured: true,
       caseStudyPath: '/work/reisky',
     },
     {
@@ -329,6 +340,8 @@ export const portfolioData: PortfolioData = {
       startDate: '2026-05',
       endDate: '2026-07',
       description: 'OJT internship project at Mashup Technology Ventures Inc. - OKRa.',
+      homepageSummary: 'A department-first work-tracking platform for tickets, collaboration, attachments, and admin oversight.',
+      homepageOutcome: 'Connected frontend, API, database, authentication, and storage layers into one tested internal product.',
       context: 'Department-first collaborative work-tracking platform with workspaces, workflow columns, tickets, cross-department sharing, comments, labels, activity history, invitations, attachments, and administrative oversight.',
       responsibility: 'Connected reusable React workflows, shared TypeScript/Zod contracts, 32 route handlers, PostgreSQL, Drizzle ORM, Auth.js/NextAuth, secure storage, and realtime board updates.',
       outcomes: [
@@ -342,7 +355,6 @@ export const portfolioData: PortfolioData = {
         'Authored 83 automated test files covering API routes, database behavior, authentication, responsive UI, accessibility, keyboard interaction, and end-to-end workflows.',
       ],
       technologies: ['Next.js App Router', 'TypeScript', 'React', 'PostgreSQL', 'Drizzle ORM', 'Zod', 'Auth.js/NextAuth', 'SSE'],
-      featured: true,
       caseStudyPath: '/work/okra',
     },
     {
@@ -353,6 +365,8 @@ export const portfolioData: PortfolioData = {
       startDate: '2025-06',
       endDate: '2025-11',
       description: 'Student-led startup project focused on product, order, and notification workflows.',
+      homepageSummary: 'Product, order, and notification workflows for a packaging marketplace.',
+      homepageOutcome: 'Protected admin operations and transaction-safe order workflows supported a dependable marketplace foundation.',
       context: 'Marketplace platform work for products, orders, notifications, admin-only access, and Firestore-backed operations.',
       responsibility: 'Built product and order API routes in Next.js 15 with CRUD, order placement, updates, deletion, and Firebase Admin SDK/RBAC protection.',
       outcomes: [
@@ -375,6 +389,8 @@ export const portfolioData: PortfolioData = {
       startDate: '2025-06',
       endDate: '2025-11',
       description: 'Student-led startup marketplace for MSME browsing, social feed, cart, and seller dashboard workflows.',
+      homepageSummary: 'Marketplace browsing, social feed, cart, and seller dashboard work for an MSME commerce platform.',
+      homepageOutcome: 'Shipped practical commerce flows with search, realtime interactions, and database-backed safeguards.',
       context: 'E-commerce and marketplace flows for listings, category navigation, detail pages, search, autocomplete, filters, social feed interactions, cart, and seller dashboard work.',
       responsibility: 'Built marketplace browsing flows using Next.js 15, Prisma ORM, PostgreSQL, and SWR, and contributed React 19 / Radix UI component architecture.',
       outcomes: [
@@ -397,6 +413,8 @@ export const portfolioData: PortfolioData = {
       startDate: '2025-01',
       endDate: '2025-05',
       description: 'Project-based full-stack development work for Wisdomous Inc. and Apollo Medical Group.',
+      homepageSummary: 'Patient portal and hospital booking work delivered in a small agile product team.',
+      homepageOutcome: 'Improved booking reliability and patient/admin usability through frontend leadership and backend refactoring.',
       context: 'Patient portal and hospital booking system serving patients and admin staff.',
       responsibility: 'Led frontend development, contributed backend refactors, optimized database structure, and supported end-to-end QA in a 2-developer agile team.',
       outcomes: [
@@ -410,7 +428,6 @@ export const portfolioData: PortfolioData = {
         'Contributed to design discussions, sprint reviews, and end-to-end QA.',
       ],
       technologies: ['Responsive UI/UX', 'Backend Refactoring', 'Database Optimization', 'End-to-End QA'],
-      featured: true,
     },
     {
       id: 'dti',
@@ -420,6 +437,8 @@ export const portfolioData: PortfolioData = {
       startDate: '2024-08',
       endDate: '2025-05',
       description: 'Academic client project through an external client partnership via Central Philippine University.',
+      homepageSummary: 'Built map, admin, and API workflows for an MSME industry map delivered with an external government client.',
+      homepageOutcome: 'Turned geographic and administrative data into usable map, management, and approval workflows.',
       context: 'Interactive MSME map and admin dashboard for Iloilo map data, MSME management, user management, and API-layer access control.',
       responsibility: 'Developed MSME and user management API routes, GeoJSON delivery, reusable Firestore utility abstractions, runtime validation, API-layer RBAC, and account-approval workflows.',
       outcomes: [
@@ -559,17 +578,6 @@ export const portfolioData: PortfolioData = {
         { name: 'TDD' },
       ],
     },
-    {
-      title: 'AI-assisted development',
-      description: 'Structured AI tooling used with testing, documentation, review, and human validation',
-      skills: [
-        { name: 'GitHub Copilot' },
-        { name: 'OpenAI Codex' },
-        { name: 'Claude Code' },
-        { name: 'Cursor' },
-        { name: 'OpenCode' },
-      ],
-    },
   ],
 
   capabilityGroups: [
@@ -577,37 +585,31 @@ export const portfolioData: PortfolioData = {
       title: 'Frontend systems',
       summary: 'Responsive UIs, marketplace browsing flows, patient/admin portals, interactive maps, and component architecture in the Next.js/React ecosystem.',
       evidence: 'Built interfaces for OKRa, Reisky, Apollo Medical Group, PackUp, DemiGAD, and the DTI Iloilo MSME Industry Map.',
-      skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS v4', 'Radix UI', 'Framer Motion'],
+      skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
     },
     {
       title: 'Backend and APIs',
       summary: 'REST APIs, Next.js API routes, authentication, RBAC, service layers, event-driven notifications, and API validation.',
       evidence: 'Implemented OKRa RBAC/session validation, PackUp product/order APIs, DTI API-layer access control, and Baylo marketplace data flows.',
-      skills: ['Node.js', 'REST APIs', 'Next.js API Routes', 'Zod', 'SSE', 'Nodemailer'],
+      skills: ['Node.js', 'REST APIs', 'Zod', 'SSE'],
     },
     {
       title: 'Authentication and security',
       summary: 'Credential sessions, role- and workspace-scoped authorization, ownership checks, rate limiting, and protected file workflows.',
       evidence: 'Implemented OKRa session versioning and RBAC, PackUp Firebase Admin safeguards, and API-layer access control for DTI.',
-      skills: ['Auth.js/NextAuth', 'Firebase Auth', 'Supabase Auth', 'JWT', 'RBAC', 'Rate limiting'],
+      skills: ['Auth.js/NextAuth', 'Firebase Auth', 'RBAC', 'Rate limiting'],
     },
     {
       title: 'CMS and data',
       summary: 'PostgreSQL/Drizzle domain models, Prisma-backed marketplace data, Firebase Firestore utilities, and Sanity CMS/GROQ content pipelines.',
       evidence: 'Built Reisky’s 50-schema Sanity pipeline, OKRa PostgreSQL/Drizzle features, Baylo Prisma/PostgreSQL flows, and DTI Firestore-backed map APIs.',
-      skills: ['PostgreSQL', 'Drizzle ORM', 'Prisma ORM', 'Sanity CMS', 'GROQ', 'Firestore'],
+      skills: ['PostgreSQL', 'Drizzle ORM', 'Sanity CMS', 'Firestore'],
     },
     {
       title: 'Delivery and quality',
       summary: 'Testing, accessibility, SEO, secure file handling, cloud deployment, and production-minded QA.',
       evidence: 'Established a 55-test Reisky suite, contributed to OKRa’s 83-file test suite, and shipped Apollo Medical Group to production in a 2-developer agile team.',
-      skills: ['Vitest', 'Playwright', 'Lighthouse', 'ESLint', 'GitHub Actions', 'Vercel'],
-    },
-    {
-      title: 'AI-assisted development',
-      summary: 'A structured, spec-driven workflow using AI tools with automated tests, documentation, code review, and human validation as quality gates.',
-      evidence: 'Uses GitHub Copilot, OpenAI Codex, Claude Code, Cursor, and OpenCode to accelerate delivery without replacing engineering judgment.',
-      skills: ['GitHub Copilot', 'OpenAI Codex', 'Claude Code', 'Cursor', 'OpenCode'],
+      skills: ['Vitest', 'Playwright', 'Lighthouse', 'ESLint'],
     },
   ],
 

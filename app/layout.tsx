@@ -24,9 +24,9 @@ const bodyFont = Hanken_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Jon Wayne Cabusbusan | Full-Stack Web Developer",
+  title: "Jon Wayne Cabusbusan | Full-Stack Developer",
   description:
-    "Full-stack web developer building production-oriented applications with Next.js, TypeScript, React, PostgreSQL, APIs, authentication, automated testing, and cloud deployment.",
+    "Full-stack developer building production web systems for client teams and product organizations, from interface and APIs through data, testing, and deployment.",
   keywords: [
     "Full-Stack Web Developer",
     "Next.js Developer",
@@ -56,9 +56,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    title: "Jon Wayne Cabusbusan | Full-Stack Web Developer",
+    title: "Jon Wayne Cabusbusan | Full-Stack Developer",
     description:
-      "Next.js and TypeScript portfolio covering responsive UIs, REST APIs, PostgreSQL/Drizzle domain models, RBAC, CMS data pipelines, testing, accessibility, and cloud deployment.",
+      "Portfolio covering client delivery, product engineering, responsive interfaces, APIs, data systems, testing, accessibility, and deployment.",
     siteName: "Jon Wayne Cabusbusan Portfolio",
     images: [
       {
@@ -69,9 +69,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jon Wayne Cabusbusan | Full-Stack Web Developer",
+    title: "Jon Wayne Cabusbusan | Full-Stack Developer",
     description:
-      "Production-oriented full-stack web development across Next.js, TypeScript, React, PostgreSQL, APIs, testing, and deployment.",
+      "Production web development for client teams and product organizations across interface, APIs, data, testing, and deployment.",
     images: ["/images/hero/hero-portrait.webp"],
   },
 };
