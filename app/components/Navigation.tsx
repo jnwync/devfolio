@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 const links = [
   { name: 'Profile', href: '#about' },
@@ -223,11 +222,6 @@ export default function Navigation() {
                 );
               })}
 
-              <Button asChild size="sm" className="ml-3">
-                <a href="#contact" onClick={(event) => handleLinkClick(event, '#contact')}>
-                  Contact
-                </a>
-              </Button>
             </div>
 
             <button
@@ -270,11 +264,6 @@ export default function Navigation() {
                       </a>
                     );
                   })}
-                  <Button asChild size="default" className="mt-2">
-                    <a href="#contact" onClick={(event) => handleLinkClick(event, '#contact')}>
-                      Contact
-                    </a>
-                  </Button>
                 </div>
               </motion.div>
             )}
