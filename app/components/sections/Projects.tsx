@@ -66,10 +66,7 @@ function FeaturedProject({
 
         <ul className="mt-6 flex flex-wrap gap-1.5" role="list" aria-label="Technologies">
           {project.technologies.slice(0, 5).map((tech) => (
-            <li
-              key={tech}
-              className="mono-micro rounded-full border border-border-on-ink px-2.5 py-1 text-paper-on-ink"
-            >
+            <li key={tech} className="chip-pill">
               {tech}
             </li>
           ))}
@@ -164,14 +161,14 @@ export default function Projects() {
       className="dark-scene dark-scene--cover scroll-mt-20 pt-16 pb-20 md:pt-24"
     >
       <div className="section-shell">
-        <header className="rv flex flex-wrap items-end justify-between gap-6 border-b border-border-on-ink pb-8">
+        <header className="rv sec-head">
           <div>
             <p className="section-kicker">01 — Selected work</p>
-            <h2 id="projects-heading" className="section-heading text-paper-on-ink">
+            <h2 id="projects-heading" className="sec-title text-paper-on-ink">
               Work that shipped.
             </h2>
           </div>
-          <p className="mono-meta pb-2 text-muted-on-ink" aria-hidden="true">
+          <p className="sec-count" aria-hidden="true">
             01 — 06
           </p>
         </header>

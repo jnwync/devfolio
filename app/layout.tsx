@@ -118,7 +118,6 @@ export default function RootLayout({
               "document.documentElement.dataset.js='1';try{if(!sessionStorage.getItem('jnwync-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.dataset.intro='play'}}catch(e){}",
           }}
         />
-        <div aria-hidden="true" className="page-grain pointer-events-none fixed inset-0 -z-10" />
         <MotionConfig reducedMotion="user">
           <ScrollProgress />
           {children}

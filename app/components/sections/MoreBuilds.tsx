@@ -85,10 +85,7 @@ export default function MoreBuilds({ projects }: { projects: Project[] }) {
                 <p className="text-sm leading-6 text-muted-on-ink md:flex-1">{project.homepageSummary}</p>
                 <ul className="flex flex-wrap gap-1.5" role="list" aria-label="Technologies">
                   {project.technologies.slice(0, 4).map((tech) => (
-                    <li
-                      key={tech}
-                      className="mono-micro rounded-full border border-border-on-ink px-2.5 py-1 text-paper-on-ink"
-                    >
+                    <li key={tech} className="chip-pill">
                       {tech}
                     </li>
                   ))}

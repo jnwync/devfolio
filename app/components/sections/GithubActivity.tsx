@@ -62,10 +62,10 @@ function ContributionGrid({ weeks, total }: { weeks: ContributionWeek[]; total: 
           );
         })}
       </div>
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
-        <span className="sm:hidden">Recent 6 months shown</span>
-        <span className="hidden sm:inline">Rolling 12 months</span>
-        <span className="inline-flex items-center gap-2" aria-hidden="true">
+      <div className="cal-legend mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
+        <span className="mono-micro sm:hidden">Recent 6 months</span>
+        <span className="mono-micro hidden sm:inline">Rolling 12 months</span>
+        <span className="mono-micro inline-flex items-center gap-2" aria-hidden="true">
           Less
           <span className="github-calendar-cell github-calendar-cell--0" />
           <span className="github-calendar-cell github-calendar-cell--1" />
@@ -85,58 +85,57 @@ export default async function GithubActivity() {
   const githubUrl = `https://github.com/${personal.githubUsername}`;
 
   return (
-    <section
-      aria-labelledby="github-activity-heading"
-      className="editorial-rule relative overflow-hidden py-20 md:py-28"
-    >
-      <div className="section-shell relative z-10">
-        <header className="rv mb-12 grid gap-5 md:grid-cols-[0.42fr_0.58fr] md:items-end">
+    <section aria-labelledby="github-activity-heading" className="scroll-mt-20 py-20 md:py-28">
+      <div className="section-shell">
+        <header className="rv sec-head">
           <div>
-            <p className="section-kicker">GitHub activity</p>
-            <h2 id="github-activity-heading" className="section-heading">
-              Public activity, in context.
+            <p className="section-kicker">04 — Proof of work</p>
+            <h2 id="github-activity-heading" className="sec-title">
+              Public activity.
             </h2>
           </div>
-          <p className="max-w-2xl text-base leading-7 text-muted-foreground md:justify-self-end">
-            GitHub activity is supporting evidence alongside the shipped work and experience above.
-          </p>
+          {calendar && (
+            <p className="sec-count" aria-hidden="true">
+              {calendar.total.toLocaleString()} commits / yr
+            </p>
+          )}
         </header>
 
         {calendar ? (
-          <div className="border-y border-border py-6 sm:py-8">
-            <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-              <p className="text-base leading-7 text-muted-foreground">
-                <span className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
+          <div className="rv py-8">
+            <ContributionGrid weeks={calendar.weeks} total={calendar.total} />
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+              <p className="text-sm leading-6 text-muted-foreground">
+                <span className="font-serif text-2xl font-bold text-foreground">
                   {calendar.total.toLocaleString()}
                 </span>{' '}
                 contributions in the last year.
               </p>
-                <a
+              <a
                 href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-foreground transition-colors hover:text-primary"
+                className="link-underline mono-meta inline-flex min-h-11 items-center gap-1.5 text-foreground"
               >
-                View GitHub profile
-                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                github.com/jnwync
+                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
               </a>
             </div>
-            <ContributionGrid weeks={calendar.weeks} total={calendar.total} />
           </div>
         ) : (
-          <div className="flex flex-wrap items-center justify-between gap-5 border-y border-border py-6 sm:py-8">
-            <p className="max-w-2xl text-base leading-7 text-muted-foreground">
-              The live activity calendar is unavailable right now. You can still browse the
-              source of the work and current public activity on GitHub.
+          <div className="rv flex flex-wrap items-center justify-between gap-5 py-8">
+            <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
+              The live activity calendar is unavailable right now — the source and current
+              public activity are on GitHub.
             </p>
             <a
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-foreground transition-colors hover:text-primary"
+              className="link-underline mono-meta inline-flex min-h-11 items-center gap-1.5 text-foreground"
             >
-              View GitHub profile
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              github.com/jnwync
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </a>
           </div>
         )}

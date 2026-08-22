@@ -160,8 +160,108 @@
   color: var(--green-bright);
 }
 
-.section-heading {
-  @apply relative mt-4 text-balance font-serif text-3xl font-bold leading-[1.05] sm:text-4xl md:text-5xl;
+/* Uniform scene header: kicker + display title left, mono count right,
+   hairline below. Every section opens with this. */
+.sec-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.6rem;
+}
+
+.dark-scene .sec-head {
+  border-bottom-color: var(--border-on-ink);
+}
+
+.sec-title {
+  margin: 0.7rem 0 0;
+  font-family: var(--font-display), "Arial Black", sans-serif;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  font-size: clamp(2.4rem, 1.2rem + 4.6vw, 5rem);
+  text-wrap: balance;
+}
+
+.sec-count {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  padding-bottom: 0.4rem;
+}
+
+.dark-scene .sec-count {
+  color: var(--muted-on-ink);
+}
+
+/* Uniform technology / tag chip, both surfaces. */
+.chip-pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.42rem 0.7rem;
+  color: var(--foreground);
+  background: oklch(1 0 0 / 0.45);
+}
+
+.dark-scene .chip-pill {
+  border-color: var(--border-on-ink);
+  color: var(--paper-on-ink);
+  background: transparent;
+}
+
+/* Availability chip with a live pulse. */
+.avail-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.55rem 0.95rem;
+  color: var(--foreground);
+  background: oklch(1 0 0 / 0.45);
+}
+
+.dark-scene .avail-chip {
+  border-color: var(--border-on-ink);
+  color: var(--paper-on-ink);
+  background: transparent;
+}
+
+.avail-chip .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--success);
+  animation: avail-pulse 2.4s ease infinite;
+}
+
+.dark-scene .avail-chip .dot {
+  background: var(--green-bright);
+}
+
+@keyframes avail-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 oklch(0.48 0.11 150 / 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px oklch(0.48 0.11 150 / 0);
+  }
 }
 
 .mono-meta {
@@ -581,6 +681,10 @@ html[data-js] .rv.in-view {
   border-radius: 0.16rem;
 }
 
+.cal-legend .github-calendar-cell {
+  width: 0.7rem;
+}
+
 .github-calendar-cell--0 {
   background-color: var(--muted);
 }
@@ -624,72 +728,6 @@ html[data-js] .rv.in-view {
 
 .premium-panel {
   @apply relative isolate overflow-hidden border border-border bg-card;
-}
-
-.premium-hover {
-  transition:
-    border-color 260ms var(--ease-out-quart),
-    background-color 260ms var(--ease-out-quart);
-}
-
-@media (hover: hover) {
-  .premium-hover:hover {
-    border-color: var(--border-hover);
-  }
-}
-
-.portrait-card {
-  @apply relative isolate;
-}
-
-.portrait-card::before {
-  content: "";
-  position: absolute;
-  inset: 0.85rem -0.85rem -0.85rem 0.85rem;
-  z-index: -1;
-  border: 1px solid oklch(0.862 0.024 130 / 0.85);
-  background: var(--secondary);
-  box-shadow: var(--shadow-press);
-}
-
-/* Film-grain texture layer. Decorative, non-interactive, reduced-motion safe. */
-.grain-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.5;
-  mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-}
-
-/* Page-wide paper grain: a fixed, static texture the whole page is "printed on". */
-.page-grain {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-  opacity: 0.34;
-  mix-blend-mode: soft-light;
-}
-
-/* Oversized ghosted typographic backdrop for layered depth. */
-.ghost-word {
-  position: absolute;
-  pointer-events: none;
-  user-select: none;
-  font-family: var(--font-display), sans-serif;
-  font-weight: 800;
-  line-height: 0.8;
-  letter-spacing: -0.02em;
-  color: oklch(0.4 0.1 152 / 0.05);
-  z-index: 0;
-}
-
-/* Word-mask reveal: clips each headline word so it rises into view. */
-.line-mask {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
 }
 
 /* horizontal builds strip */
@@ -764,10 +802,6 @@ html[data-js] .rv.in-view {
 }
 
 @media (max-width: 640px) {
-  body {
-    background-size: 100% 560px;
-  }
-
   .section-shell {
     @apply px-5;
   }

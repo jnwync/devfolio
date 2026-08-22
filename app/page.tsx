@@ -6,7 +6,6 @@ import Projects from './components/sections/Projects';
 import ProfessionalExperience from './components/sections/Experiences';
 import GithubActivity from './components/sections/GithubActivity';
 import Skills from './components/sections/Skills';
-import Education from './components/sections/Education';
 import Contact from './components/sections/Contacts';
 
 export default function Home() {
@@ -24,9 +23,8 @@ export default function Home() {
             <Projects />
           </div>
           <ProfessionalExperience />
-          <GithubActivity />
           <Skills />
-          <Education />
+          <GithubActivity />
         </div>
         <Contact />
       </main>

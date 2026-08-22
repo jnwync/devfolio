@@ -24,15 +24,13 @@ export default function Hero() {
   return (
     <section id="about" className="scene-hero" aria-labelledby="hero-heading">
       <div className="relative flex min-h-[calc(100svh-4.5rem)] flex-col overflow-hidden bg-background">
-        <div aria-hidden="true" className="grain-layer" />
-
         <div className="section-shell relative z-10 flex flex-1 flex-col justify-center py-10 sm:py-12">
-          <div className="hero-st hero-st-1 mb-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-border pb-4">
+          <div className="hero-st hero-st-1 mb-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-border pb-5">
             <span className="mono-meta text-foreground">
               {personal.name} — {personal.location}
             </span>
-            <span className="mono-meta flex items-center gap-2 text-muted-foreground">
-              <span className="h-2 w-2 rounded-full bg-success" aria-hidden="true" />
+            <span className="avail-chip">
+              <span className="dot" aria-hidden="true" />
               {personal.availability.message}
             </span>
           </div>

@@ -60,8 +60,8 @@ export default function Contact() {
       className="dark-scene scene-contact flex flex-col justify-center py-14 md:py-16"
     >
       <div className="section-shell w-full">
-        <p className="mono-meta inline-flex items-center gap-2 rounded-full border border-border-on-ink px-3.5 py-2 text-paper-on-ink">
-          <span className="h-2 w-2 rounded-full bg-green-bright" aria-hidden="true" />
+        <p className="avail-chip">
+          <span className="dot" aria-hidden="true" />
           {personal.availability.message}
         </p>
 
@@ -99,7 +99,7 @@ export default function Contact() {
           <Button asChild variant="outlineDark" size="lg">
             <a href="/cv.pdf" download>
               <FileDown className="h-5 w-5" aria-hidden="true" />
-              Download CV
+              Resume
             </a>
           </Button>
         </div>
