@@ -10,9 +10,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-[0_12px_28px_oklch(0.36_0.085_148/0.18)] hover:-translate-y-0.5 hover:bg-primary/92 hover:shadow-[0_18px_38px_oklch(0.36_0.085_148/0.2)] active:translate-y-px",
+          "bg-primary text-primary-foreground shadow-[0_12px_28px_oklch(0.4_0.1_152/0.18)] hover:-translate-y-0.5 hover:bg-primary/92 hover:shadow-[0_18px_38px_oklch(0.4_0.1_152/0.2)] active:translate-y-px",
         outline:
           "border border-border bg-background text-foreground hover:-translate-y-0.5 hover:border-primary hover:text-primary hover:shadow-(--shadow-soft) active:translate-y-px",
+        paper:
+          "bg-paper-on-ink text-ink hover:-translate-y-0.5 hover:bg-green-bright active:translate-y-px",
+        outlineDark:
+          "border border-border-on-ink bg-transparent text-paper-on-ink hover:-translate-y-0.5 hover:border-paper-on-ink active:translate-y-px",
         secondary:
           "bg-secondary text-secondary-foreground hover:-translate-y-0.5 hover:bg-secondary/80 hover:shadow-(--shadow-soft) active:translate-y-px",
         ghost:

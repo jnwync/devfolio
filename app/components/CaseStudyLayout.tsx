@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
+import Wordmark from './Wordmark';
 import type { CaseStudy } from '@/data/caseStudies';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,10 +22,10 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
           <nav aria-label="Case study" className="flex min-h-16 items-center justify-between gap-4">
             <Link
               href="/"
-              className="inline-flex min-h-11 items-center rounded-md pr-3 font-serif text-xl font-bold text-foreground transition-colors hover:text-primary"
+              className="inline-flex min-h-11 items-center rounded-md pr-3 text-xl text-foreground transition-colors hover:text-primary"
               aria-label="Jon Wayne Cabusbusan — Home"
             >
-              jnwync
+              <Wordmark />
             </Link>
             <Link
               href="/#projects"

@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import Wordmark from './Wordmark';
 
 const links = [
-  { name: 'Profile', href: '#about' },
   { name: 'Work', href: '#projects' },
   { name: 'Experience', href: '#experience' },
   { name: 'Skills', href: '#skills' },
@@ -17,8 +17,8 @@ const NAVIGATION_SETTLE_FALLBACK_MS = 1200;
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('about');
+  const [overDark, setOverDark] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
   const [pendingSection, setPendingSection] = useState<string | null>(null);
   const pendingSectionRef = useRef<string | null>(null);
   const settleTimerRef = useRef<number | null>(null);
@@ -58,6 +58,10 @@ export default function Navigation() {
     }, NAVIGATION_SETTLE_FALLBACK_MS);
   };
 
+  // Track which section is most visible for the active link state. The
+  // contact scene is pinned behind the page from scroll 0, so observers
+  // would misread it — it is handled by the reveal-position scroll handler
+  // below instead.
   useEffect(() => {
     const sections = new Map<string, number>();
     const observer = new IntersectionObserver(
@@ -77,6 +81,8 @@ export default function Navigation() {
             current[1] > max[1] ? current : max
           );
           setActiveSection(mostVisible[0]);
+        } else {
+          setActiveSection('');
         }
       },
       {
@@ -87,12 +93,70 @@ export default function Navigation() {
 
     links.forEach((link) => {
       const element = document.querySelector(link.href);
-      if (element) observer.observe(element);
+      if (element && !element.classList.contains('scene-contact')) observer.observe(element);
     });
 
     return () => {
       observer.disconnect();
       sections.clear();
+    };
+  }, []);
+
+  // Flip the nav to its dark theme while a dark scene sits under it. Scenes
+  // inside .page-above are observed; the pinned contact scene counts once
+  // the page above it has lifted past the nav.
+  useEffect(() => {
+    const darkScenes = document.querySelectorAll('.dark-scene:not(.scene-contact)');
+    const pageAbove = document.querySelector('.page-above');
+
+    const intersecting = new Set<Element>();
+    let overScene = false;
+    let overContact = false;
+    let contactRevealed = false;
+    let ticking = false;
+
+    const apply = () => {
+      setOverDark(overScene || overContact);
+      if (contactRevealed && !pendingSectionRef.current) {
+        setActiveSection('contact');
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            intersecting.add(entry.target);
+          } else {
+            intersecting.delete(entry.target);
+          }
+        });
+        overScene = intersecting.size > 0;
+        apply();
+      },
+      // Only the strip the nav occupies counts.
+      { rootMargin: '0px 0px -94% 0px', threshold: 0 }
+    );
+    darkScenes.forEach((scene) => observer.observe(scene));
+
+    const handleScroll = () => {
+      if (ticking || !pageAbove) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        ticking = false;
+        const bottom = pageAbove.getBoundingClientRect().bottom;
+        overContact = bottom <= 80;
+        contactRevealed = bottom <= window.innerHeight * 0.55;
+        apply();
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -115,13 +179,6 @@ export default function Navigation() {
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 16);
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToSection = (href: string) => {
@@ -168,6 +225,13 @@ export default function Navigation() {
     watchScrollSettled(sectionId);
   };
 
+  const handleHomeClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    setIsOpen(false);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+  };
+
   return (
     <>
       <a
@@ -178,25 +242,23 @@ export default function Navigation() {
       </a>
 
       <nav
-        className={`sticky top-0 z-50 border-b transition-[background-color,border-color] duration-200 ${
-          scrolled || isOpen
-            ? 'border-border bg-background'
-            : 'border-transparent bg-background'
-        }`}
+        className="site-nav sticky top-0 z-50 border-b border-transparent"
+        data-nav-theme={overDark && !isOpen ? 'dark' : undefined}
         aria-label="Main navigation"
       >
         <div className="section-shell">
           <div data-nav-bar className="flex min-h-18 items-center justify-between gap-4">
             <a
               href="#about"
-              onClick={(event) => handleLinkClick(event, '#about')}
-              className="inline-flex min-h-11 items-center rounded-md pr-3 font-serif text-xl font-bold text-foreground transition-colors hover:text-primary focus-visible:rounded-sm"
+              onClick={handleHomeClick}
+              id="nav-wordmark"
+              className="nav-wordmark inline-flex min-h-11 items-center rounded-md pr-3 text-[1.35rem] focus-visible:rounded-sm"
               aria-label="Jon Wayne Cabusbusan - Home"
             >
-              jnwync
+              <Wordmark />
             </a>
 
-            <div className="hidden items-center gap-1.5 md:flex">
+            <div className="hidden items-center gap-7 md:flex">
               {links.map((link) => {
                 const sectionId = link.href.slice(1);
                 const isActive = visibleActiveSection === sectionId;
@@ -205,29 +267,27 @@ export default function Navigation() {
                     key={link.name}
                     href={link.href}
                     onClick={(event) => handleLinkClick(event, link.href)}
-                    className={`relative inline-flex min-h-11 items-center rounded-md px-3 text-sm font-bold transition-colors ${
-                      isActive ? 'bg-secondary/70 text-primary' : 'text-muted-foreground hover:bg-secondary/45 hover:text-foreground'
-                    }`}
+                    className="nav-link link-underline inline-flex min-h-11 items-center text-sm font-bold"
                     aria-current={isActive ? 'location' : undefined}
                   >
                     {link.name}
-                    {isActive && (
-                      <motion.span
-                        layoutId="activeSection"
-                        className="absolute inset-x-3 -bottom-0.5 h-px bg-primary"
-                        transition={{ duration: 0.2, ease: [0.25, 1, 0.5, 1] }}
-                      />
-                    )}
                   </a>
                 );
               })}
 
+              <a
+                href="/cv.pdf"
+                download
+                className="nav-resume inline-flex min-h-10 items-center rounded-full px-4 text-sm font-bold"
+              >
+                Resume
+              </a>
             </div>
 
             <button
               type="button"
               onClick={() => setIsOpen((value) => !value)}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-md border border-border text-foreground transition-colors hover:border-primary hover:text-primary md:hidden"
+              className="nav-menu-btn inline-flex h-12 w-12 items-center justify-center rounded-md border border-border text-foreground transition-colors hover:border-primary hover:text-primary md:hidden"
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
@@ -264,6 +324,13 @@ export default function Navigation() {
                       </a>
                     );
                   })}
+                  <a
+                    href="/cv.pdf"
+                    download
+                    className="flex min-h-12 items-center rounded-md px-3 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary/70 hover:text-foreground"
+                  >
+                    Resume
+                  </a>
                 </div>
               </motion.div>
             )}

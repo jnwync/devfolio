@@ -90,7 +90,7 @@ export default async function GithubActivity() {
       className="editorial-rule relative overflow-hidden py-20 md:py-28"
     >
       <div className="section-shell relative z-10">
-        <header className="mb-12 grid gap-5 md:grid-cols-[0.42fr_0.58fr] md:items-end">
+        <header className="rv mb-12 grid gap-5 md:grid-cols-[0.42fr_0.58fr] md:items-end">
           <div>
             <p className="section-kicker">GitHub activity</p>
             <h2 id="github-activity-heading" className="section-heading">

@@ -1,6 +1,7 @@
 import Navigation from './components/Navigation';
+import Intro from './components/Intro';
+import ScrollReveals from './components/ScrollReveals';
 import Hero from './components/sections/Hero';
-import EvidenceBand from './components/sections/EvidenceBand';
 import Projects from './components/sections/Projects';
 import ProfessionalExperience from './components/sections/Experiences';
 import GithubActivity from './components/sections/GithubActivity';
@@ -10,16 +11,26 @@ import Contact from './components/sections/Contacts';
 
 export default function Home() {
   return (
-    <main id="main-content">
+    <>
       <Navigation />
-      <Hero />
-      <EvidenceBand />
-      <Projects />
-      <ProfessionalExperience />
-      <GithubActivity />
-      <Skills />
-      <Education />
-      <Contact />
-    </main>
+      <Intro />
+      <main id="main-content">
+        {/* Everything above the contact scene lifts away to reveal it. */}
+        <div className="page-above">
+          {/* The hero pins only within this wrapper, so it releases once the
+              dark Work panel has fully covered it. */}
+          <div>
+            <Hero />
+            <Projects />
+          </div>
+          <ProfessionalExperience />
+          <GithubActivity />
+          <Skills />
+          <Education />
+        </div>
+        <Contact />
+      </main>
+      <ScrollReveals />
+    </>
   );
 }

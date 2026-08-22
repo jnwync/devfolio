@@ -15,7 +15,7 @@ export default function ProfessionalExperience() {
   return (
     <section id="experience" aria-labelledby="experience-heading" className="editorial-rule scroll-mt-20 py-20 md:py-28">
       <div className="section-shell">
-        <header className="mb-12 grid gap-5 md:grid-cols-[0.42fr_0.58fr] md:items-end">
+        <header className="rv mb-12 grid gap-5 md:grid-cols-[0.42fr_0.58fr] md:items-end">
           <div>
             <p className="section-kicker">02 — Experience</p>
             <h2 id="experience-heading" className="section-heading">
@@ -31,13 +31,13 @@ export default function ProfessionalExperience() {
           {portfolioData.experiences.map((exp) => {
             const year = exp.period.match(/\b(20\d{2})\b/)?.[0] ?? '';
             return (
-              <article key={exp.id} className="grid gap-5 border-t border-border py-8 md:grid-cols-[0.32fr_0.68fr] md:items-start md:gap-10">
+              <article key={exp.id} className="group grid gap-5 border-t border-border py-8 transition-[padding-left] duration-300 ease-(--ease-out-quint) md:grid-cols-[0.32fr_0.68fr] md:items-start md:gap-10 md:hover:pl-3">
                 <div>
                   <p className="font-serif text-4xl font-bold leading-none text-foreground sm:text-5xl">{year}</p>
-                  <time className="mt-3 block text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground" dateTime={`${exp.startDate}/${exp.endDate}`}>
+                  <time className="mono-meta mt-3 block text-muted-foreground" dateTime={`${exp.startDate}/${exp.endDate}`}>
                     {exp.period}
                   </time>
-                  <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-accent">
+                  <p className="mono-meta mt-2 text-accent">
                     {typeLabels[exp.type]}{exp.location ? ` · ${exp.location}` : ''}
                   </p>
                 </div>

@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
+import { Bricolage_Grotesque, Hanken_Grotesk, Fragment_Mono } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import ScrollProgress from "./components/ScrollProgress";
 
 const siteUrl = "https://jnwync-devfolio.vercel.app";
 
-const displayFont = Bodoni_Moda({
+const displayFont = Bricolage_Grotesque({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  style: ["normal", "italic"],
   display: "swap",
   preload: true,
 });
@@ -18,8 +17,17 @@ const displayFont = Bodoni_Moda({
 const bodyFont = Hanken_Grotesk({
   variable: "--font-body",
   subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
   preload: true,
+});
+
+const monoFont = Fragment_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -100,10 +108,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${displayFont.variable} ${bodyFont.variable} antialiased`}
+        className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} antialiased`}
       >
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.dataset.js='1';try{if(!sessionStorage.getItem('jnwync-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.dataset.intro='play'}}catch(e){}",
+          }}
+        />
         <div aria-hidden="true" className="page-grain pointer-events-none fixed inset-0 -z-10" />
         <MotionConfig reducedMotion="user">
           <ScrollProgress />

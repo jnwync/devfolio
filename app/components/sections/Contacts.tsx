@@ -1,22 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowUpRight, Check, Copy, FileDown, Mail, Phone } from 'lucide-react';
+import { ArrowUp, Check, Copy, FileDown } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import type { IconType } from 'react-icons';
 import { portfolioData } from '@/data/portfolio';
 import { Button } from '@/components/ui/button';
-
-const iconMap: Record<string, IconType> = {
-  github: FaGithub,
-  linkedin: FaLinkedin,
-  phone: Phone,
-  mail: Mail,
-};
-
-function displayValue(href: string): string {
-  return href.replace(/^mailto:/, '').replace(/^tel:/, '').replace(/^https?:\/\//, '').replace(/\/$/, '');
-}
+import Wordmark from '../Wordmark';
 
 async function copyText(value: string): Promise<boolean> {
   try {
@@ -40,10 +29,17 @@ async function copyText(value: string): Promise<boolean> {
   return copied;
 }
 
+/**
+ * Final scene. `.scene-contact` is sticky at the page bottom behind
+ * `.page-above`, so the whole site lifts away like a sheet to reveal it —
+ * the mirror of the Work panel covering the hero at the top.
+ */
 export default function Contact() {
   const [copied, setCopied] = useState(false);
-  const { personal, contactLinks } = portfolioData;
-  const directory = contactLinks.filter((link) => !link.primary);
+  const { personal } = portfolioData;
+  const github = portfolioData.contactLinks.find((l) => l.icon === 'github');
+  const linkedin = portfolioData.contactLinks.find((l) => l.icon === 'linkedin');
+  const phone = portfolioData.contactLinks.find((l) => l.icon === 'phone');
 
   const handleCopyEmail = async () => {
     if (await copyText(personal.email)) {
@@ -52,86 +48,120 @@ export default function Contact() {
     }
   };
 
+  const handleBackToTop = () => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+  };
+
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="editorial-rule scroll-mt-20 py-20 md:py-28">
-      <div className="section-shell">
-        <header className="max-w-3xl">
-          <p className="section-kicker">05 — Contact</p>
-          <h2 id="contact-heading" className="mt-4 text-balance font-serif text-4xl font-bold leading-[1.04] text-foreground sm:text-5xl lg:text-6xl">
-            Choose the conversation that fits.
-          </h2>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">
-            I am available for project delivery, contract work, and full-time product engineering conversations.
-          </p>
-        </header>
+    <section
+      id="contact"
+      aria-labelledby="contact-heading"
+      className="dark-scene scene-contact flex flex-col justify-center py-14 md:py-16"
+    >
+      <div className="section-shell w-full">
+        <p className="mono-meta inline-flex items-center gap-2 rounded-full border border-border-on-ink px-3.5 py-2 text-paper-on-ink">
+          <span className="h-2 w-2 rounded-full bg-green-bright" aria-hidden="true" />
+          {personal.availability.message}
+        </p>
 
-        <div className="mt-12 grid gap-10 border-y border-border py-8 md:grid-cols-2 md:gap-12">
-          <div>
-            <h3 className="font-serif text-2xl font-bold text-foreground">Project work</h3>
-            <p className="mt-3 max-w-md text-base leading-7 text-muted-foreground">
-              Tell me what you are building, where delivery is stuck, and what needs to ship next.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild size="lg">
-                <a href={`mailto:${personal.email}`}>
-                  <Mail className="h-5 w-5" aria-hidden="true" />
-                  Discuss a project
-                </a>
-              </Button>
-              <Button onClick={handleCopyEmail} variant="outline" size="lg" aria-label={copied ? 'Email copied to clipboard' : 'Copy email address'}>
-                {copied ? <Check className="h-5 w-5" aria-hidden="true" /> : <Copy className="h-5 w-5" aria-hidden="true" />}
-                <span aria-live="polite">{copied ? 'Copied' : 'Copy email'}</span>
-              </Button>
-            </div>
-          </div>
+        <h2
+          id="contact-heading"
+          className="mt-6 max-w-4xl font-serif text-[clamp(2.4rem,1.3rem+5.8vw,5.5rem)] font-bold leading-[0.98] tracking-[-0.03em] text-paper-on-ink"
+        >
+          Let&rsquo;s ship something<span className="text-green-bright">.</span>
+        </h2>
 
-          <div>
-            <h3 className="font-serif text-2xl font-bold text-foreground">Full-time roles</h3>
-            <p className="mt-3 max-w-md text-base leading-7 text-muted-foreground">
-              Review the experience timeline, then reach out about a full-stack role on a product team.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild size="lg">
-                <a href="/cv.pdf" download>
-                  <FileDown className="h-5 w-5" aria-hidden="true" />
-                  Download CV
-                </a>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <a href={`mailto:${personal.email}`}>
-                  <Mail className="h-5 w-5" aria-hidden="true" />
-                  Discuss a role
-                </a>
-              </Button>
-            </div>
-          </div>
+        <p className="mt-5 max-w-xl text-base leading-7 text-muted-on-ink">
+          Available for project delivery, contract work, and full-time product engineering
+          conversations. Tell me what needs to ship next.
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <Button asChild variant="paper" size="lg">
+            <a href={`mailto:${personal.email}`}>{personal.email}</a>
+          </Button>
+          <Button
+            onClick={handleCopyEmail}
+            variant="outlineDark"
+            size="icon"
+            aria-label={copied ? 'Email copied to clipboard' : 'Copy email address'}
+          >
+            <span aria-live="polite" className="sr-only">
+              {copied ? 'Email copied' : ''}
+            </span>
+            {copied ? (
+              <Check className="h-5 w-5 text-green-bright" aria-hidden="true" />
+            ) : (
+              <Copy className="h-5 w-5" aria-hidden="true" />
+            )}
+          </Button>
+          <Button asChild variant="outlineDark" size="lg">
+            <a href="/cv.pdf" download>
+              <FileDown className="h-5 w-5" aria-hidden="true" />
+              Download CV
+            </a>
+          </Button>
         </div>
 
-        <div className="grid gap-10 pt-10 lg:grid-cols-[0.55fr_0.45fr] lg:gap-16">
+        <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-6 border-t border-border-on-ink pt-7 md:grid-cols-4">
           <div>
-            <p className="text-sm leading-6 text-muted-foreground">Based in {personal.location}. Available for remote, hybrid, contract, and full-time conversations.</p>
+            <dt className="mono-meta text-muted-on-ink">GitHub</dt>
+            <dd className="mt-2">
+              <a
+                href={github?.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline inline-flex items-center gap-2 text-sm font-bold text-paper-on-ink"
+              >
+                <FaGithub className="h-4 w-4" aria-hidden="true" />
+                jnwync
+              </a>
+            </dd>
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">Elsewhere</p>
-            <ul className="mt-4 divide-y divide-border border-y border-border" role="list">
-              {directory.map((link) => {
-                const Icon = iconMap[link.icon];
-                const isExternal = link.href.startsWith('http');
-                return (
-                  <li key={link.label}>
-                    <a href={link.href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined} className="group flex min-h-14 items-center gap-4 py-4 transition-colors hover:text-primary">
-                      {Icon && <Icon className="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary" aria-hidden="true" />}
-                      <span className="flex min-w-0 flex-col">
-                        <span className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{link.label}</span>
-                        <span className="truncate text-sm font-bold text-foreground">{displayValue(link.href)}</span>
-                      </span>
-                      <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-muted-foreground group-hover:text-primary" aria-hidden="true" />
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
+            <dt className="mono-meta text-muted-on-ink">LinkedIn</dt>
+            <dd className="mt-2">
+              <a
+                href={linkedin?.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline inline-flex items-center gap-2 text-sm font-bold text-paper-on-ink"
+              >
+                <FaLinkedin className="h-4 w-4" aria-hidden="true" />
+                in/jnwync
+              </a>
+            </dd>
           </div>
+          <div>
+            <dt className="mono-meta text-muted-on-ink">Phone</dt>
+            <dd className="mt-2">
+              <a href={phone?.href} className="link-underline text-sm font-bold text-paper-on-ink">
+                {personal.phone}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt className="mono-meta text-muted-on-ink">Location</dt>
+            <dd className="mt-2 text-sm font-bold text-paper-on-ink">{personal.location}</dd>
+          </div>
+        </dl>
+
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-border-on-ink pt-6">
+          <p className="flex items-center gap-3 text-paper-on-ink">
+            <Wordmark className="text-lg" />
+            <span className="mono-meta text-muted-on-ink">
+              © {new Date().getFullYear()} Jon Wayne Cabusbusan
+            </span>
+          </p>
+          <Button
+            onClick={handleBackToTop}
+            variant="outlineDark"
+            size="icon"
+            aria-label="Back to top"
+          >
+            <ArrowUp className="h-5 w-5" aria-hidden="true" />
+          </Button>
         </div>
       </div>
     </section>

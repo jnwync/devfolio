@@ -1,46 +1,69 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/*
+  jnwync. design system v2
+  One green family on warm, green-tinted paper. The wordmark's dot is the
+  origin of every accent on the page. Two dark "scenes" (Selected Work,
+  Contact) use the ink tokens; everything between stays on paper.
+*/
+
 :root {
-  --background: oklch(0.975 0.018 78);
-  --foreground: oklch(0.18 0.032 72);
-  --card: oklch(0.993 0.01 78);
-  --card-foreground: oklch(0.18 0.032 72);
-  --popover: oklch(0.993 0.01 78);
-  --popover-foreground: oklch(0.18 0.032 72);
-  --primary: oklch(0.36 0.085 148);
-  --primary-foreground: oklch(0.985 0.014 78);
-  --secondary: oklch(0.925 0.035 82);
-  --secondary-foreground: oklch(0.24 0.045 78);
-  --muted: oklch(0.925 0.024 78);
-  --muted-foreground: oklch(0.43 0.036 74);
-  --accent: oklch(0.55 0.125 48);
-  --accent-foreground: oklch(0.985 0.014 78);
+  /* paper surfaces */
+  --background: oklch(0.968 0.012 120);
+  --foreground: oklch(0.225 0.028 155);
+  --card: oklch(0.985 0.008 120);
+  --card-foreground: oklch(0.225 0.028 155);
+  --popover: oklch(0.985 0.008 120);
+  --popover-foreground: oklch(0.225 0.028 155);
+
+  /* the green family */
+  --primary: oklch(0.40 0.1 152);
+  --primary-foreground: oklch(0.975 0.01 120);
+  --accent: oklch(0.46 0.115 151);
+  --accent-foreground: oklch(0.975 0.01 120);
+
+  --secondary: oklch(0.928 0.022 128);
+  --secondary-foreground: oklch(0.26 0.035 152);
+  --muted: oklch(0.928 0.016 124);
+  --muted-foreground: oklch(0.44 0.032 148);
+
   --destructive: oklch(0.55 0.19 28);
-  --destructive-foreground: oklch(0.985 0.014 78);
+  --destructive-foreground: oklch(0.985 0.014 120);
   --success: oklch(0.48 0.11 150);
-  --success-foreground: oklch(0.985 0.014 78);
+  --success-foreground: oklch(0.985 0.014 120);
   --warning: oklch(0.68 0.13 72);
-  --warning-foreground: oklch(0.18 0.032 72);
+  --warning-foreground: oklch(0.225 0.028 155);
   --info: oklch(0.47 0.09 225);
-  --info-foreground: oklch(0.985 0.014 78);
-  --border: oklch(0.82 0.035 78);
-  --input: oklch(0.955 0.018 78);
-  --ring: oklch(0.46 0.11 148);
+  --info-foreground: oklch(0.985 0.014 120);
+
+  --border: oklch(0.862 0.024 130);
+  --input: oklch(0.955 0.014 122);
+  --ring: oklch(0.46 0.11 150);
+
+  /* dark scene tokens */
+  --ink: oklch(0.225 0.022 158);
+  --ink-soft: oklch(0.268 0.024 156);
+  --paper-on-ink: oklch(0.955 0.012 120);
+  --muted-on-ink: oklch(0.71 0.028 145);
+  --border-on-ink: oklch(0.955 0.012 120 / 0.15);
+  --green-bright: oklch(0.80 0.112 152);
+
   --radius: 0.5rem;
-  --shadow-soft: 0 2px 8px oklch(0.23 0.04 75 / 0.08);
-  --shadow-lift: 0 4px 12px oklch(0.22 0.045 70 / 0.1);
-  --shadow-press: 0 2px 8px oklch(0.24 0.045 70 / 0.08);
-  --shadow-nav: 0 2px 8px oklch(0.23 0.04 75 / 0.08);
-  --shadow-active: inset 0 0 0 1px oklch(0.82 0.035 78 / 0.7);
-  --border-hover: oklch(0.36 0.085 148 / 0.4);
+  --shadow-soft: 0 2px 8px oklch(0.24 0.03 150 / 0.08);
+  --shadow-lift: 0 4px 12px oklch(0.24 0.03 150 / 0.1);
+  --shadow-press: 0 2px 8px oklch(0.24 0.03 150 / 0.08);
+  --shadow-scene: 0 -24px 64px oklch(0.2 0.02 155 / 0.35);
+  --border-hover: oklch(0.40 0.1 152 / 0.4);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-scene: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 @theme inline {
   --font-sans: var(--font-body);
   --font-serif: var(--font-display);
+  --font-mono: var(--font-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -66,6 +89,12 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper-on-ink: var(--paper-on-ink);
+  --color-muted-on-ink: var(--muted-on-ink);
+  --color-border-on-ink: var(--border-on-ink);
+  --color-green-bright: var(--green-bright);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -85,10 +114,10 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: var(--font-body), sans-serif;
+    font-family: var(--font-body), "Helvetica Neue", Arial, sans-serif;
   }
 
-  body::selection {
+  ::selection {
     background-color: var(--primary);
     color: var(--primary-foreground);
   }
@@ -96,8 +125,8 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-display), serif;
-    letter-spacing: 0;
+    font-family: var(--font-display), "Arial Black", sans-serif;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
@@ -111,28 +140,410 @@
     outline: 2px solid var(--ring);
     outline-offset: 3px;
   }
-
-  ::selection {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-  }
 }
+
+/* ---------- layout helpers ---------- */
 
 .section-shell {
   @apply mx-auto max-w-6xl px-5 sm:px-6 lg:px-8;
 }
 
 .section-kicker {
-  @apply text-xs font-bold uppercase tracking-[0.16em] text-accent;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.dark-scene .section-kicker {
+  color: var(--green-bright);
 }
 
 .section-heading {
-  @apply relative mt-4 text-balance font-serif text-3xl font-bold leading-tight sm:text-4xl md:text-5xl;
+  @apply relative mt-4 text-balance font-serif text-3xl font-bold leading-[1.05] sm:text-4xl md:text-5xl;
+}
+
+.mono-meta {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mono-micro {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+
+.toolbox-line {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  line-height: 2;
+  color: var(--muted-foreground);
 }
 
 .editorial-rule {
   @apply border-t border-border;
 }
+
+/* ---------- wordmark ---------- */
+
+.wordmark {
+  font-family: var(--font-display), "Arial Black", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.wordmark .wordmark-dot {
+  color: var(--primary);
+}
+
+.dark-scene .wordmark .wordmark-dot,
+[data-nav-theme="dark"] .wordmark .wordmark-dot {
+  color: var(--green-bright);
+}
+
+/* ---------- intro (branded load) ---------- */
+/* Driven by html[data-intro]: absent = static page (no JS, repeat visit, or
+   reduced motion), "play" = overlay runs, "done" = hero staggers in. */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  pointer-events: none;
+}
+
+html[data-intro="play"] .intro {
+  display: block;
+}
+
+.intro-panel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50.5%;
+  background: var(--background);
+  transition: transform 0.85s var(--ease-scene);
+}
+
+.intro-panel--top {
+  top: 0;
+}
+
+.intro-panel--bottom {
+  bottom: 0;
+}
+
+.intro.intro--open .intro-panel--top {
+  transform: translateY(-102%);
+}
+
+.intro.intro--open .intro-panel--bottom {
+  transform: translateY(102%);
+}
+
+.intro-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+}
+
+.intro-name {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  opacity: 0;
+  animation: intro-fade-up 0.7s ease 0.15s forwards;
+}
+
+.intro.intro--open .intro-name {
+  opacity: 0 !important;
+  transition: opacity 0.2s ease;
+}
+
+.intro-mark {
+  font-family: var(--font-display), "Arial Black", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-size: clamp(3.5rem, 12vw, 9.5rem);
+  color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    var(--foreground) 0%,
+    var(--foreground) 50%,
+    oklch(0.225 0.028 155 / 0.16) 50.5%,
+    oklch(0.225 0.028 155 / 0.16) 100%
+  );
+  background-size: 205% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: intro-sweep 1s var(--ease-scene) 0.3s forwards;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.intro-mark .wordmark-dot {
+  color: var(--primary);
+  opacity: 0;
+  animation: intro-dot 0.4s var(--ease-out-quint) 1.15s forwards;
+}
+
+@keyframes intro-sweep {
+  to {
+    background-position: 0% 0;
+  }
+}
+
+@keyframes intro-dot {
+  from {
+    opacity: 0;
+    transform: translateY(0.06em) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intro-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* nav wordmark waits for the morph to land */
+html[data-intro="play"] .nav-wordmark {
+  opacity: 0;
+}
+
+html[data-intro="play"] body {
+  overflow: hidden;
+}
+
+html[data-intro="done"] .nav-wordmark {
+  animation: intro-fade-in 0.3s ease 0.55s both;
+}
+
+@keyframes intro-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* hero entrance stagger, keyed off the intro */
+html[data-intro="play"] .hero-st {
+  opacity: 0;
+}
+
+html[data-intro="done"] .hero-st {
+  opacity: 0;
+  animation: hero-rise 0.75s var(--ease-out-quint) forwards;
+}
+
+html[data-intro="done"] .hero-st-1 { animation-delay: 0.05s; }
+html[data-intro="done"] .hero-st-2 { animation-delay: 0.14s; }
+html[data-intro="done"] .hero-st-3 { animation-delay: 0.24s; }
+html[data-intro="done"] .hero-st-4 { animation-delay: 0.36s; }
+html[data-intro="done"] .hero-st-5 { animation-delay: 0.48s; }
+html[data-intro="done"] .hero-st-6 { animation-delay: 0.62s; }
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- scenes ---------- */
+
+.scene-hero {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.dark-scene {
+  position: relative;
+  z-index: 3;
+  background: var(--ink);
+  color: var(--paper-on-ink);
+}
+
+.dark-scene--cover {
+  border-radius: 1.75rem 1.75rem 0 0;
+  box-shadow: var(--shadow-scene);
+}
+
+.page-above {
+  position: relative;
+  z-index: 2;
+  background: var(--background);
+  box-shadow: 0 24px 48px oklch(0.2 0.02 155 / 0.28);
+}
+
+/* The contact scene pins behind the page for the lift-away reveal — but only
+   where it fully fits the viewport; otherwise it flows normally so nothing
+   is ever clipped behind the pinned edge. */
+.scene-contact {
+  position: static;
+  z-index: 1;
+}
+
+@media (min-width: 768px) and (min-height: 720px) {
+  .scene-contact {
+    position: sticky;
+    bottom: 0;
+    min-height: 100svh;
+  }
+}
+
+/* reveal-on-scroll helper (JS adds .in-view; hidden only when JS is present) */
+html[data-js] .rv {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s var(--ease-out-quint);
+}
+
+html[data-js] .rv.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+.rv-d1 { transition-delay: 0.08s; }
+.rv-d2 { transition-delay: 0.16s; }
+.rv-d3 { transition-delay: 0.24s; }
+
+/* ---------- site nav theming ---------- */
+
+.site-nav {
+  background: color-mix(in oklab, var(--background) 90%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.site-nav .nav-link {
+  color: var(--muted-foreground);
+  transition: color 0.25s ease;
+}
+
+.site-nav .nav-link:hover,
+.site-nav .nav-link[aria-current] {
+  color: var(--primary);
+}
+
+.site-nav .nav-wordmark {
+  color: var(--foreground);
+  transition: color 0.35s ease;
+}
+
+.site-nav .nav-resume {
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.site-nav .nav-resume:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.site-nav[data-nav-theme="dark"] {
+  background: color-mix(in oklab, var(--ink) 86%, transparent);
+  border-color: var(--border-on-ink);
+}
+
+.site-nav[data-nav-theme="dark"] .nav-link {
+  color: var(--muted-on-ink);
+}
+
+.site-nav[data-nav-theme="dark"] .nav-link:hover,
+.site-nav[data-nav-theme="dark"] .nav-link[aria-current] {
+  color: var(--green-bright);
+}
+
+.site-nav[data-nav-theme="dark"] .nav-wordmark {
+  color: var(--paper-on-ink);
+}
+
+.site-nav[data-nav-theme="dark"] .nav-resume {
+  border-color: var(--border-on-ink);
+  color: var(--paper-on-ink);
+}
+
+.site-nav[data-nav-theme="dark"] .nav-resume:hover {
+  background: var(--green-bright);
+  border-color: var(--green-bright);
+  color: var(--ink);
+}
+
+.site-nav[data-nav-theme="dark"] .nav-menu-btn {
+  border-color: var(--border-on-ink);
+  color: var(--paper-on-ink);
+}
+
+/* underline slide for text links */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 100% 50%;
+  transition: transform 0.35s var(--ease-out-quint);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after,
+.link-underline[aria-current]::after {
+  transform: scaleX(1);
+  transform-origin: 0 50%;
+}
+
+/* ---------- github calendar ---------- */
 
 .github-calendar-grid {
   display: grid;
@@ -148,8 +559,8 @@
   display: block;
   min-height: 1rem;
   overflow: hidden;
-  font-size: 0.65rem;
-  font-weight: 700;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
   line-height: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -175,15 +586,15 @@
 }
 
 .github-calendar-cell--1 {
-  background-color: oklch(0.82 0.075 148);
+  background-color: oklch(0.84 0.06 150);
 }
 
 .github-calendar-cell--2 {
-  background-color: oklch(0.68 0.105 148);
+  background-color: oklch(0.7 0.095 151);
 }
 
 .github-calendar-cell--3 {
-  background-color: oklch(0.52 0.11 148);
+  background-color: oklch(0.54 0.105 152);
 }
 
 .github-calendar-cell--4 {
@@ -204,6 +615,8 @@
     letter-spacing: 0.05em;
   }
 }
+
+/* ---------- decorative ---------- */
 
 .evidence-marker {
   @apply mt-2.5 h-2 w-2 rounded-full bg-primary;
@@ -229,12 +642,12 @@
   @apply relative isolate;
 }
 
-  .portrait-card::before {
+.portrait-card::before {
   content: "";
   position: absolute;
   inset: 0.85rem -0.85rem -0.85rem 0.85rem;
   z-index: -1;
-  border: 1px solid oklch(0.82 0.035 78 / 0.85);
+  border: 1px solid oklch(0.862 0.024 130 / 0.85);
   background: var(--secondary);
   box-shadow: var(--shadow-press);
 }
@@ -264,11 +677,11 @@
   position: absolute;
   pointer-events: none;
   user-select: none;
-  font-family: var(--font-display), serif;
+  font-family: var(--font-display), sans-serif;
   font-weight: 800;
   line-height: 0.8;
   letter-spacing: -0.02em;
-  color: oklch(0.36 0.085 148 / 0.05);
+  color: oklch(0.4 0.1 152 / 0.05);
   z-index: 0;
 }
 
@@ -277,6 +690,28 @@
   display: inline-block;
   overflow: hidden;
   vertical-align: bottom;
+}
+
+/* horizontal builds strip */
+.hstrip-track {
+  will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .hstrip-track {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .hstrip-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hstrip-card {
+    scroll-snap-align: start;
+  }
 }
 
 /* Screen reader only utility (if not provided by Tailwind) */
@@ -312,6 +747,20 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+  .intro {
+    display: none !important;
+  }
+
+  html[data-intro="play"] .hero-st,
+  html[data-intro="play"] .nav-wordmark {
+    opacity: 1;
+  }
+
+  .rv {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -324,6 +773,6 @@
   }
 
   .section-kicker {
-    @apply tracking-[0.13em];
+    letter-spacing: 0.13em;
   }
 }
