@@ -45,6 +45,7 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
             <h1
               id="case-study-title"
               className="mt-4 max-w-4xl text-balance font-serif text-3xl font-bold leading-tight sm:text-4xl md:text-5xl"
+              style={{ viewTransitionName: `pt-${caseStudy.projectId}` }}
             >
               {caseStudy.title}
             </h1>

@@ -17,7 +17,7 @@ export default function HeroImage() {
           sizes="(max-width: 1024px) 90vw, 360px"
           className="object-cover object-top transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.03]"
         />
-        <span className="mono-micro absolute bottom-3 left-3 rounded-full bg-ink/70 px-2.5 py-1.5 text-paper-on-ink backdrop-blur-sm">
+        <span className="mono-micro absolute bottom-3 left-3 rounded-md bg-ink/70 px-2.5 py-1.5 text-paper-on-ink backdrop-blur-sm">
           Iloilo, PH
         </span>
       </div>

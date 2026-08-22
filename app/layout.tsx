@@ -3,13 +3,14 @@ import { Bricolage_Grotesque, Hanken_Grotesk, Fragment_Mono } from "next/font/go
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import ScrollProgress from "./components/ScrollProgress";
+import { ViewTransitionSettler } from "./components/TransitionLink";
 
 const siteUrl = "https://jnwync-devfolio.vercel.app";
 
 const displayFont = Bricolage_Grotesque({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: "variable",
   display: "swap",
   preload: true,
 });
@@ -108,7 +109,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
         className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} antialiased`}
       >
@@ -120,6 +121,7 @@ export default function RootLayout({
         />
         <MotionConfig reducedMotion="user">
           <ScrollProgress />
+          <ViewTransitionSettler />
           {children}
         </MotionConfig>
         <script

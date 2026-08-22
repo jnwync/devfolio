@@ -186,6 +186,19 @@
   text-wrap: balance;
 }
 
+/* Kinetic settle: titles arrive light and firm up as the section enters.
+   Gated on JS so static rendering stays at full weight. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-js] .sec-head .sec-title {
+    font-variation-settings: "wght" 320;
+    transition: font-variation-settings 0.9s var(--ease-out-quint) 0.12s;
+  }
+
+  html[data-js] .sec-head.in-view .sec-title {
+    font-variation-settings: "wght" 650;
+  }
+}
+
 .sec-count {
   font-family: var(--font-mono), monospace;
   font-size: 0.78rem;
@@ -199,7 +212,8 @@
   color: var(--muted-on-ink);
 }
 
-/* Uniform technology / tag chip, both surfaces. */
+/* Uniform technology / tag chip, both surfaces. Square-cornered mono tags —
+   registration-mark vocabulary, not pill vocabulary. */
 .chip-pill {
   display: inline-flex;
   align-items: center;
@@ -209,8 +223,8 @@
   text-transform: uppercase;
   line-height: 1;
   border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.42rem 0.7rem;
+  border-radius: 0.3rem;
+  padding: 0.42rem 0.6rem;
   color: var(--foreground);
   background: oklch(1 0 0 / 0.45);
 }
@@ -398,8 +412,21 @@ html[data-intro="play"] .intro {
   will-change: transform;
 }
 
+.intro-mark .il {
+  display: inline-block;
+  font-variation-settings: "wght" 240;
+  animation: il-settle 0.7s var(--ease-out-quint) forwards;
+}
+
+@keyframes il-settle {
+  to {
+    font-variation-settings: "wght" 700;
+  }
+}
+
 .intro-mark .wordmark-dot {
   color: var(--primary);
+  font-variation-settings: "wght" 700;
   opacity: 0;
   animation: intro-dot 0.4s var(--ease-out-quint) 1.15s forwards;
 }
@@ -641,6 +668,26 @@ html[data-js] .rv.in-view {
 .link-underline[aria-current]::after {
   transform: scaleX(1);
   transform-origin: 0 50%;
+}
+
+/* ---------- view transitions (case-study morph) ---------- */
+
+::view-transition-group(*) {
+  animation-duration: 0.45s;
+  animation-timing-function: var(--ease-out-quint);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
 
 /* ---------- github calendar ---------- */

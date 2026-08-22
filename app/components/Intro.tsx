@@ -77,7 +77,12 @@ export default function Intro() {
       <div className="intro-center">
         <span className="intro-name">Jon Wayne Cabusbusan</span>
         <span className="intro-mark">
-          jnwync<span className="wordmark-dot">.</span>
+          {'jnwync'.split('').map((letter, index) => (
+            <span key={index} className="il" style={{ animationDelay: `${0.2 + index * 0.1}s` }}>
+              {letter}
+            </span>
+          ))}
+          <span className="wordmark-dot">.</span>
         </span>
       </div>
     </div>

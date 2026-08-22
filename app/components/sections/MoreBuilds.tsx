@@ -51,7 +51,7 @@ export default function MoreBuilds({ projects }: { projects: Project[] }) {
   const x = useTransform(scrollYProgress, [0.05, 0.95], [0, -maxShift]);
 
   return (
-    <div ref={outerRef} className={drive ? 'md:h-[260vh]' : undefined}>
+    <div ref={outerRef} className={drive ? 'relative md:h-[260vh]' : 'relative'}>
       <div className={drive ? 'sticky top-0 flex min-h-svh flex-col justify-center overflow-hidden' : undefined}>
         <div className="section-shell w-full">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-t border-border-on-ink pt-10">

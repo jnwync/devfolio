@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import TransitionLink from '../TransitionLink';
 import { portfolioData, getExperienceById, type Project } from '@/data/portfolio';
 import { Button } from '@/components/ui/button';
 import MoreBuilds from './MoreBuilds';
@@ -38,7 +38,10 @@ function FeaturedProject({
           </span>
           <span className="mono-meta ml-4 text-muted-on-ink">{typeLabels[project.type]}</span>
         </p>
-        <h3 className="mt-4 font-serif text-[1.7rem] font-bold leading-[1.05] text-paper-on-ink sm:text-4xl">
+        <h3
+          className="mt-4 font-serif text-[1.7rem] font-bold leading-[1.05] text-paper-on-ink sm:text-4xl"
+          style={{ viewTransitionName: `pt-${project.id}` }}
+        >
           {project.title}
         </h3>
         <p className="mt-4 max-w-[46ch] text-[0.95rem] leading-7 text-muted-on-ink">
@@ -74,10 +77,10 @@ function FeaturedProject({
 
         {project.caseStudyPath && (
           <Button asChild variant="paper" className="mt-7">
-            <Link href={project.caseStudyPath}>
+            <TransitionLink href={project.caseStudyPath}>
               Read the case study
               <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-(--ease-out-quint) group-hover/btn:translate-x-1" aria-hidden="true" />
-            </Link>
+            </TransitionLink>
           </Button>
         )}
       </div>
@@ -90,7 +93,11 @@ function FeaturedProject({
 /** Browser-chrome frame shared by the featured project media. */
 function BrowserFrame({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="group overflow-hidden rounded-xl border border-border-on-ink bg-[oklch(0.2_0.02_158)] shadow-[0_24px_60px_oklch(0.12_0.01_158/0.5)]">
+    <div
+      data-fx="parallax"
+      data-speed="0.045"
+      className="group overflow-hidden rounded-xl border border-border-on-ink bg-[oklch(0.2_0.02_158)] shadow-[0_24px_60px_oklch(0.12_0.01_158/0.5)] will-change-transform"
+    >
       <div className="flex items-center gap-2 border-b border-border-on-ink bg-[oklch(0.17_0.015_158)] px-3.5 py-2.5">
         <span className="h-2 w-2 rounded-full bg-[oklch(0.38_0.02_158)]" aria-hidden="true" />
         <span className="h-2 w-2 rounded-full bg-[oklch(0.38_0.02_158)]" aria-hidden="true" />

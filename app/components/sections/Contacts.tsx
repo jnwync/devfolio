@@ -57,9 +57,10 @@ export default function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="dark-scene scene-contact flex flex-col justify-center py-14 md:py-16"
+      className="dark-scene scene-contact relative flex flex-col justify-center overflow-hidden py-14 md:py-16"
     >
-      <div className="section-shell w-full">
+      <div data-fx="contact-dim" className="pointer-events-none absolute inset-0 z-10 bg-[oklch(0.1_0.01_158)] opacity-0" aria-hidden="true" />
+      <div data-fx="contact-rise" className="section-shell w-full">
         <p className="avail-chip">
           <span className="dot" aria-hidden="true" />
           {personal.availability.message}

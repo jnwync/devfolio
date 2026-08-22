@@ -278,7 +278,7 @@ export default function Navigation() {
               <a
                 href="/cv.pdf"
                 download
-                className="nav-resume inline-flex min-h-10 items-center rounded-full px-4 text-sm font-bold"
+                className="nav-resume inline-flex min-h-10 items-center rounded-lg px-4 text-sm font-bold"
               >
                 Resume
               </a>

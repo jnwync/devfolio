@@ -1,6 +1,7 @@
 import Navigation from './components/Navigation';
 import Intro from './components/Intro';
 import ScrollReveals from './components/ScrollReveals';
+import SceneFx from './components/SceneFx';
 import Hero from './components/sections/Hero';
 import Projects from './components/sections/Projects';
 import ProfessionalExperience from './components/sections/Experiences';
@@ -29,6 +30,7 @@ export default function Home() {
         <Contact />
       </main>
       <ScrollReveals />
+      <SceneFx />
     </>
   );
 }

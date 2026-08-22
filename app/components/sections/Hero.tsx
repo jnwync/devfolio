@@ -23,7 +23,11 @@ export default function Hero() {
 
   return (
     <section id="about" className="scene-hero" aria-labelledby="hero-heading">
-      <div className="relative flex min-h-[calc(100svh-4.5rem)] flex-col overflow-hidden bg-background">
+      <div
+        data-fx="hero-press"
+        className="relative flex min-h-[calc(100svh-4.5rem)] origin-[50%_15%] flex-col overflow-hidden bg-background will-change-transform"
+      >
+        <div data-fx="hero-dim" className="pointer-events-none absolute inset-0 z-30 bg-ink opacity-0" aria-hidden="true" />
         <div className="section-shell relative z-10 flex flex-1 flex-col justify-center py-10 sm:py-12">
           <div className="hero-st hero-st-1 mb-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-border pb-5">
             <span className="mono-meta text-foreground">
