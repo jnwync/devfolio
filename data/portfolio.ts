@@ -60,6 +60,12 @@ export interface SkillCategory {
   skills: Skill[];
 }
 
+/** One tool in the stack row. `icon` is a Simple Icons slug (react-icons/si). */
+export interface StackItem {
+  name: string;
+  icon: string;
+}
+
 export interface CapabilityGroup {
   title: string;
   summary: string;
@@ -104,6 +110,7 @@ export interface PortfolioData {
   experiences: Experience[];
   projects: Project[];
   featuredSkills: Skill[];
+  stack: StackItem[];
   skillCategories: SkillCategory[];
   capabilityGroups: CapabilityGroup[];
   education: Education;
@@ -490,6 +497,26 @@ export const portfolioData: PortfolioData = {
     { name: 'PostgreSQL' },
     { name: 'Drizzle ORM' },
     { name: 'Node.js' },
+  ],
+
+  // ---------------------------------------------------------------------------
+  // THE STACK (logo row under the hero — Simple Icons slugs, rendered locally)
+  // ---------------------------------------------------------------------------
+  stack: [
+    { name: 'TypeScript', icon: 'typescript' },
+    { name: 'React', icon: 'react' },
+    { name: 'Next.js', icon: 'nextdotjs' },
+    { name: 'Node.js', icon: 'nodedotjs' },
+    { name: 'Express', icon: 'express' },
+    { name: 'PostgreSQL', icon: 'postgresql' },
+    { name: 'Prisma', icon: 'prisma' },
+    { name: 'Drizzle', icon: 'drizzle' },
+    { name: 'Firebase', icon: 'firebase' },
+    { name: 'Supabase', icon: 'supabase' },
+    { name: 'Sanity', icon: 'sanity' },
+    { name: 'Tailwind', icon: 'tailwindcss' },
+    { name: 'Expo', icon: 'expo' },
+    { name: 'Docker', icon: 'docker' },
   ],
 
   // ---------------------------------------------------------------------------

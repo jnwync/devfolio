@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import { portfolioData } from '@/data/portfolio';
 
 /**
- * Full-height opening scene. It pins (`.scene-hero`) so the dark Selected
- * Work panel rises over it — the first scene change of the page. Entrance
- * staggering is pure CSS keyed on html[data-intro], so the hero needs no
- * client JS of its own.
+ * Full-height opening scene, transparent to the field behind it: the type
+ * sits flat and sharp while the atmosphere drifts slowly underneath.
+ * Entrance staggering is pure CSS keyed on html[data-intro], so the hero
+ * needs no client JS of its own.
  */
 export default function Hero() {
   const { personal, proofPoints } = portfolioData;
@@ -22,13 +22,9 @@ export default function Hero() {
   const hasShip = headline !== personal.positioning;
 
   return (
-    <section id="about" className="scene-hero" aria-labelledby="hero-heading">
-      <div
-        data-fx="hero-press"
-        className="relative flex min-h-[calc(100svh-4.5rem)] origin-[50%_15%] flex-col overflow-hidden bg-background will-change-transform"
-      >
-        <div data-fx="hero-dim" className="pointer-events-none absolute inset-0 z-30 bg-ink opacity-0" aria-hidden="true" />
-        <div className="section-shell relative z-10 flex flex-1 flex-col justify-center py-10 sm:py-12">
+    <section id="about" className="relative" aria-labelledby="hero-heading">
+      <div className="relative flex min-h-[calc(100svh-4.5rem)] flex-col">
+        <div className="section-shell relative flex flex-1 flex-col justify-center py-10 sm:py-12">
           <div className="hero-st hero-st-1 mb-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-border pb-5">
             <span className="mono-meta text-foreground">
               {personal.name} — {personal.location}
@@ -103,7 +99,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="section-shell relative z-10">
+        <div className="section-shell relative">
           <dl className="hero-st hero-st-6 grid grid-cols-2 gap-y-5 border-t border-border py-6 md:grid-cols-4 md:gap-y-0">
             {proofPoints.map((point, index) => (
               <div
