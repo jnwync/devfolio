@@ -162,6 +162,31 @@ export const portfolioData: PortfolioData = {
   // ---------------------------------------------------------------------------
   experiences: [
     {
+      id: 'trackbill',
+      company: 'Inertia - Trackbill',
+      role: 'Contract Full-Stack Product Engineer',
+      type: 'contract',
+      period: 'Jul 2026 - Sep 2026',
+      startDate: '2026-07',
+      endDate: '2026-09',
+      location: 'Remote',
+      description: 'Contract product engineering across the Trackbill web app, Node/Express/Prisma services, and Expo/React Native mobile apps for security, receipts, reporting, analytics, admin tooling, and mobile parity.',
+      homepageSummary: 'Delivered full-stack product slices across web, API, and mobile for receipts, security, reporting, analytics, and admin tooling.',
+      scope: 'Shipped product slices across Node/Express/Prisma services, Next.js/React web workflows, and Expo/React Native mobile features, contributing to three production codebases.',
+      achievements: [
+        'Delivered full-stack product slices across Node/Express/Prisma services, Next.js/React web workflows, and Expo/React Native mobile features for security, receipts, reporting, analytics, admin tooling, and mobile parity.',
+        'Built an API-key security lifecycle spanning Prisma schema/migrations, Express controllers/routes, OpenAPI, redaction/error utilities, tests, and web settings UX.',
+        'Delivered unified incoming-receipt routing across backend, web, and native app layers with shared preferences, explicit-folder routing, transactional folder-resolution locking, rollback behavior, localization, and tests.',
+        'Improved receipt and admin workflows including inline receipt editing, bulk category updates, duplicate-scan semantics, last-upload sorting, debounced folder search, user-list pagination, MRR reporting, and direct seat editing.',
+        'Contributed across three production codebases with 42 merged author-filtered PR records and test changes across server, client, and mobile layers.',
+      ],
+      impact: [
+        { metric: '42', description: 'Merged PRs across server, client, and mobile layers' },
+        { metric: '3', description: 'Production codebases contributed to across API, web, and mobile' },
+      ],
+      technologies: ['Node.js', 'Express.js', 'Prisma ORM', 'Next.js', 'React', 'Expo', 'React Native', 'OpenAPI'],
+    },
+    {
       id: 'okra',
       company: 'Mashup Technology Ventures Inc. - OKRa',
       role: 'Software Engineering Intern / Full-Stack Developer (OJT)',
