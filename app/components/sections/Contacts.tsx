@@ -30,9 +30,8 @@ async function copyText(value: string): Promise<boolean> {
 }
 
 /**
- * Final scene. `.scene-contact` is sticky at the page bottom behind
- * `.page-above`, so the whole site lifts away like a sheet to reveal it —
- * the mirror of the Work panel covering the hero at the top.
+ * Final scene: the second lifted plate, closing the page the way the Work
+ * plate opened it. Contact details stay conventional and scannable.
  */
 export default function Contact() {
   const [copied, setCopied] = useState(false);
@@ -57,10 +56,9 @@ export default function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="dark-scene scene-contact relative flex flex-col justify-center overflow-hidden py-14 md:py-16"
+      className="dark-scene dark-scene--cover scroll-mt-20 flex flex-col justify-center py-16 md:py-24"
     >
-      <div data-fx="contact-dim" className="pointer-events-none absolute inset-0 z-10 bg-[oklch(0.1_0.01_158)] opacity-0" aria-hidden="true" />
-      <div data-fx="contact-rise" className="section-shell w-full">
+      <div className="section-shell w-full">
         <p className="avail-chip">
           <span className="dot" aria-hidden="true" />
           {personal.availability.message}

@@ -14,7 +14,7 @@ export default function Skills() {
   ).slice(0, 18);
 
   return (
-    <section id="skills" aria-labelledby="skills-heading" className="bg-secondary/40 scroll-mt-20 py-20 md:py-28">
+    <section id="skills" aria-labelledby="skills-heading" className="scroll-mt-20 py-20 md:py-28">
       <div className="section-shell">
         <header className="rv sec-head">
           <div>

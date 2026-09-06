@@ -52,18 +52,35 @@
   --input: light-dark(oklch(0.955 0.014 122), oklch(0.23 0.012 160));
   --ring: light-dark(oklch(0.46 0.11 150), oklch(0.78 0.13 152));
 
-  /* scene (plate) tokens: dark ink in daylight, a lifted surface at night */
-  --ink: light-dark(oklch(0.225 0.022 158), oklch(0.205 0.013 162));
-  --ink-soft: light-dark(oklch(0.268 0.024 156), oklch(0.245 0.014 160));
-  --paper-on-ink: light-dark(oklch(0.955 0.012 120), oklch(0.945 0.009 110));
-  --muted-on-ink: light-dark(oklch(0.71 0.028 145), oklch(0.73 0.02 140));
-  --border-on-ink: light-dark(oklch(0.955 0.012 120 / 0.15), oklch(0.945 0.009 110 / 0.14));
-  --green-bright: light-dark(oklch(0.80 0.112 152), oklch(0.78 0.13 152));
+  /* scene (plate) tokens: the Work and Contact plates are the only opaque
+     surfaces — a heavier sage sheet by day, a lifted surface at night. The
+     "-on-ink" names are kept so every component recolours automatically. */
+  --ink: var(--bg-plate);
+  --ink-soft: light-dark(oklch(0.905 0.02 128), oklch(0.245 0.014 160));
+  --paper-on-ink: var(--foreground);
+  --muted-on-ink: light-dark(oklch(0.42 0.032 148), oklch(0.73 0.02 140));
+  --border-on-ink: light-dark(oklch(0.225 0.028 155 / 0.14), oklch(0.945 0.009 110 / 0.14));
+  --green-bright: light-dark(oklch(0.40 0.1 152), oklch(0.78 0.13 152));
+  --plate-edge: light-dark(oklch(1 0 0 / 0.75), oklch(1 0 0 / 0.07));
+
+  /* device frames stay dark in both weathers: they are artefacts, not surface */
+  --frame: oklch(0.2 0.02 158);
+  --frame-bar: oklch(0.17 0.015 158);
+  --frame-dot: oklch(0.38 0.02 158);
+  --frame-edge: oklch(1 0 0 / 0.12);
+  --frame-board: oklch(0.19 0.018 158);
+  --frame-column: oklch(0.22 0.02 158);
+  --frame-card: oklch(0.26 0.022 158);
+  --frame-card-hot: oklch(0.26 0.03 155);
+  --frame-text: oklch(0.955 0.012 120);
+  --frame-muted: oklch(0.71 0.028 145);
+  --frame-green: oklch(0.80 0.112 152);
 
   /* translucent surfaces */
   --chip-bg: light-dark(oklch(1 0 0 / 0.45), oklch(1 0 0 / 0.05));
   --shadow-ink: light-dark(oklch(0.24 0.03 150 / 0.08), oklch(0.05 0.01 160 / 0.4));
-  --shadow-ink-strong: light-dark(oklch(0.2 0.02 155 / 0.35), oklch(0.03 0.01 160 / 0.7));
+  --shadow-ink-strong: light-dark(oklch(0.2 0.02 155 / 0.16), oklch(0.03 0.01 160 / 0.7));
+  --shadow-frame: light-dark(oklch(0.2 0.03 155 / 0.22), oklch(0.02 0.01 160 / 0.6));
 
   --radius: 0.5rem;
   --shadow-soft: 0 2px 8px var(--shadow-ink);
@@ -140,6 +157,17 @@
   --color-green-bright: var(--green-bright);
   --color-plate: var(--bg-plate);
   --color-raised: var(--bg-raised);
+  --color-frame: var(--frame);
+  --color-frame-bar: var(--frame-bar);
+  --color-frame-dot: var(--frame-dot);
+  --color-frame-edge: var(--frame-edge);
+  --color-frame-board: var(--frame-board);
+  --color-frame-column: var(--frame-column);
+  --color-frame-card: var(--frame-card);
+  --color-frame-card-hot: var(--frame-card-hot);
+  --color-frame-text: var(--frame-text);
+  --color-frame-muted: var(--frame-muted);
+  --color-frame-green: var(--frame-green);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -594,7 +622,8 @@ html[data-intro="done"] .hero-st-6 { animation-delay: 0.62s; }
 /* ---------- scenes ---------- */
 
 /* Plates are the only opaque surfaces on the page; everything else is
-   transparent so the field shows through. */
+   transparent so the field shows through. A one-pixel light edge along the
+   top reads as the lit rim of a lifted sheet. */
 .dark-scene {
   position: relative;
   z-index: 3;
@@ -604,7 +633,9 @@ html[data-intro="done"] .hero-st-6 { animation-delay: 0.62s; }
 
 .dark-scene--cover {
   border-radius: 1.75rem 1.75rem 0 0;
-  box-shadow: var(--shadow-scene);
+  box-shadow:
+    var(--shadow-scene),
+    inset 0 1px 0 var(--plate-edge);
 }
 
 /* reveal-on-scroll helper (JS adds .in-view; hidden only when JS is present) */
@@ -971,28 +1002,6 @@ html:not([data-js]) .theme-toggle {
 
 .premium-panel {
   @apply relative isolate overflow-hidden border border-border bg-card;
-}
-
-/* horizontal builds strip */
-.hstrip-track {
-  will-change: transform;
-}
-
-@media (max-width: 767px) {
-  .hstrip-track {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .hstrip-track::-webkit-scrollbar {
-    display: none;
-  }
-
-  .hstrip-card {
-    scroll-snap-align: start;
-  }
 }
 
 /* Screen reader only utility (if not provided by Tailwind) */

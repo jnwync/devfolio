@@ -12,7 +12,7 @@ const typeLabels: Record<string, string> = {
   academic: 'Academic client',
 };
 
-function FeaturedProject({
+function SelectedProject({
   project,
   index,
   flip,
@@ -90,19 +90,16 @@ function FeaturedProject({
   );
 }
 
-/** Browser-chrome frame shared by the featured project media. */
+/** Browser-chrome frame shared by the selected project media. It stays dark in
+ *  both weathers — it is an artefact sitting on the plate, not part of it. */
 function BrowserFrame({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div
-      data-fx="parallax"
-      data-speed="0.045"
-      className="group overflow-hidden rounded-xl border border-border-on-ink bg-[oklch(0.2_0.02_158)] shadow-[0_24px_60px_oklch(0.12_0.01_158/0.5)] will-change-transform"
-    >
-      <div className="flex items-center gap-2 border-b border-border-on-ink bg-[oklch(0.17_0.015_158)] px-3.5 py-2.5">
-        <span className="h-2 w-2 rounded-full bg-[oklch(0.38_0.02_158)]" aria-hidden="true" />
-        <span className="h-2 w-2 rounded-full bg-[oklch(0.38_0.02_158)]" aria-hidden="true" />
-        <span className="h-2 w-2 rounded-full bg-[oklch(0.38_0.02_158)]" aria-hidden="true" />
-        <span className="ml-2 flex-1 truncate rounded-md bg-ink px-2.5 py-1 font-mono text-[0.6rem] tracking-wide text-muted-on-ink">
+    <div className="group overflow-hidden rounded-xl border border-frame-edge bg-frame shadow-[0_24px_60px_var(--shadow-frame)]">
+      <div className="flex items-center gap-2 border-b border-frame-edge bg-frame-bar px-3.5 py-2.5">
+        <span className="h-2 w-2 rounded-full bg-frame-dot" aria-hidden="true" />
+        <span className="h-2 w-2 rounded-full bg-frame-dot" aria-hidden="true" />
+        <span className="h-2 w-2 rounded-full bg-frame-dot" aria-hidden="true" />
+        <span className="ml-2 flex-1 truncate rounded-md bg-frame-board px-2.5 py-1 font-mono text-[0.6rem] tracking-wide text-frame-muted">
           {label}
         </span>
       </div>
@@ -121,10 +118,10 @@ function OkraBoard() {
   ];
 
   return (
-    <div className="grid min-h-72 grid-cols-3 gap-3 bg-[oklch(0.19_0.018_158)] p-5" aria-hidden="true">
+    <div className="grid min-h-72 grid-cols-3 gap-3 bg-frame-board p-5" aria-hidden="true">
       {columns.map((col) => (
-        <div key={col.name} className="flex flex-col gap-2 rounded-lg border border-border-on-ink bg-[oklch(0.22_0.02_158)] p-2.5">
-          <div className="mono-micro flex justify-between px-1 pb-1 text-muted-on-ink">
+        <div key={col.name} className="flex flex-col gap-2 rounded-lg border border-frame-edge bg-frame-column p-2.5">
+          <div className="mono-micro flex justify-between px-1 pb-1 text-frame-muted">
             <span>{col.name}</span>
             <span>{col.count}</span>
           </div>
@@ -133,8 +130,8 @@ function OkraBoard() {
               key={cardIndex}
               className={`rounded-md border p-2.5 ${
                 col.hot === cardIndex
-                  ? 'border-green-bright bg-[oklch(0.26_0.03_155)]'
-                  : 'border-paper-on-ink/10 bg-[oklch(0.26_0.022_158)]'
+                  ? 'border-frame-green bg-frame-card-hot'
+                  : 'border-frame-text/10 bg-frame-card'
               }`}
             >
               {Array.from({ length: lines }).map((_, lineIndex) => (
@@ -142,10 +139,10 @@ function OkraBoard() {
                   key={lineIndex}
                   className={`mb-1.5 h-1.5 rounded-full last:mb-0 ${
                     col.hot === cardIndex && lineIndex === lines - 1
-                      ? 'w-2/5 bg-green-bright'
+                      ? 'w-2/5 bg-frame-green'
                       : lineIndex % 2 === 0
-                        ? 'w-4/5 bg-paper-on-ink/15'
-                        : 'w-3/5 bg-paper-on-ink/15'
+                        ? 'w-4/5 bg-frame-text/15'
+                        : 'w-3/5 bg-frame-text/15'
                   }`}
                 />
               ))}
@@ -158,7 +155,7 @@ function OkraBoard() {
 }
 
 export default function Projects() {
-  const featured = portfolioData.projects.filter((project) => project.caseStudyPath);
+  const selected = portfolioData.projects.filter((project) => project.caseStudyPath);
   const more = portfolioData.projects.filter((project) => !project.caseStudyPath);
 
   return (
@@ -180,12 +177,12 @@ export default function Projects() {
           </p>
         </header>
 
-        <FeaturedProject project={featured[0]} index={0}>
+        <SelectedProject project={selected[0]} index={0}>
           <BrowserFrame label="Reisky Martial Arts — production site">
             <div className="overflow-hidden">
               <Image
-                src={featured[0].image ?? '/images/projects/reisky-home.png'}
-                alt={`Screenshot of ${featured[0].title}`}
+                src={selected[0].image ?? '/images/projects/reisky-home.png'}
+                alt={`Screenshot of ${selected[0].title}`}
                 width={1200}
                 height={675}
                 className="h-auto w-full scale-[1.01] object-cover transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.05]"
@@ -193,16 +190,16 @@ export default function Projects() {
               />
             </div>
           </BrowserFrame>
-        </FeaturedProject>
+        </SelectedProject>
 
-        <FeaturedProject project={featured[1]} index={1} flip>
+        <SelectedProject project={selected[1]} index={1} flip>
           <BrowserFrame label="OKRa — abstracted board view">
             <OkraBoard />
           </BrowserFrame>
-        </FeaturedProject>
-      </div>
+        </SelectedProject>
 
-      <MoreBuilds projects={more} />
+        <MoreBuilds projects={more} />
+      </div>
     </section>
   );
 }
