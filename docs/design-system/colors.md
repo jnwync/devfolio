@@ -163,3 +163,36 @@
 - [Design System](./README.md) - Design principles
 
 **Last Updated:** December 12, 2025
+
+## v3 — Quiet depth (September 2026)
+
+The palette above still describes the green family, but the mechanism changed:
+
+- **One token block, two weathers.** Every colour in `app/globals.css` is
+  written once with `light-dark(light, dark)`. The theme is a single
+  `color-scheme` switch on `html[data-theme]`, set before first paint by the
+  layout boot script (stored `jnwync-theme` → OS preference → dark). Without
+  JavaScript, `prefers-color-scheme` decides.
+- **Depth ladder.** `--bg-void` (page, behind the field) → `--bg-plate` (the
+  Work and Contact plates) → `--bg-raised` (frames, cards). Only the plates are
+  opaque; every other section lets the field through.
+- **Plate tokens.** The `-on-ink` family (`--ink`, `--paper-on-ink`,
+  `--muted-on-ink`, `--border-on-ink`, `--green-bright`) resolves to a sage
+  sheet by day and a lifted surface at night, so components recolour without
+  markup changes. `--plate-edge` is the one-pixel lit rim.
+- **Frames.** `--frame-*` tokens keep browser frames and the OKRa board dark in
+  both weathers — they are artefacts sitting on the plate, not surface.
+- **Weather.** `--atmo-bg` (static atmosphere) and `--grain-alpha` are the only
+  non-colour tokens that differ per theme; `app/components/Atmosphere.tsx`
+  paints the moving particle layers.
+
+Measured contrast (sRGB, WCAG 2.x):
+
+| Pair | Light | Dark |
+| --- | --- | --- |
+| foreground / page | 15.6 : 1 | 17.1 : 1 |
+| muted-foreground / page | 7.3 : 1 | 8.5 : 1 |
+| muted-on-ink / plate | 6.6 : 1 | 8.0 : 1 |
+| accent (kickers) / plate | 5.6 : 1 | — |
+| primary / page | 8.1 : 1 | 10.5 : 1 |
+| primary-foreground / primary | — | 10.3 : 1 |
