@@ -5,8 +5,14 @@ import "./globals.css";
 import Atmosphere from "./components/Atmosphere";
 import ScrollProgress from "./components/ScrollProgress";
 import { ViewTransitionSettler } from "./components/TransitionLink";
+import { portfolioData } from "@/data/portfolio";
 
-const siteUrl = "https://jnwync-devfolio.vercel.app";
+const siteUrl = "https://jnwync.vercel.app";
+const siteName = "Jon Wayne Cabusbusan";
+const siteTitle = "Jon Wayne Cabusbusan | Remote Full-Stack Web & Mobile Developer";
+const siteDescription =
+  "Remote full-stack web and mobile developer: Next.js, React, React Native/Expo, Node.js, PostgreSQL. Production apps for client teams and product organizations, from interface to deployment.";
+const ogImageUrl = `${siteUrl}/opengraph-image`;
 
 const displayFont = Bricolage_Grotesque({
   variable: "--font-display",
@@ -42,74 +48,95 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Jon Wayne Cabusbusan | Full-Stack Developer",
-  description:
-    "Full-stack developer building production web systems for client teams and product organizations, from interface and APIs through data, testing, and deployment.",
+  title: siteTitle,
+  description: siteDescription,
   keywords: [
+    "Remote Full-Stack Developer",
     "Full-Stack Web Developer",
+    "Mobile Developer",
+    "React Native Developer",
+    "Expo",
     "Next.js Developer",
     "React Developer",
     "TypeScript",
+    "Node.js",
+    "Express.js",
     "PostgreSQL",
+    "Prisma ORM",
     "Drizzle ORM",
     "Sanity CMS",
-    "Node.js",
     "REST APIs",
+    "OpenAPI",
     "RBAC",
     "Automated Testing",
-    "Web Development",
-    "Frontend",
-    "Backend",
+    "Philippines",
   ],
-  authors: [{ name: "Jon Wayne Cabusbusan" }],
-  creator: "Jon Wayne Cabusbusan",
+  authors: [{ name: siteName, url: siteUrl }],
+  creator: siteName,
   alternates: {
-    canonical: "/",
+    canonical: siteUrl,
   },
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    type: "website",
+    type: "profile",
     locale: "en_US",
     url: siteUrl,
-    title: "Jon Wayne Cabusbusan | Full-Stack Developer",
-    description:
-      "Portfolio covering client delivery, product engineering, responsive interfaces, APIs, data systems, testing, accessibility, and deployment.",
-    siteName: "Jon Wayne Cabusbusan Portfolio",
-    images: [
-      {
-        url: "/images/hero/hero-portrait.webp",
-        alt: "Professional headshot of Jon Wayne Cabusbusan",
-      },
-    ],
+    title: siteTitle,
+    description: siteDescription,
+    siteName: `${siteName} Portfolio`,
+    firstName: "Jon Wayne",
+    lastName: "Cabusbusan",
+    username: "jnwync",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jon Wayne Cabusbusan | Full-Stack Developer",
-    description:
-      "Production web development for client teams and product organizations across interface, APIs, data, testing, and deployment.",
-    images: ["/images/hero/hero-portrait.webp"],
+    title: siteTitle,
+    description: siteDescription,
+    images: [ogImageUrl],
   },
 };
+
+const knowsAbout = Array.from(
+  new Set(
+    portfolioData.skillCategories
+      .filter((category) => category.title !== "Practices")
+      .flatMap((category) => category.skills.map((skill) => skill.name))
+  )
+);
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Jon Wayne Cabusbusan",
+  name: portfolioData.personal.name,
+  givenName: "Jon Wayne",
+  familyName: "Cabusbusan",
   url: siteUrl,
-  jobTitle: "Full-Stack Web Developer",
-  email: "jonwayne.cabusbusan@gmail.com",
+  image: `${siteUrl}/images/hero/hero-portrait.webp`,
+  jobTitle: "Full-Stack Web & Mobile Developer",
+  description: siteDescription,
+  email: `mailto:${portfolioData.personal.email}`,
+  telephone: portfolioData.personal.phone,
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Iloilo",
+    addressLocality: "Iloilo City",
+    addressRegion: "Iloilo",
     addressCountry: "PH",
   },
-  sameAs: [
-    "https://github.com/jnwync",
-    "https://www.linkedin.com/in/jnwync/",
-  ],
+  workLocation: {
+    "@type": "Place",
+    name: "Remote",
+  },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: portfolioData.education.institution,
+  },
+  knowsAbout,
+  sameAs: portfolioData.contactLinks
+    .filter((link) => link.icon === "github" || link.icon === "linkedin")
+    .map((link) => link.href),
 };
 
 /**

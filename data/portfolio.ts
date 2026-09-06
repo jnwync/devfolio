@@ -541,6 +541,7 @@ export const portfolioData: PortfolioData = {
         { name: 'Next.js' },
         { name: 'React' },
         { name: 'React Native' },
+        { name: 'Expo' },
         { name: 'Tailwind CSS v4' },
         { name: 'Radix UI' },
         { name: 'Framer Motion' },
@@ -556,6 +557,7 @@ export const portfolioData: PortfolioData = {
         { name: 'Node.js' },
         { name: 'Express.js' },
         { name: 'REST APIs' },
+        { name: 'OpenAPI' },
         { name: 'Next.js API Routes' },
         { name: 'Zod' },
         { name: 'Server-Sent Events' },
@@ -635,15 +637,15 @@ export const portfolioData: PortfolioData = {
   capabilityGroups: [
     {
       title: 'Frontend systems',
-      summary: 'Responsive UIs, marketplace browsing flows, patient/admin portals, interactive maps, and component architecture in the Next.js/React ecosystem.',
-      evidence: 'Built interfaces for OKRa, Reisky, Apollo Medical Group, PackUp, DemiGAD, and the DTI Iloilo MSME Industry Map.',
-      skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
+      summary: 'Responsive UIs, Expo/React Native mobile features, marketplace browsing flows, patient/admin portals, interactive maps, and component architecture in the Next.js/React ecosystem.',
+      evidence: 'Built interfaces for Trackbill (web + mobile), OKRa, Reisky, Apollo Medical Group, PackUp, DemiGAD, and the DTI Iloilo MSME Industry Map.',
+      skills: ['Next.js', 'React', 'React Native', 'TypeScript'],
     },
     {
       title: 'Backend and APIs',
-      summary: 'REST APIs, Next.js API routes, authentication, RBAC, service layers, event-driven notifications, and API validation.',
-      evidence: 'Implemented OKRa RBAC/session validation, PackUp product/order APIs, DTI API-layer access control, and Baylo marketplace data flows.',
-      skills: ['Node.js', 'REST APIs', 'Zod', 'SSE'],
+      summary: 'REST APIs, Express and Next.js route handlers, OpenAPI contracts, authentication, RBAC, service layers, event-driven notifications, and API validation.',
+      evidence: 'Built the Trackbill API-key lifecycle (Express/Prisma/OpenAPI), OKRa RBAC/session validation, PackUp product/order APIs, DTI API-layer access control, and Baylo marketplace data flows.',
+      skills: ['Node.js', 'Express.js', 'Prisma ORM', 'OpenAPI'],
     },
     {
       title: 'Authentication and security',
