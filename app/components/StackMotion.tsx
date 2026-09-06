@@ -46,7 +46,8 @@ function seedFor(index: number): Seed {
     // Mostly pushed back into the field; roughly one in five sits slightly forward.
     z: forward ? 20 + rand() * 40 : -60 - rand() * 200,
     ry: (rand() * 2 - 1) * 24,
-    y: (rand() * 2 - 1) * 18,
+    // No vertical drift: depth reads from scale and turn alone, never as jitter.
+    y: 0,
     delay: rand() * 0.4,
     dir: index % 2 === 0 ? 1 : -1,
   };

@@ -34,18 +34,24 @@ async function copyText(value: string): Promise<boolean> {
  * plate opened it. Contact details stay conventional and scannable.
  */
 export default function Contact() {
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
+  const copied = copyState === 'copied';
   const { personal } = portfolioData;
   const github = portfolioData.contactLinks.find((l) => l.icon === 'github');
   const linkedin = portfolioData.contactLinks.find((l) => l.icon === 'linkedin');
   const phone = portfolioData.contactLinks.find((l) => l.icon === 'phone');
 
   const handleCopyEmail = async () => {
-    if (await copyText(personal.email)) {
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    }
+    const ok = await copyText(personal.email);
+    setCopyState(ok ? 'copied' : 'failed');
+    window.setTimeout(() => setCopyState('idle'), 2400);
   };
+  const copyLabel =
+    copyState === 'copied'
+      ? 'Email copied to clipboard'
+      : copyState === 'failed'
+        ? 'Copy failed. Select the address to copy it.'
+        : 'Copy email address';
 
   const handleBackToTop = () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -84,10 +90,11 @@ export default function Contact() {
             onClick={handleCopyEmail}
             variant="outlineDark"
             size="icon"
-            aria-label={copied ? 'Email copied to clipboard' : 'Copy email address'}
+            aria-label={copyLabel}
+            title={copyLabel}
           >
             <span aria-live="polite" className="sr-only">
-              {copied ? 'Email copied' : ''}
+              {copyState === 'idle' ? '' : copyLabel}
             </span>
             {copied ? (
               <Check className="h-5 w-5 text-green-bright" aria-hidden="true" />
@@ -96,9 +103,9 @@ export default function Contact() {
             )}
           </Button>
           <Button asChild variant="outlineDark" size="lg">
-            <a href="/cv.pdf" download>
+            <a href="/cv.pdf" download title="Download resume (PDF)">
               <FileDown className="h-5 w-5" aria-hidden="true" />
-              Resume
+              Resume (PDF)
             </a>
           </Button>
         </div>
@@ -142,7 +149,12 @@ export default function Contact() {
           </div>
           <div>
             <dt className="mono-meta text-muted-on-ink">Location</dt>
-            <dd className="mt-2 text-sm font-bold text-paper-on-ink">{personal.location}</dd>
+            <dd className="mt-2 text-sm font-bold text-paper-on-ink">
+              {personal.location}
+              <span className="mt-1 block font-normal text-muted-on-ink">
+                {personal.timezone} · Remote
+              </span>
+            </dd>
           </div>
         </dl>
 

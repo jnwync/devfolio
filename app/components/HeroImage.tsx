@@ -3,11 +3,12 @@ import Image from 'next/image';
 /**
  * Portrait in the system's frame language: rounded card, hairline border,
  * registration corner marks, and a mono location tag — the same technical
- * vocabulary as the browser frames and metric rails.
+ * vocabulary as the browser frames and metric rails. It sits still: no tilt,
+ * no zoom on hover.
  */
 export default function HeroImage() {
   return (
-    <figure className="group relative mx-auto w-72 rotate-2 transition-transform duration-500 ease-(--ease-out-quint) hover:rotate-0 sm:w-80 lg:mx-0 lg:w-87">
+    <figure className="relative mx-auto w-72 sm:w-80 lg:mx-0 lg:w-87">
       <div className="relative aspect-4/5 w-full overflow-hidden rounded-2xl border border-border bg-muted">
         <Image
           src="/images/hero/hero-portrait.webp"
@@ -15,7 +16,7 @@ export default function HeroImage() {
           fill
           priority
           sizes="(max-width: 1024px) 90vw, 360px"
-          className="object-cover object-top transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.03]"
+          className="object-cover object-top"
         />
         <span className="hero-portrait-tag mono-micro absolute bottom-3 left-3 rounded-md px-2.5 py-1.5 backdrop-blur-sm">
           Iloilo, PH

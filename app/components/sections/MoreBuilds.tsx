@@ -1,24 +1,33 @@
 import type { Project } from '@/data/portfolio';
 
 const typeLabels: Record<string, string> = {
+  contract: 'Contract',
   freelance: 'Freelance',
   professional: 'Professional',
   startup: 'Startup',
   academic: 'Academic client',
 };
 
+const pad = (n: number) => String(n).padStart(2, '0');
+
 /**
- * Projects 03–06 as a hairline index inside the Work plate: number, title
- * and period, one-line summary, tools. No cards, no pinned scroll — the row
- * language is the same as the Experience list so it scans in seconds.
+ * The remaining builds as a hairline index inside the Work plate: number,
+ * title and period, one-line summary, tools. No cards, no pinned scroll —
+ * the row language is the same as the Experience list so it scans in
+ * seconds. Numbering continues from the selected case studies.
  */
-export default function MoreBuilds({ projects }: { projects: Project[] }) {
+export default function MoreBuilds({ projects, startAt }: { projects: Project[]; startAt: number }) {
+  const first = startAt;
+  const last = startAt + projects.length - 1;
+
   return (
     <div className="mt-4 border-t border-border-on-ink pt-10">
       <div className="mb-2 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="section-kicker">More builds</p>
-          <h3 className="mt-2 font-serif text-2xl font-bold text-paper-on-ink sm:text-3xl">03 — 06</h3>
+          <h3 className="mt-2 font-serif text-2xl font-bold text-paper-on-ink sm:text-3xl">
+            {pad(first)}–{pad(last)}
+          </h3>
         </div>
       </div>
 
@@ -26,10 +35,10 @@ export default function MoreBuilds({ projects }: { projects: Project[] }) {
         {projects.map((project, index) => (
           <li
             key={project.id}
-            className="group grid items-baseline gap-x-6 gap-y-3 border-b border-border-on-ink py-7 transition-[padding-left] duration-300 ease-(--ease-out-quint) md:grid-cols-[3rem_minmax(0,5fr)_minmax(0,6fr)_auto] md:hover:pl-3"
+            className="grid items-baseline gap-x-6 gap-y-3 border-b border-border-on-ink py-7 md:grid-cols-[3rem_minmax(0,5fr)_minmax(0,6fr)_auto]"
           >
             <span className="mono-meta text-green-bright" aria-hidden="true">
-              {String(index + 3).padStart(2, '0')}
+              {pad(first + index)}
             </span>
             <div>
               <h4 className="font-serif text-xl font-bold leading-tight text-paper-on-ink">{project.title}</h4>

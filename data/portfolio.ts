@@ -32,7 +32,7 @@ export interface Experience {
 export interface Project {
   id: string;
   title: string;
-  type: 'freelance' | 'professional' | 'startup' | 'academic';
+  type: 'contract' | 'freelance' | 'professional' | 'startup' | 'academic';
   period: string;
   startDate: string;
   endDate: string;
@@ -96,6 +96,8 @@ export interface PersonalInfo {
   email: string;
   phone: string;
   location: string;
+  /** Working timezone, shown next to the location for remote hiring. */
+  timezone: string;
   bio: string;
   roles: string[];
   availability: {
@@ -134,6 +136,7 @@ export const portfolioData: PortfolioData = {
     email: 'jonwayne.cabusbusan@gmail.com',
     phone: '+63 945 289 7584',
     location: 'Iloilo, Philippines',
+    timezone: 'GMT+8',
     bio: 'Full-stack web developer experienced in delivering production-oriented applications across responsive React interfaces, REST APIs, relational and NoSQL databases, authentication, authorization, business workflows, automated testing, and cloud deployment. Strong in TypeScript, Next.js, React, Node.js, PostgreSQL, Drizzle ORM, Prisma, Firebase, and Supabase, with hands-on experience in shared validation contracts, RBAC, secure file handling, real-time collaboration, accessibility, and containerized development.',
     roles: [
       'Full-Stack Web Developer',
@@ -145,22 +148,23 @@ export const portfolioData: PortfolioData = {
     },
   },
 
+  // Four figures from the CV, not four adjectives.
   proofPoints: [
     {
-      value: 'End-to-end ownership',
-      label: 'Interface, APIs, data, authentication, testing, and deployment in one delivery loop',
+      value: '42 merged PRs',
+      label: 'Across three production codebases at Trackbill: API, web, and mobile',
     },
     {
-      value: 'Reliable delivery',
-      label: 'Accessible flows, secure defaults, and release-ready checks built into the work',
+      value: '83 test files',
+      label: 'Authored for OKRa across API routes, database, auth, UI, and end-to-end flows',
     },
     {
-      value: 'Shipped in context',
-      label: 'Client work, product teams, startups, and academic partnerships',
+      value: 'Lighthouse 100',
+      label: 'Accessibility on all 12 Reisky routes, mobile and desktop, in a 55-test suite',
     },
     {
-      value: 'Production-minded',
-      label: 'Type-safe systems designed to remain understandable after launch',
+      value: '7 roles, 2024 – 2026',
+      label: 'Contract, freelance, product-team, startup, and academic client work',
     },
   ],
 
@@ -337,6 +341,30 @@ export const portfolioData: PortfolioData = {
   // PROJECTS
   // ---------------------------------------------------------------------------
   projects: [
+    {
+      id: 'trackbill',
+      title: 'Trackbill — Receipts, Security, and Reporting across Web and Mobile',
+      type: 'contract',
+      period: 'Jul 2026 - Sep 2026',
+      startDate: '2026-07',
+      endDate: '2026-09',
+      description: 'Contract product engineering for Inertia across the Trackbill API, web app, and Expo/React Native mobile apps.',
+      homepageSummary: 'API-key security lifecycle, unified receipt routing across backend, web, and native, and receipt/admin workflow improvements across three production codebases.',
+      homepageOutcome: '42 merged PRs with test changes across server, client, and mobile layers.',
+      context: 'Product engineering across Node/Express/Prisma services, Next.js/React web workflows, and Expo/React Native mobile features for security, receipts, reporting, analytics, admin tooling, and mobile parity.',
+      responsibility: 'Delivered full-stack product slices end-to-end: Prisma schema and migrations, Express controllers and routes, OpenAPI, web settings UX, and native app features.',
+      outcomes: [
+        'Built an API-key security lifecycle spanning schema, routes, OpenAPI, redaction/error utilities, tests, and settings UX.',
+        'Delivered unified incoming-receipt routing across backend, web, and native with transactional folder-resolution locking and rollback behavior.',
+        'Improved receipt and admin workflows: inline editing, bulk category updates, duplicate-scan semantics, pagination, MRR reporting, and seat editing.',
+      ],
+      achievements: [
+        'Built an API-key security lifecycle spanning Prisma schema/migrations, Express controllers/routes, OpenAPI, redaction/error utilities, tests, and web settings UX.',
+        'Delivered unified incoming-receipt routing across backend, web, and native app layers with shared preferences, transactional folder-resolution locking, rollback behavior, localization, and tests.',
+        'Contributed across three production codebases with 42 merged author-filtered PR records and test changes across server, client, and mobile layers.',
+      ],
+      technologies: ['Node.js', 'Express.js', 'Prisma ORM', 'Next.js', 'Expo', 'React Native', 'OpenAPI'],
+    },
     {
       id: 'reisky',
       title: 'Reisky — Filipino Martial Arts Studio Platform',

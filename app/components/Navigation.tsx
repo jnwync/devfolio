@@ -279,6 +279,8 @@ export default function Navigation() {
               <a
                 href="/cv.pdf"
                 download
+                title="Download resume (PDF)"
+                aria-label="Download resume (PDF)"
                 className="nav-resume inline-flex min-h-10 items-center rounded-lg px-4 text-sm font-bold"
               >
                 Resume
@@ -334,7 +336,7 @@ export default function Navigation() {
                     download
                     className="flex min-h-12 items-center rounded-md px-3 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary/70 hover:text-foreground"
                   >
-                    Resume
+                    Resume (PDF)
                   </a>
                 </div>
               </motion.div>

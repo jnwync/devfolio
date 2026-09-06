@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 import Wordmark from './Wordmark';
 import type { CaseStudy } from '@/data/caseStudies';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 interface CaseStudyLayoutProps {
@@ -10,6 +10,11 @@ interface CaseStudyLayoutProps {
   email: string;
 }
 
+/**
+ * Case-study page in the same vocabulary as the home page: the field behind,
+ * hairline sections, chip-pill tags, and the same header controls (Resume,
+ * theme toggle) so it never feels like a different product.
+ */
 export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutProps) {
   const metricsGrid = caseStudy.metrics.length > 3
     ? 'grid-cols-2 md:grid-cols-3'
@@ -17,23 +22,36 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md">
+      <header className="site-nav sticky top-0 z-50 border-b border-transparent">
         <div className="section-shell">
           <nav aria-label="Case study" className="flex min-h-16 items-center justify-between gap-4">
             <Link
               href="/"
-              className="inline-flex min-h-11 items-center rounded-md pr-3 text-xl text-foreground transition-colors hover:text-primary"
+              className="nav-wordmark inline-flex min-h-11 items-center rounded-md pr-3 text-xl"
               aria-label="Jon Wayne Cabusbusan — Home"
             >
               <Wordmark />
             </Link>
-            <Link
-              href="/#projects"
-              className="inline-flex min-h-11 items-center gap-2 rounded-md pl-3 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary"
-            >
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Selected work
-            </Link>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link
+                href="/#projects"
+                className="nav-link inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-xs font-bold uppercase tracking-[0.16em]"
+              >
+                <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                <span className="hidden sm:inline">Selected work</span>
+                <span className="sm:hidden">Work</span>
+              </Link>
+              <a
+                href="/cv.pdf"
+                download
+                title="Download resume (PDF)"
+                aria-label="Download resume (PDF)"
+                className="nav-resume hidden min-h-10 items-center rounded-lg px-4 text-sm font-bold sm:inline-flex"
+              >
+                Resume
+              </a>
+              <ThemeToggle className="h-11 w-11" />
+            </div>
           </nav>
         </div>
       </header>
@@ -99,10 +117,10 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
         <section className="editorial-rule py-10 md:py-12" aria-label="Technology stack">
           <div className="section-shell">
             <p className="section-kicker mb-4">Stack</p>
-            <ul className="flex flex-wrap gap-2" role="list">
+            <ul className="flex flex-wrap gap-1.5" role="list">
               {caseStudy.stack.map((tech) => (
-                <li key={tech}>
-                  <Badge variant="secondary">{tech}</Badge>
+                <li key={tech} className="chip-pill">
+                  {tech}
                 </li>
               ))}
             </ul>

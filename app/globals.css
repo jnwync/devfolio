@@ -233,12 +233,13 @@
   transition: background-color 0.4s ease;
 }
 
-/* Procedural film grain: one tiled feTurbulence texture, fixed and inert.
-   Off below 768px — a full-screen compositing layer is not worth it there. */
+/* Procedural film grain: one tiled feTurbulence texture, fixed and inert. It
+   sits on the field, under the content, so type is never textured. Off
+   below 768px — a full-screen compositing layer is not worth it there. */
 .grain {
   position: fixed;
   inset: 0;
-  z-index: 40;
+  z-index: -1;
   pointer-events: none;
   opacity: var(--grain-alpha);
   background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -327,7 +328,7 @@
   display: inline-flex;
   align-items: center;
   font-family: var(--font-mono), monospace;
-  font-size: 0.62rem;
+  font-size: 0.66rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   line-height: 1;
@@ -396,7 +397,7 @@
 
 .mono-micro {
   font-family: var(--font-mono), monospace;
-  font-size: 0.62rem;
+  font-size: 0.66rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   line-height: 1.5;
@@ -738,15 +739,27 @@ html[data-js] .stack-item {
 
 .stack-label {
   font-family: var(--font-mono), monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   line-height: 1.4;
   text-align: center;
   color: var(--muted-foreground);
 }
 
+/* Phones: four per row, last row centred so nothing is orphaned left. */
 @media (max-width: 639px) {
+  .stack-field {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.75rem 0;
+  }
+
+  .stack-item {
+    flex: 0 0 25%;
+  }
+
   .stack-glyph {
     width: 2.75rem;
     height: 2.75rem;
@@ -755,6 +768,65 @@ html[data-js] .stack-item {
   .stack-glyph svg {
     width: 1.5rem;
     height: 1.5rem;
+  }
+}
+
+/* ---------- experience rows (native disclosure) ---------- */
+
+.exp-row > summary {
+  position: relative;
+  list-style: none;
+}
+
+.exp-row > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A plus that turns into a minus — the only affordance the row needs. */
+.exp-toggle {
+  position: absolute;
+  top: 1.85rem;
+  right: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--primary);
+}
+
+.exp-toggle::before,
+.exp-toggle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: currentColor;
+  transition: transform 0.3s var(--ease-out-quint);
+}
+
+.exp-toggle::before {
+  width: 1rem;
+  height: 1px;
+  transform: translate(-50%, -50%);
+}
+
+.exp-toggle::after {
+  width: 1px;
+  height: 1rem;
+  transform: translate(-50%, -50%);
+}
+
+.exp-row[open] .exp-toggle::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.exp-row[open] > summary {
+  padding-bottom: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .exp-toggle {
+    position: static;
+    justify-self: end;
+    align-self: center;
   }
 }
 
@@ -1071,5 +1143,54 @@ html:not([data-js]) .theme-toggle {
 
   .section-kicker {
     letter-spacing: 0.13em;
+  }
+}
+
+/* ---------- print: a plain, complete resume page ---------- */
+
+@media print {
+  :root {
+    color-scheme: light;
+  }
+
+  .atmosphere,
+  .grain,
+  .intro,
+  .site-nav,
+  .theme-toggle,
+  .exp-toggle {
+    display: none !important;
+  }
+
+  .dark-scene,
+  .dark-scene--cover {
+    background: none;
+    color: var(--foreground);
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .rv,
+  html[data-js] .rv,
+  .stack-item,
+  .stack-glyph {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .exp-row {
+    break-inside: avoid;
+  }
+
+  /* Print every experience expanded where the browser supports it. */
+  .exp-row::details-content {
+    content-visibility: visible;
+    display: block;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: var(--muted-foreground);
   }
 }

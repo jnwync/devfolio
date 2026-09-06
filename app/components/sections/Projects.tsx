@@ -6,11 +6,14 @@ import { Button } from '@/components/ui/button';
 import MoreBuilds from './MoreBuilds';
 
 const typeLabels: Record<string, string> = {
+  contract: 'Contract · Product engineering',
   freelance: 'Freelance · International client',
   professional: 'Internship · Product team',
   startup: 'Student-led startup',
   academic: 'Academic client',
 };
+
+const pad = (n: number) => String(n).padStart(2, '0');
 
 function SelectedProject({
   project,
@@ -157,6 +160,7 @@ function OkraBoard() {
 export default function Projects() {
   const selected = portfolioData.projects.filter((project) => project.caseStudyPath);
   const more = portfolioData.projects.filter((project) => !project.caseStudyPath);
+  const total = portfolioData.projects.length;
 
   return (
     <section
@@ -167,13 +171,13 @@ export default function Projects() {
       <div className="section-shell">
         <header className="rv sec-head">
           <div>
-            <p className="section-kicker">01 — Selected work</p>
+            <p className="section-kicker">01 · Selected work</p>
             <h2 id="projects-heading" className="sec-title text-paper-on-ink">
               Work that shipped.
             </h2>
           </div>
           <p className="sec-count" aria-hidden="true">
-            01 — 06
+            {pad(1)}–{pad(total)}
           </p>
         </header>
 
@@ -185,7 +189,7 @@ export default function Projects() {
                 alt={`Screenshot of ${selected[0].title}`}
                 width={1200}
                 height={675}
-                className="h-auto w-full scale-[1.01] object-cover transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.05]"
+                className="h-auto w-full object-cover"
                 sizes="(max-width: 768px) 100vw, 560px"
               />
             </div>
@@ -198,7 +202,7 @@ export default function Projects() {
           </BrowserFrame>
         </SelectedProject>
 
-        <MoreBuilds projects={more} />
+        <MoreBuilds projects={more} startAt={selected.length + 1} />
       </div>
     </section>
   );

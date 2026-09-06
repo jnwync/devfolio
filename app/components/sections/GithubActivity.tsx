@@ -89,7 +89,7 @@ export default async function GithubActivity() {
       <div className="section-shell">
         <header className="rv sec-head">
           <div>
-            <p className="section-kicker">04 — Proof of work</p>
+            <p className="section-kicker">04 · Proof of work</p>
             <h2 id="github-activity-heading" className="sec-title">
               Public activity.
             </h2>

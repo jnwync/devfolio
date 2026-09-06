@@ -7,9 +7,10 @@ import { portfolioData } from '@/data/portfolio';
 
 /**
  * Full-height opening scene, transparent to the field behind it: the type
- * sits flat and sharp while the atmosphere drifts slowly underneath.
- * Entrance staggering is pure CSS keyed on html[data-intro], so the hero
- * needs no client JS of its own.
+ * sits flat and sharp while the atmosphere drifts slowly underneath. The
+ * eyebrow carries the three facts a remote recruiter scans for first: name,
+ * where, and what kind of work. Entrance staggering is pure CSS keyed on
+ * html[data-intro], so the hero needs no client JS of its own.
  */
 export default function Hero() {
   const { personal, proofPoints } = portfolioData;
@@ -26,20 +27,21 @@ export default function Hero() {
       <div className="relative flex min-h-[calc(100svh-4.5rem)] flex-col">
         <div className="section-shell relative flex flex-1 flex-col justify-center py-10 sm:py-12">
           <div className="hero-st hero-st-1 mb-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-border pb-5">
-            <span className="mono-meta text-foreground">
-              {personal.name} — {personal.location}
-            </span>
+            <p className="mono-meta text-foreground">
+              {personal.name}
+              <span className="text-muted-foreground"> · Remote web + mobile · {personal.location} · {personal.timezone}</span>
+            </p>
             <span className="avail-chip">
               <span className="dot" aria-hidden="true" />
               {personal.availability.message}
             </span>
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+          <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center xl:grid-cols-[1.3fr_0.7fr]">
             <div className="max-w-3xl">
               <h1
                 id="hero-heading"
-                className="hero-st hero-st-2 font-serif text-[clamp(2.4rem,1.5rem+4.6vw,4.75rem)] font-bold leading-[1.02] text-foreground"
+                className="hero-st hero-st-2 font-serif text-[clamp(2.4rem,1.4rem+4.2vw,4.25rem)] font-bold leading-[1.02] text-foreground"
               >
                 {headline}
                 {hasShip && (
@@ -106,7 +108,7 @@ export default function Hero() {
                 key={point.value}
                 className={`pr-5 md:border-l md:border-border md:px-5 ${index === 0 ? 'md:border-l-0 md:pl-0' : ''} ${index === 3 ? 'md:pr-0' : ''}`}
               >
-                <dt className="font-serif text-[0.95rem] font-bold leading-snug text-foreground">
+                <dt className="font-serif text-[1.05rem] font-bold leading-snug text-foreground">
                   {point.value}
                 </dt>
                 <dd className="mt-1.5 text-[0.8rem] leading-5 text-muted-foreground">{point.label}</dd>

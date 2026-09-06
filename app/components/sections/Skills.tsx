@@ -18,7 +18,7 @@ export default function Skills() {
       <div className="section-shell">
         <header className="rv sec-head">
           <div>
-            <p className="section-kicker">03 — Capabilities</p>
+            <p className="section-kicker">03 · Capabilities</p>
             <h2 id="skills-heading" className="sec-title">
               What I cover.
             </h2>
@@ -53,7 +53,7 @@ export default function Skills() {
         </div>
 
         <p className="toolbox-line rv mt-8 max-w-4xl">
-          <span className="font-bold text-foreground">Toolbox — </span>
+          <span className="font-bold text-foreground">Toolbox · </span>
           {toolbox.join(' · ')}
         </p>
 
