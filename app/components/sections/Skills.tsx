@@ -39,7 +39,7 @@ export default function Skills() {
               </h3>
               <div className="text-sm leading-6 text-muted-foreground">
                 {group.summary}
-                <em className="mt-2 block text-[0.78rem] not-italic text-foreground/45">{group.evidence}</em>
+                <em className="mt-2 block text-[0.78rem] not-italic text-muted-foreground">{group.evidence}</em>
               </div>
               <ul className="flex flex-wrap gap-1.5 md:justify-end" role="list" aria-label={`${group.title} tools`}>
                 {group.skills.map((skill) => (

@@ -111,7 +111,7 @@ export default function Contact() {
                 href={github?.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-underline inline-flex items-center gap-2 text-sm font-bold text-paper-on-ink"
+                className="link-underline inline-flex min-h-6 items-center gap-2 text-sm font-bold text-paper-on-ink"
               >
                 <FaGithub className="h-4 w-4" aria-hidden="true" />
                 jnwync
@@ -125,7 +125,7 @@ export default function Contact() {
                 href={linkedin?.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-underline inline-flex items-center gap-2 text-sm font-bold text-paper-on-ink"
+                className="link-underline inline-flex min-h-6 items-center gap-2 text-sm font-bold text-paper-on-ink"
               >
                 <FaLinkedin className="h-4 w-4" aria-hidden="true" />
                 in/jnwync
@@ -135,7 +135,7 @@ export default function Contact() {
           <div>
             <dt className="mono-meta text-muted-on-ink">Phone</dt>
             <dd className="mt-2">
-              <a href={phone?.href} className="link-underline text-sm font-bold text-paper-on-ink">
+              <a href={phone?.href} className="link-underline inline-flex min-h-6 items-center text-sm font-bold text-paper-on-ink">
                 {personal.phone}
               </a>
             </dd>

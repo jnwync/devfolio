@@ -1049,12 +1049,15 @@ html:not([data-js]) .theme-toggle {
     opacity: 1;
   }
 
-  .rv {
+  /* Reveals never hide content when motion is off — not even off-screen. */
+  .rv,
+  html[data-js] .rv {
     opacity: 1;
     transform: none;
   }
 
-  .stack-item {
+  .stack-item,
+  .stack-glyph {
     transform: none !important;
     opacity: 1 !important;
     will-change: auto;

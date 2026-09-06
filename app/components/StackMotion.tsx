@@ -65,6 +65,9 @@ export default function StackMotion() {
 
     const compact = window.matchMedia('(max-width: 767px)');
     const seeds = items.map((_, i) => seedFor(i));
+    // Only the decorative glyph fades with distance; the label stays at full
+    // contrast so the row is readable at every point of the settle.
+    const glyphs = items.map((el) => el.querySelector<HTMLElement>('.stack-glyph'));
 
     // Each item's offset from the field's perspective origin, measured with
     // transforms cleared so the numbers describe layout, not the current pose.
@@ -117,7 +120,8 @@ export default function StackMotion() {
           const tx = (-o.dx * z) / perspective;
           const ty = (-o.dy * z) / perspective + s.y * k;
           el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, ${z.toFixed(1)}px) rotateY(${ry.toFixed(2)}deg)`;
-          el.style.opacity = (0.6 + 0.4 * e).toFixed(3);
+          const glyph = glyphs[i];
+          if (glyph) glyph.style.opacity = (0.55 + 0.45 * e).toFixed(3);
         });
       }
 
@@ -146,9 +150,10 @@ export default function StackMotion() {
       window.removeEventListener('scroll', wake);
       window.removeEventListener('resize', onResize);
       if (raf) cancelAnimationFrame(raf);
-      items.forEach((el) => {
+      items.forEach((el, i) => {
         el.style.transform = '';
-        el.style.opacity = '';
+        const glyph = glyphs[i];
+        if (glyph) glyph.style.opacity = '';
       });
     };
   }, []);
