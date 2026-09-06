@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 import Wordmark from './Wordmark';
 
 const links = [
@@ -282,18 +283,22 @@ export default function Navigation() {
               >
                 Resume
               </a>
+              <ThemeToggle className="h-11 w-11" />
             </div>
 
-            <button
-              type="button"
-              onClick={() => setIsOpen((value) => !value)}
-              className="nav-menu-btn inline-flex h-12 w-12 items-center justify-center rounded-md border border-border text-foreground transition-colors hover:border-primary hover:text-primary md:hidden"
-              aria-label={isOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={isOpen}
-              aria-controls="mobile-menu"
-            >
-              {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
-            </button>
+            <div className="flex items-center gap-2 md:hidden">
+              <ThemeToggle className="h-12 w-12" />
+              <button
+                type="button"
+                onClick={() => setIsOpen((value) => !value)}
+                className="nav-menu-btn inline-flex h-12 w-12 items-center justify-center rounded-md border border-border text-foreground transition-colors hover:border-primary hover:text-primary"
+                aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isOpen}
+                aria-controls="mobile-menu"
+              >
+                {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+              </button>
+            </div>
           </div>
 
           <AnimatePresence>

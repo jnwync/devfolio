@@ -33,7 +33,7 @@ export default function Intro() {
       // Private mode: the intro simply plays again next time.
     }
 
-    // Wait for the sweep + dot pop, then morph and reveal.
+    // Wait for the sweep + dot pop (0.7s), then morph and reveal on top of a live page.
     timers.push(
       window.setTimeout(() => {
         const mark = rootRef.current?.querySelector<HTMLElement>('.intro-mark');
@@ -54,15 +54,15 @@ export default function Intro() {
                 { transform: 'translate(0, 0) scale(1)' },
                 { transform: `translate(${dx}px, ${dy}px) scale(${scale})` },
               ],
-              { duration: 700, easing: 'cubic-bezier(0.76, 0, 0.24, 1)', fill: 'forwards' }
+              { duration: 450, easing: 'cubic-bezier(0.76, 0, 0.24, 1)', fill: 'forwards' }
             );
           } catch {
             // Older browsers: the curtains still open; just remove the overlay.
           }
         }
 
-        timers.push(window.setTimeout(finish, 950));
-      }, 1450)
+        timers.push(window.setTimeout(finish, 600));
+      }, 700)
     );
 
     return () => timers.forEach((t) => window.clearTimeout(t));

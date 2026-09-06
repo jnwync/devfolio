@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Hanken_Grotesk, Fragment_Mono } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
+import Atmosphere from "./components/Atmosphere";
 import ScrollProgress from "./components/ScrollProgress";
 import { ViewTransitionSettler } from "./components/TransitionLink";
 
@@ -30,6 +31,14 @@ const monoFont = Fragment_Mono({
   display: "swap",
   preload: false,
 });
+
+export const viewport: Viewport = {
+  colorScheme: "dark light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f6ee" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d1310" },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -103,22 +112,27 @@ const structuredData = {
   ],
 };
 
+/**
+ * Runs before first paint. Resolves the theme (stored choice → OS preference
+ * → dark), flags JS as available for the reveal helpers, and arms the
+ * sub-second intro once per session when motion is allowed.
+ */
+const bootScript =
+  "(function(){var d=document.documentElement;d.dataset.js='1';var t=null;try{t=localStorage.getItem('jnwync-theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}d.dataset.theme=t;try{if(!sessionStorage.getItem('jnwync-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.dataset.intro='play'}}catch(e){}})();";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} antialiased`}
       >
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "document.documentElement.dataset.js='1';try{if(!sessionStorage.getItem('jnwync-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.dataset.intro='play'}}catch(e){}",
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        <Atmosphere />
+        <div className="grain" aria-hidden="true" />
         <MotionConfig reducedMotion="user">
           <ScrollProgress />
           <ViewTransitionSettler />

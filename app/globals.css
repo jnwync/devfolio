@@ -2,62 +2,105 @@
 @import "tw-animate-css";
 
 /*
-  jnwync. design system v2
-  One green family on warm, green-tinted paper. The wordmark's dot is the
-  origin of every accent on the page. Two dark "scenes" (Selected Work,
-  Contact) use the ink tokens; everything between stays on paper.
+  jnwync. design system v3 — quiet depth
+  One green family, two weathers. Every colour token is written once with
+  light-dark(); the theme is a single `color-scheme` switch driven by
+  html[data-theme] (set before first paint by the layout script) or, without
+  JavaScript, by prefers-color-scheme. Dark is the default weather: a deep
+  green-black void with a slow starfield behind near-static content. Light is
+  the same site at noon: warm paper, soft bokeh, a horizon band. Type stays
+  flat and sharp in both — the contrast between crisp type and the soft
+  dimensional field is the whole effect.
 */
 
 :root {
-  /* paper surfaces */
-  --background: oklch(0.968 0.012 120);
-  --foreground: oklch(0.225 0.028 155);
-  --card: oklch(0.985 0.008 120);
-  --card-foreground: oklch(0.225 0.028 155);
-  --popover: oklch(0.985 0.008 120);
-  --popover-foreground: oklch(0.225 0.028 155);
+  color-scheme: dark;
 
-  /* the green family */
-  --primary: oklch(0.40 0.1 152);
-  --primary-foreground: oklch(0.975 0.01 120);
-  --accent: oklch(0.46 0.115 151);
-  --accent-foreground: oklch(0.975 0.01 120);
+  /* depth ladder: void (page) → plate (scenes) → raised (frames, cards) */
+  --bg-void: light-dark(oklch(0.972 0.011 108), oklch(0.165 0.012 165));
+  --bg-plate: light-dark(oklch(0.935 0.018 126), oklch(0.205 0.013 162));
+  --bg-raised: light-dark(oklch(0.988 0.007 108), oklch(0.245 0.014 160));
 
-  --secondary: oklch(0.928 0.022 128);
-  --secondary-foreground: oklch(0.26 0.035 152);
-  --muted: oklch(0.928 0.016 124);
-  --muted-foreground: oklch(0.44 0.032 148);
+  --background: var(--bg-void);
+  --foreground: light-dark(oklch(0.225 0.028 155), oklch(0.945 0.009 110));
+  --card: var(--bg-raised);
+  --card-foreground: var(--foreground);
+  --popover: var(--bg-raised);
+  --popover-foreground: var(--foreground);
 
-  --destructive: oklch(0.55 0.19 28);
-  --destructive-foreground: oklch(0.985 0.014 120);
-  --success: oklch(0.48 0.11 150);
-  --success-foreground: oklch(0.985 0.014 120);
-  --warning: oklch(0.68 0.13 72);
+  /* the green family — the wordmark's dot is the origin of every accent */
+  --primary: light-dark(oklch(0.40 0.1 152), oklch(0.78 0.13 152));
+  --primary-foreground: light-dark(oklch(0.975 0.01 120), oklch(0.15 0.02 160));
+  --accent: light-dark(oklch(0.46 0.115 151), oklch(0.80 0.12 152));
+  --accent-foreground: light-dark(oklch(0.975 0.01 120), oklch(0.15 0.02 160));
+
+  --secondary: light-dark(oklch(0.928 0.022 128), oklch(0.235 0.014 160));
+  --secondary-foreground: light-dark(oklch(0.26 0.035 152), oklch(0.93 0.01 110));
+  --muted: light-dark(oklch(0.928 0.016 124), oklch(0.225 0.012 160));
+  --muted-foreground: light-dark(oklch(0.43 0.032 148), oklch(0.73 0.02 140));
+
+  --destructive: light-dark(oklch(0.55 0.19 28), oklch(0.72 0.17 28));
+  --destructive-foreground: light-dark(oklch(0.985 0.014 120), oklch(0.15 0.02 30));
+  --success: light-dark(oklch(0.48 0.11 150), oklch(0.78 0.13 152));
+  --success-foreground: light-dark(oklch(0.985 0.014 120), oklch(0.15 0.02 160));
+  --warning: light-dark(oklch(0.68 0.13 72), oklch(0.80 0.14 78));
   --warning-foreground: oklch(0.225 0.028 155);
-  --info: oklch(0.47 0.09 225);
-  --info-foreground: oklch(0.985 0.014 120);
+  --info: light-dark(oklch(0.47 0.09 225), oklch(0.75 0.1 225));
+  --info-foreground: light-dark(oklch(0.985 0.014 120), oklch(0.15 0.02 225));
 
-  --border: oklch(0.862 0.024 130);
-  --input: oklch(0.955 0.014 122);
-  --ring: oklch(0.46 0.11 150);
+  --border: light-dark(oklch(0.862 0.024 130), oklch(0.945 0.009 110 / 0.14));
+  --input: light-dark(oklch(0.955 0.014 122), oklch(0.23 0.012 160));
+  --ring: light-dark(oklch(0.46 0.11 150), oklch(0.78 0.13 152));
 
-  /* dark scene tokens */
-  --ink: oklch(0.225 0.022 158);
-  --ink-soft: oklch(0.268 0.024 156);
-  --paper-on-ink: oklch(0.955 0.012 120);
-  --muted-on-ink: oklch(0.71 0.028 145);
-  --border-on-ink: oklch(0.955 0.012 120 / 0.15);
-  --green-bright: oklch(0.80 0.112 152);
+  /* scene (plate) tokens: dark ink in daylight, a lifted surface at night */
+  --ink: light-dark(oklch(0.225 0.022 158), oklch(0.205 0.013 162));
+  --ink-soft: light-dark(oklch(0.268 0.024 156), oklch(0.245 0.014 160));
+  --paper-on-ink: light-dark(oklch(0.955 0.012 120), oklch(0.945 0.009 110));
+  --muted-on-ink: light-dark(oklch(0.71 0.028 145), oklch(0.73 0.02 140));
+  --border-on-ink: light-dark(oklch(0.955 0.012 120 / 0.15), oklch(0.945 0.009 110 / 0.14));
+  --green-bright: light-dark(oklch(0.80 0.112 152), oklch(0.78 0.13 152));
+
+  /* translucent surfaces */
+  --chip-bg: light-dark(oklch(1 0 0 / 0.45), oklch(1 0 0 / 0.05));
+  --shadow-ink: light-dark(oklch(0.24 0.03 150 / 0.08), oklch(0.05 0.01 160 / 0.4));
+  --shadow-ink-strong: light-dark(oklch(0.2 0.02 155 / 0.35), oklch(0.03 0.01 160 / 0.7));
 
   --radius: 0.5rem;
-  --shadow-soft: 0 2px 8px oklch(0.24 0.03 150 / 0.08);
-  --shadow-lift: 0 4px 12px oklch(0.24 0.03 150 / 0.1);
-  --shadow-press: 0 2px 8px oklch(0.24 0.03 150 / 0.08);
-  --shadow-scene: 0 -24px 64px oklch(0.2 0.02 155 / 0.35);
-  --border-hover: oklch(0.40 0.1 152 / 0.4);
+  --shadow-soft: 0 2px 8px var(--shadow-ink);
+  --shadow-lift: 0 4px 12px var(--shadow-ink);
+  --shadow-press: 0 2px 8px var(--shadow-ink);
+  --shadow-scene: 0 -24px 64px var(--shadow-ink-strong);
+  --border-hover: light-dark(oklch(0.40 0.1 152 / 0.4), oklch(0.78 0.13 152 / 0.5));
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-scene: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* weather (non-colour tokens, dark defaults) */
+  --grain-alpha: 0.07;
+  --atmo-bg:
+    radial-gradient(70% 60% at 18% 12%, oklch(0.3 0.04 160 / 0.6), transparent 70%),
+    radial-gradient(45% 40% at 86% 72%, oklch(0.25 0.03 165 / 0.55), transparent 70%);
+}
+
+/* Light weather: warm paper, a horizon band, two soft layered shapes. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --grain-alpha: 0.04;
+  --atmo-bg:
+    radial-gradient(55% 48% at 84% 8%, oklch(0.97 0.035 92 / 0.85), transparent 70%),
+    radial-gradient(50% 44% at 8% 88%, oklch(0.91 0.035 140 / 0.7), transparent 70%),
+    linear-gradient(180deg, transparent 50%, oklch(1 0 0 / 0.55) 62%, transparent 76%);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --grain-alpha: 0.04;
+    --atmo-bg:
+      radial-gradient(55% 48% at 84% 8%, oklch(0.97 0.035 92 / 0.85), transparent 70%),
+      radial-gradient(50% 44% at 8% 88%, oklch(0.91 0.035 140 / 0.7), transparent 70%),
+      linear-gradient(180deg, transparent 50%, oklch(1 0 0 / 0.55) 62%, transparent 76%);
+  }
 }
 
 @theme inline {
@@ -95,6 +138,8 @@
   --color-muted-on-ink: var(--muted-on-ink);
   --color-border-on-ink: var(--border-on-ink);
   --color-green-bright: var(--green-bright);
+  --color-plate: var(--bg-plate);
+  --color-raised: var(--bg-raised);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -107,7 +152,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     scroll-padding-top: 5rem;
     text-size-adjust: 100%;
   }
@@ -139,6 +183,43 @@
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 3px;
+  }
+}
+
+/* ---------- the field (background layers) ---------- */
+
+/* Fixed canvas behind the page. The CSS background is the static
+   atmosphere (nebula at night, horizon + soft shapes by day) and renders
+   with no JavaScript at all; the canvas paints the particle layers on top
+   and moves them at 10–20% of scroll distance. */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  pointer-events: none;
+  background: var(--atmo-bg);
+  background-color: var(--background);
+  transition: background-color 0.4s ease;
+}
+
+/* Procedural film grain: one tiled feTurbulence texture, fixed and inert.
+   Off below 768px — a full-screen compositing layer is not worth it there. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: var(--grain-alpha);
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+@media (max-width: 767px) {
+  .grain {
+    display: none;
   }
 }
 
@@ -226,7 +307,7 @@
   border-radius: 0.3rem;
   padding: 0.42rem 0.6rem;
   color: var(--foreground);
-  background: oklch(1 0 0 / 0.45);
+  background: var(--chip-bg);
 }
 
 .dark-scene .chip-pill {
@@ -248,7 +329,7 @@
   border-radius: 999px;
   padding: 0.55rem 0.95rem;
   color: var(--foreground);
-  background: oklch(1 0 0 / 0.45);
+  background: var(--chip-bg);
 }
 
 .dark-scene .avail-chip {
@@ -271,10 +352,10 @@
 
 @keyframes avail-pulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 oklch(0.48 0.11 150 / 0.35);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--success) 35%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 6px oklch(0.48 0.11 150 / 0);
+    box-shadow: 0 0 0 6px color-mix(in oklab, var(--success) 0%, transparent);
   }
 }
 
@@ -323,9 +404,10 @@
   color: var(--green-bright);
 }
 
-/* ---------- intro (branded load) ---------- */
+/* ---------- intro (branded load, under one second) ---------- */
 /* Driven by html[data-intro]: absent = static page (no JS, repeat visit, or
-   reduced motion), "play" = overlay runs, "done" = hero staggers in. */
+   reduced motion), "play" = overlay runs, "done" = hero staggers in. The
+   overlay blocks for 0.7s at most; the curtains open on top of a live page. */
 
 .intro {
   position: fixed;
@@ -345,7 +427,7 @@ html[data-intro="play"] .intro {
   width: 100%;
   height: 50.5%;
   background: var(--background);
-  transition: transform 0.85s var(--ease-scene);
+  transition: transform 0.55s var(--ease-scene);
 }
 
 .intro-panel--top {
@@ -381,12 +463,12 @@ html[data-intro="play"] .intro {
   text-transform: uppercase;
   color: var(--muted-foreground);
   opacity: 0;
-  animation: intro-fade-up 0.7s ease 0.15s forwards;
+  animation: intro-fade-up 0.4s ease 0.05s forwards;
 }
 
 .intro.intro--open .intro-name {
   opacity: 0 !important;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.15s ease;
 }
 
 .intro-mark {
@@ -400,14 +482,14 @@ html[data-intro="play"] .intro {
     90deg,
     var(--foreground) 0%,
     var(--foreground) 50%,
-    oklch(0.225 0.028 155 / 0.16) 50.5%,
-    oklch(0.225 0.028 155 / 0.16) 100%
+    color-mix(in oklab, var(--foreground) 16%, transparent) 50.5%,
+    color-mix(in oklab, var(--foreground) 16%, transparent) 100%
   );
   background-size: 205% 100%;
   background-position: 100% 0;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: intro-sweep 1s var(--ease-scene) 0.3s forwards;
+  animation: intro-sweep 0.5s var(--ease-scene) 0.08s forwards;
   transform-origin: 0 0;
   will-change: transform;
 }
@@ -415,7 +497,7 @@ html[data-intro="play"] .intro {
 .intro-mark .il {
   display: inline-block;
   font-variation-settings: "wght" 240;
-  animation: il-settle 0.7s var(--ease-out-quint) forwards;
+  animation: il-settle 0.45s var(--ease-out-quint) forwards;
 }
 
 @keyframes il-settle {
@@ -428,7 +510,7 @@ html[data-intro="play"] .intro {
   color: var(--primary);
   font-variation-settings: "wght" 700;
   opacity: 0;
-  animation: intro-dot 0.4s var(--ease-out-quint) 1.15s forwards;
+  animation: intro-dot 0.3s var(--ease-out-quint) 0.5s forwards;
 }
 
 @keyframes intro-sweep {
@@ -469,7 +551,7 @@ html[data-intro="play"] body {
 }
 
 html[data-intro="done"] .nav-wordmark {
-  animation: intro-fade-in 0.3s ease 0.55s both;
+  animation: intro-fade-in 0.3s ease 0.35s both;
 }
 
 @keyframes intro-fade-in {
@@ -511,12 +593,8 @@ html[data-intro="done"] .hero-st-6 { animation-delay: 0.62s; }
 
 /* ---------- scenes ---------- */
 
-.scene-hero {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
+/* Plates are the only opaque surfaces on the page; everything else is
+   transparent so the field shows through. */
 .dark-scene {
   position: relative;
   z-index: 3;
@@ -527,29 +605,6 @@ html[data-intro="done"] .hero-st-6 { animation-delay: 0.62s; }
 .dark-scene--cover {
   border-radius: 1.75rem 1.75rem 0 0;
   box-shadow: var(--shadow-scene);
-}
-
-.page-above {
-  position: relative;
-  z-index: 2;
-  background: var(--background);
-  box-shadow: 0 24px 48px oklch(0.2 0.02 155 / 0.28);
-}
-
-/* The contact scene pins behind the page for the lift-away reveal — but only
-   where it fully fits the viewport; otherwise it flows normally so nothing
-   is ever clipped behind the pinned edge. */
-.scene-contact {
-  position: static;
-  z-index: 1;
-}
-
-@media (min-width: 768px) and (min-height: 720px) {
-  .scene-contact {
-    position: sticky;
-    bottom: 0;
-    min-height: 100svh;
-  }
 }
 
 /* reveal-on-scroll helper (JS adds .in-view; hidden only when JS is present) */
@@ -570,10 +625,112 @@ html[data-js] .rv.in-view {
 .rv-d2 { transition-delay: 0.16s; }
 .rv-d3 { transition-delay: 0.24s; }
 
+/* ---------- hero ---------- */
+
+.hero-portrait-tag {
+  background: color-mix(in oklab, var(--ink) 72%, transparent);
+  color: var(--paper-on-ink);
+}
+
+/* ---------- the stack (signature moment) ---------- */
+/* Icons sit in loose 3D space and settle flat as the row scrolls into view.
+   Transforms are written by StackMotion; without JS or under reduced motion
+   nothing is written, so the row is simply flat and fully readable. */
+
+.stack-scene {
+  position: relative;
+  padding: clamp(3.5rem, 7vw, 6rem) 0 clamp(4rem, 8vw, 7rem);
+}
+
+.stack-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+  margin-bottom: clamp(2.25rem, 5vw, 3.5rem);
+}
+
+.stack-field {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2rem 0.5rem;
+  perspective: 1100px;
+  perspective-origin: 50% 40%;
+}
+
+@media (min-width: 640px) {
+  .stack-field {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .stack-field {
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    gap: 0;
+  }
+}
+
+.stack-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+html[data-js] .stack-item {
+  will-change: transform, opacity;
+}
+
+.stack-glyph {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  color: var(--foreground);
+  transition: color 0.3s ease;
+}
+
+.stack-glyph svg {
+  width: 1.85rem;
+  height: 1.85rem;
+}
+
+.stack-item:hover .stack-glyph {
+  color: var(--primary);
+}
+
+.stack-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+@media (max-width: 639px) {
+  .stack-glyph {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .stack-glyph svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
 /* ---------- site nav theming ---------- */
 
 .site-nav {
-  background: color-mix(in oklab, var(--background) 90%, transparent);
+  background: color-mix(in oklab, var(--background) 88%, transparent);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition:
@@ -640,9 +797,48 @@ html[data-js] .rv.in-view {
   color: var(--ink);
 }
 
-.site-nav[data-nav-theme="dark"] .nav-menu-btn {
+.site-nav[data-nav-theme="dark"] .nav-menu-btn,
+.site-nav[data-nav-theme="dark"] .theme-toggle {
   border-color: var(--border-on-ink);
   color: var(--paper-on-ink);
+}
+
+/* Theme toggle: the icon shown is the weather you can switch to. Hidden
+   without JS because it could not do anything. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  color: var(--foreground);
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s var(--ease-out-quart);
+}
+
+.theme-toggle:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.theme-toggle:active {
+  transform: scale(0.96);
+}
+
+.theme-toggle .tt-sun,
+.theme-toggle .tt-moon {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-toggle .tt-sun,
+html[data-theme="light"] .theme-toggle .tt-moon {
+  display: block;
+}
+
+html:not([data-js]) .theme-toggle {
+  display: none;
 }
 
 /* underline slide for text links */
@@ -737,15 +933,15 @@ html[data-js] .rv.in-view {
 }
 
 .github-calendar-cell--1 {
-  background-color: oklch(0.84 0.06 150);
+  background-color: light-dark(oklch(0.84 0.06 150), oklch(0.34 0.06 152));
 }
 
 .github-calendar-cell--2 {
-  background-color: oklch(0.7 0.095 151);
+  background-color: light-dark(oklch(0.7 0.095 151), oklch(0.48 0.09 152));
 }
 
 .github-calendar-cell--3 {
-  background-color: oklch(0.54 0.105 152);
+  background-color: light-dark(oklch(0.54 0.105 152), oklch(0.62 0.11 152));
 }
 
 .github-calendar-cell--4 {
@@ -823,6 +1019,8 @@ html[data-js] .rv.in-view {
   white-space: normal;
 }
 
+/* ---------- reduced motion: everything stops, nothing hides ---------- */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -845,6 +1043,12 @@ html[data-js] .rv.in-view {
   .rv {
     opacity: 1;
     transform: none;
+  }
+
+  .stack-item {
+    transform: none !important;
+    opacity: 1 !important;
+    will-change: auto;
   }
 }
 
