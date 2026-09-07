@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import TransitionLink from '../TransitionLink';
 import { portfolioData, getExperienceById, type Project } from '@/data/portfolio';
 import { Button } from '@/components/ui/button';
@@ -78,13 +78,25 @@ function SelectedProject({
           ))}
         </ul>
 
-        {project.caseStudyPath && (
-          <Button asChild variant="paper" className="mt-7">
-            <TransitionLink href={project.caseStudyPath}>
-              Read the case study
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-(--ease-out-quint) group-hover/btn:translate-x-1" aria-hidden="true" />
-            </TransitionLink>
-          </Button>
+        {(project.caseStudyPath || project.link) && (
+          <div className="mt-7 flex flex-wrap gap-3">
+            {project.caseStudyPath && (
+              <Button asChild variant="paper">
+                <TransitionLink href={project.caseStudyPath}>
+                  Read the case study
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </TransitionLink>
+              </Button>
+            )}
+            {project.link && (
+              <Button asChild variant="outlineDark">
+                <a href={project.link} target="_blank" rel="noopener noreferrer">
+                  Live site
+                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </Button>
+            )}
+          </div>
         )}
       </div>
 

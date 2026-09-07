@@ -40,6 +40,7 @@ export const reiskyCaseStudy: CaseStudy = {
   client: 'Reisky Martial Arts · Surrey, BC, Canada',
   role: 'Freelance Full-Stack Developer',
   period: 'Jan 2026 – Apr 2026',
+  liveUrl: 'https://reisky.vercel.app',
   summary:
     'A production website and headless-CMS platform for a Filipino martial arts studio, designed and built end-to-end as an international freelance client project in Surrey, BC, Canada.',
   metrics: [

@@ -1,3 +1,4 @@
+import { ArrowUpRight } from 'lucide-react';
 import { portfolioData } from '@/data/portfolio';
 
 /**
@@ -76,6 +77,17 @@ export default function ProfessionalExperience() {
                       </li>
                     ))}
                   </ul>
+                  {exp.link && (
+                    <a
+                      href={exp.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-underline mono-meta mt-6 inline-flex min-h-6 items-center gap-1.5 text-foreground"
+                    >
+                      Live site
+                      <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </a>
+                  )}
                 </div>
               </div>
             </details>
