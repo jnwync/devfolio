@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import Wordmark from './Wordmark';
@@ -59,10 +58,7 @@ export default function Navigation() {
     }, NAVIGATION_SETTLE_FALLBACK_MS);
   };
 
-  // Track which section is most visible for the active link state. The
-  // contact scene is pinned behind the page from scroll 0, so observers
-  // would misread it — it is handled by the reveal-position scroll handler
-  // below instead.
+  // Track which section is most visible for the active link state.
   useEffect(() => {
     const sections = new Map<string, number>();
     const observer = new IntersectionObserver(
@@ -94,7 +90,7 @@ export default function Navigation() {
 
     links.forEach((link) => {
       const element = document.querySelector(link.href);
-      if (element && !element.classList.contains('scene-contact')) observer.observe(element);
+      if (element) observer.observe(element);
     });
 
     return () => {
@@ -103,25 +99,10 @@ export default function Navigation() {
     };
   }, []);
 
-  // Flip the nav to its dark theme while a dark scene sits under it. Scenes
-  // inside .page-above are observed; the pinned contact scene counts once
-  // the page above it has lifted past the nav.
+  // Flip the nav to its plate theme while a plate sits under it.
   useEffect(() => {
-    const darkScenes = document.querySelectorAll('.dark-scene:not(.scene-contact)');
-    const pageAbove = document.querySelector('.page-above');
-
+    const plates = document.querySelectorAll('.dark-scene');
     const intersecting = new Set<Element>();
-    let overScene = false;
-    let overContact = false;
-    let contactRevealed = false;
-    let ticking = false;
-
-    const apply = () => {
-      setOverDark(overScene || overContact);
-      if (contactRevealed && !pendingSectionRef.current) {
-        setActiveSection('contact');
-      }
-    };
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -132,33 +113,14 @@ export default function Navigation() {
             intersecting.delete(entry.target);
           }
         });
-        overScene = intersecting.size > 0;
-        apply();
+        setOverDark(intersecting.size > 0);
       },
       // Only the strip the nav occupies counts.
       { rootMargin: '0px 0px -94% 0px', threshold: 0 }
     );
-    darkScenes.forEach((scene) => observer.observe(scene));
+    plates.forEach((plate) => observer.observe(plate));
 
-    const handleScroll = () => {
-      if (ticking || !pageAbove) return;
-      ticking = true;
-      window.requestAnimationFrame(() => {
-        ticking = false;
-        const bottom = pageAbove.getBoundingClientRect().bottom;
-        overContact = bottom <= 80;
-        contactRevealed = bottom <= window.innerHeight * 0.55;
-        apply();
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -303,45 +265,36 @@ export default function Navigation() {
             </div>
           </div>
 
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                id="mobile-menu"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.22, ease: [0.25, 1, 0.5, 1] }}
-                className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto md:hidden"
-              >
-                <div className="grid gap-2 border-t border-border py-4">
-                  {links.map((link) => {
-                    const sectionId = link.href.slice(1);
-                    const isActive = visibleActiveSection === sectionId;
-                    return (
-                      <a
-                        key={link.name}
-                        href={link.href}
-                        onClick={(event) => handleLinkClick(event, link.href)}
-                        className={`flex min-h-12 items-center rounded-md px-3 text-sm font-bold transition-colors ${
-                          isActive ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
-                        }`}
-                        aria-current={isActive ? 'location' : undefined}
-                      >
-                        {link.name}
-                      </a>
-                    );
-                  })}
-                  <a
-                    href="/cv.pdf"
-                    download
-                    className="flex min-h-12 items-center rounded-md px-3 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary/70 hover:text-foreground"
-                  >
-                    Resume (PDF)
-                  </a>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <div id="mobile-menu" className={`mobile-menu md:hidden ${isOpen ? 'is-open' : ''}`} inert={!isOpen}>
+            <div className="mobile-menu-inner">
+              <div className="grid gap-2 border-t border-border py-4">
+                {links.map((link) => {
+                  const sectionId = link.href.slice(1);
+                  const isActive = visibleActiveSection === sectionId;
+                  return (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      onClick={(event) => handleLinkClick(event, link.href)}
+                      className={`flex min-h-12 items-center rounded-md px-3 text-sm font-bold transition-colors ${
+                        isActive ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
+                      }`}
+                      aria-current={isActive ? 'location' : undefined}
+                    >
+                      {link.name}
+                    </a>
+                  );
+                })}
+                <a
+                  href="/cv.pdf"
+                  download
+                  className="flex min-h-12 items-center rounded-md px-3 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary/70 hover:text-foreground"
+                >
+                  Resume (PDF)
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </nav>
     </>

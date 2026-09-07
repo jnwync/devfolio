@@ -65,7 +65,7 @@ export default function Contact() {
       className="dark-scene dark-scene--cover scroll-mt-20 flex flex-col justify-center py-16 md:py-24"
     >
       <div className="section-shell w-full">
-        <p className="avail-chip">
+        <p className="avail-line">
           <span className="dot" aria-hidden="true" />
           {personal.availability.message}
         </p>
@@ -78,8 +78,8 @@ export default function Contact() {
         </h2>
 
         <p className="mt-5 max-w-xl text-base leading-7 text-muted-on-ink">
-          Available for project delivery, contract work, and full-time product engineering
-          conversations. Tell me what needs to ship next.
+          Open to contract, freelance, and full-time product engineering roles, working
+          remotely from {personal.timezone}. Email is the fastest way to reach me.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">

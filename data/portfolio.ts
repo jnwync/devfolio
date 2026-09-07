@@ -148,24 +148,12 @@ export const portfolioData: PortfolioData = {
     },
   },
 
-  // Four figures from the CV, not four adjectives.
+  // Four figures from the CV on one line, not four adjectives in four cells.
   proofPoints: [
-    {
-      value: '42 merged PRs',
-      label: 'Across three production codebases at Trackbill: API, web, and mobile',
-    },
-    {
-      value: '83 test files',
-      label: 'Authored for OKRa across API routes, database, auth, UI, and end-to-end flows',
-    },
-    {
-      value: 'Lighthouse 100',
-      label: 'Accessibility on all 12 Reisky routes, mobile and desktop, in a 55-test suite',
-    },
-    {
-      value: '7 roles, 2024 – 2026',
-      label: 'Contract, freelance, product-team, startup, and academic client work',
-    },
+    { value: '42 merged PRs', label: 'across Trackbill API, web, and mobile' },
+    { value: '83 test files', label: 'authored for OKRa, API to end-to-end' },
+    { value: 'Lighthouse 100', label: 'accessibility on all 12 Reisky routes' },
+    { value: '7 roles since 2024', label: 'contract, freelance, product, startup, academic' },
   ],
 
   // ---------------------------------------------------------------------------

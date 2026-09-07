@@ -1,16 +1,16 @@
 import { ArrowDown, Mail } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import HeroImage from '../HeroImage';
-import Magnetic from '../motion/Magnetic';
 import { Button } from '@/components/ui/button';
 import { portfolioData } from '@/data/portfolio';
 
 /**
  * Full-height opening scene, transparent to the field behind it: the type
  * sits flat and sharp while the atmosphere drifts slowly underneath. The
- * eyebrow carries the three facts a remote recruiter scans for first: name,
- * where, and what kind of work. Entrance staggering is pure CSS keyed on
- * html[data-intro], so the hero needs no client JS of its own.
+ * eyebrow carries the three facts a remote recruiter scans for first (name,
+ * where, what kind of work); the proof line under the fold carries four
+ * figures from the CV on one hairline. The entrance is a short CSS stagger
+ * keyed on html[data-js]; nothing else on the page animates in.
  */
 export default function Hero() {
   const { personal, proofPoints } = portfolioData;
@@ -31,10 +31,10 @@ export default function Hero() {
               {personal.name}
               <span className="text-muted-foreground"> · Remote web + mobile · {personal.location} · {personal.timezone}</span>
             </p>
-            <span className="avail-chip">
+            <p className="avail-line">
               <span className="dot" aria-hidden="true" />
               {personal.availability.message}
-            </span>
+            </p>
           </div>
 
           <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center xl:grid-cols-[1.3fr_0.7fr]">
@@ -57,14 +57,12 @@ export default function Hero() {
               </p>
 
               <div className="hero-st hero-st-4 mt-9 flex flex-wrap items-center gap-3">
-                <Magnetic strength={0.2} className="inline-flex">
-                  <Button asChild size="lg">
-                    <a href="#projects">
-                      View work
-                      <ArrowDown className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                  </Button>
-                </Magnetic>
+                <Button asChild size="lg">
+                  <a href="#projects">
+                    View work
+                    <ArrowDown className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                </Button>
                 <Button asChild variant="outline" size="lg">
                   <a href="#contact">Contact</a>
                 </Button>
@@ -102,19 +100,14 @@ export default function Hero() {
         </div>
 
         <div className="section-shell relative">
-          <dl className="hero-st hero-st-6 grid grid-cols-2 gap-y-5 border-t border-border py-6 md:grid-cols-4 md:gap-y-0">
-            {proofPoints.map((point, index) => (
-              <div
-                key={point.value}
-                className={`pr-5 md:border-l md:border-border md:px-5 ${index === 0 ? 'md:border-l-0 md:pl-0' : ''} ${index === 3 ? 'md:pr-0' : ''}`}
-              >
-                <dt className="font-serif text-[1.05rem] font-bold leading-snug text-foreground">
-                  {point.value}
-                </dt>
-                <dd className="mt-1.5 text-[0.8rem] leading-5 text-muted-foreground">{point.label}</dd>
-              </div>
+          <ul className="proof-line hero-st hero-st-6" role="list" aria-label="Proof points">
+            {proofPoints.map((point) => (
+              <li key={point.value}>
+                <b>{point.value}</b>
+                <span>{point.label}</span>
+              </li>
             ))}
-          </dl>
+          </ul>
         </div>
       </div>
     </section>

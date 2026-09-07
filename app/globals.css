@@ -10,7 +10,8 @@
   green-black void with a slow starfield behind near-static content. Light is
   the same site at noon: warm paper, soft bokeh, a horizon band. Type stays
   flat and sharp in both — the contrast between crisp type and the soft
-  dimensional field is the whole effect.
+  dimensional field is the whole effect. Nothing on the page animates except
+  the field's parallax, the stack row's settle, and the hero's first entrance.
 */
 
 :root {
@@ -76,8 +77,6 @@
   --frame-muted: oklch(0.71 0.028 145);
   --frame-green: oklch(0.80 0.112 152);
 
-  /* translucent surfaces */
-  --chip-bg: light-dark(oklch(1 0 0 / 0.45), oklch(1 0 0 / 0.05));
   --shadow-ink: light-dark(oklch(0.24 0.03 150 / 0.08), oklch(0.05 0.01 160 / 0.4));
   --shadow-ink-strong: light-dark(oklch(0.2 0.02 155 / 0.16), oklch(0.03 0.01 160 / 0.7));
   --shadow-frame: light-dark(oklch(0.2 0.03 155 / 0.22), oklch(0.02 0.01 160 / 0.6));
@@ -258,6 +257,7 @@
   @apply mx-auto max-w-6xl px-5 sm:px-6 lg:px-8;
 }
 
+/* One small label style, used sparingly (hero eyebrow, case-study meta). */
 .section-kicker {
   font-family: var(--font-mono), monospace;
   font-size: 0.72rem;
@@ -270,14 +270,8 @@
   color: var(--green-bright);
 }
 
-/* Uniform scene header: kicker + display title left, mono count right,
-   hairline below. Every section opens with this. */
+/* Section header: display title over a hairline. Nothing else. */
 .sec-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1.25rem 2rem;
   border-bottom: 1px solid var(--border);
   padding-bottom: 1.6rem;
 }
@@ -287,105 +281,13 @@
 }
 
 .sec-title {
-  margin: 0.7rem 0 0;
+  margin: 0;
   font-family: var(--font-display), "Arial Black", sans-serif;
   font-weight: 650;
   letter-spacing: -0.025em;
   line-height: 1;
   font-size: clamp(2.4rem, 1.2rem + 4.6vw, 5rem);
   text-wrap: balance;
-}
-
-/* Kinetic settle: titles arrive light and firm up as the section enters.
-   Gated on JS so static rendering stays at full weight. */
-@media (prefers-reduced-motion: no-preference) {
-  html[data-js] .sec-head .sec-title {
-    font-variation-settings: "wght" 320;
-    transition: font-variation-settings 0.9s var(--ease-out-quint) 0.12s;
-  }
-
-  html[data-js] .sec-head.in-view .sec-title {
-    font-variation-settings: "wght" 650;
-  }
-}
-
-.sec-count {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  color: var(--muted-foreground);
-  white-space: nowrap;
-  padding-bottom: 0.4rem;
-}
-
-.dark-scene .sec-count {
-  color: var(--muted-on-ink);
-}
-
-/* Uniform technology / tag chip, both surfaces. Square-cornered mono tags —
-   registration-mark vocabulary, not pill vocabulary. */
-.chip-pill {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.66rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  line-height: 1;
-  border: 1px solid var(--border);
-  border-radius: 0.3rem;
-  padding: 0.42rem 0.6rem;
-  color: var(--foreground);
-  background: var(--chip-bg);
-}
-
-.dark-scene .chip-pill {
-  border-color: var(--border-on-ink);
-  color: var(--paper-on-ink);
-  background: transparent;
-}
-
-/* Availability chip with a live pulse. */
-.avail-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.55rem 0.95rem;
-  color: var(--foreground);
-  background: var(--chip-bg);
-}
-
-.dark-scene .avail-chip {
-  border-color: var(--border-on-ink);
-  color: var(--paper-on-ink);
-  background: transparent;
-}
-
-.avail-chip .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: var(--success);
-  animation: avail-pulse 2.4s ease infinite;
-}
-
-.dark-scene .avail-chip .dot {
-  background: var(--green-bright);
-}
-
-@keyframes avail-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--success) 35%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 0 6px color-mix(in oklab, var(--success) 0%, transparent);
-  }
 }
 
 .mono-meta {
@@ -403,12 +305,47 @@
   line-height: 1.5;
 }
 
-.toolbox-line {
+/* Sentence-case mono for metadata and tool lists — the quiet cousin of the
+   uppercase label, used wherever a list of tools or a date line appears. */
+.meta-line,
+.tool-line {
   font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.04em;
-  line-height: 2;
+  font-size: 0.74rem;
+  letter-spacing: 0.01em;
+  line-height: 1.7;
   color: var(--muted-foreground);
+}
+
+.dark-scene .meta-line,
+.dark-scene .tool-line {
+  color: var(--muted-on-ink);
+}
+
+/* Availability: a static dot and words. No pill, no pulse. */
+.avail-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--foreground);
+}
+
+.avail-line .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--success);
+}
+
+.dark-scene .avail-line {
+  color: var(--paper-on-ink);
+}
+
+.dark-scene .avail-line .dot {
+  background: var(--green-bright);
 }
 
 .editorial-rule {
@@ -433,190 +370,84 @@
   color: var(--green-bright);
 }
 
-/* ---------- intro (branded load, under one second) ---------- */
-/* Driven by html[data-intro]: absent = static page (no JS, repeat visit, or
-   reduced motion), "play" = overlay runs, "done" = hero staggers in. The
-   overlay blocks for 0.7s at most; the curtains open on top of a live page. */
+/* ---------- hero entrance (the only entrance on the page) ---------- */
+/* Gated on JS so static rendering is complete, and collapsed to instant by
+   the reduced-motion block below. */
 
-.intro {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  display: none;
-  pointer-events: none;
-}
-
-html[data-intro="play"] .intro {
-  display: block;
-}
-
-.intro-panel {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 50.5%;
-  background: var(--background);
-  transition: transform 0.55s var(--ease-scene);
-}
-
-.intro-panel--top {
-  top: 0;
-}
-
-.intro-panel--bottom {
-  bottom: 0;
-}
-
-.intro.intro--open .intro-panel--top {
-  transform: translateY(-102%);
-}
-
-.intro.intro--open .intro-panel--bottom {
-  transform: translateY(102%);
-}
-
-.intro-center {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.1rem;
-}
-
-.intro-name {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--muted-foreground);
+html[data-js] .hero-st {
   opacity: 0;
-  animation: intro-fade-up 0.4s ease 0.05s forwards;
+  animation: hero-rise 0.7s var(--ease-out-quint) forwards;
 }
 
-.intro.intro--open .intro-name {
-  opacity: 0 !important;
-  transition: opacity 0.15s ease;
-}
-
-.intro-mark {
-  font-family: var(--font-display), "Arial Black", sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  font-size: clamp(3.5rem, 12vw, 9.5rem);
-  color: transparent;
-  background-image: linear-gradient(
-    90deg,
-    var(--foreground) 0%,
-    var(--foreground) 50%,
-    color-mix(in oklab, var(--foreground) 16%, transparent) 50.5%,
-    color-mix(in oklab, var(--foreground) 16%, transparent) 100%
-  );
-  background-size: 205% 100%;
-  background-position: 100% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: intro-sweep 0.5s var(--ease-scene) 0.08s forwards;
-  transform-origin: 0 0;
-  will-change: transform;
-}
-
-.intro-mark .il {
-  display: inline-block;
-  font-variation-settings: "wght" 240;
-  animation: il-settle 0.45s var(--ease-out-quint) forwards;
-}
-
-@keyframes il-settle {
-  to {
-    font-variation-settings: "wght" 700;
-  }
-}
-
-.intro-mark .wordmark-dot {
-  color: var(--primary);
-  font-variation-settings: "wght" 700;
-  opacity: 0;
-  animation: intro-dot 0.3s var(--ease-out-quint) 0.5s forwards;
-}
-
-@keyframes intro-sweep {
-  to {
-    background-position: 0% 0;
-  }
-}
-
-@keyframes intro-dot {
-  from {
-    opacity: 0;
-    transform: translateY(0.06em) scale(0.6);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes intro-fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* nav wordmark waits for the morph to land */
-html[data-intro="play"] .nav-wordmark {
-  opacity: 0;
-}
-
-html[data-intro="play"] body {
-  overflow: hidden;
-}
-
-html[data-intro="done"] .nav-wordmark {
-  animation: intro-fade-in 0.3s ease 0.35s both;
-}
-
-@keyframes intro-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* hero entrance stagger, keyed off the intro */
-html[data-intro="play"] .hero-st {
-  opacity: 0;
-}
-
-html[data-intro="done"] .hero-st {
-  opacity: 0;
-  animation: hero-rise 0.75s var(--ease-out-quint) forwards;
-}
-
-html[data-intro="done"] .hero-st-1 { animation-delay: 0.05s; }
-html[data-intro="done"] .hero-st-2 { animation-delay: 0.14s; }
-html[data-intro="done"] .hero-st-3 { animation-delay: 0.24s; }
-html[data-intro="done"] .hero-st-4 { animation-delay: 0.36s; }
-html[data-intro="done"] .hero-st-5 { animation-delay: 0.48s; }
-html[data-intro="done"] .hero-st-6 { animation-delay: 0.62s; }
+html[data-js] .hero-st-1 { animation-delay: 0.05s; }
+html[data-js] .hero-st-2 { animation-delay: 0.12s; }
+html[data-js] .hero-st-3 { animation-delay: 0.2s; }
+html[data-js] .hero-st-4 { animation-delay: 0.28s; }
+html[data-js] .hero-st-5 { animation-delay: 0.36s; }
+html[data-js] .hero-st-6 { animation-delay: 0.46s; }
 
 @keyframes hero-rise {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* The proof line: four facts on one hairline, not four stat cells. */
+.proof-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0;
+  margin: 0;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+.proof-line li {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0 0.45rem;
+  padding-right: 1.4rem;
+  margin-right: 1.4rem;
+  border-right: 1px solid var(--border);
+}
+
+.proof-line li:last-child {
+  padding-right: 0;
+  margin-right: 0;
+  border-right: 0;
+}
+
+.proof-line b {
+  font-weight: 400;
+  color: var(--foreground);
+}
+
+@media (max-width: 767px) {
+  .proof-line {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem 1.5rem;
+  }
+
+  .proof-line li {
+    display: block;
+    padding-right: 0;
+    margin-right: 0;
+    border-right: 0;
+  }
+
+  .proof-line b {
+    display: block;
   }
 }
 
@@ -639,29 +470,13 @@ html[data-intro="done"] .hero-st-6 { animation-delay: 0.62s; }
     inset 0 1px 0 var(--plate-edge);
 }
 
-/* reveal-on-scroll helper (JS adds .in-view; hidden only when JS is present) */
-html[data-js] .rv {
-  opacity: 0;
-  transform: translateY(28px);
-  transition:
-    opacity 0.7s ease,
-    transform 0.7s var(--ease-out-quint);
-}
-
-html[data-js] .rv.in-view {
-  opacity: 1;
-  transform: none;
-}
-
-.rv-d1 { transition-delay: 0.08s; }
-.rv-d2 { transition-delay: 0.16s; }
-.rv-d3 { transition-delay: 0.24s; }
-
-/* ---------- hero ---------- */
-
-.hero-portrait-tag {
-  background: color-mix(in oklab, var(--ink) 72%, transparent);
-  color: var(--paper-on-ink);
+/* Figures on the plate: a hairline frame and a caption underneath. */
+.figure-frame {
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid var(--frame-edge);
+  background: var(--frame);
+  box-shadow: 0 24px 60px var(--shadow-frame);
 }
 
 /* ---------- the stack (signature moment) ---------- */
@@ -675,11 +490,6 @@ html[data-js] .rv.in-view {
 }
 
 .stack-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.75rem 2rem;
   border-bottom: 1px solid var(--border);
   padding-bottom: 1rem;
   margin-bottom: clamp(2.25rem, 5vw, 3.5rem);
@@ -780,6 +590,10 @@ html[data-js] .stack-item {
 
 .exp-row > summary::-webkit-details-marker {
   display: none;
+}
+
+.exp-row > summary:hover h3 {
+  color: var(--primary);
 }
 
 /* A plus that turns into a minus — the only affordance the row needs. */
@@ -906,6 +720,22 @@ html[data-js] .stack-item {
   color: var(--paper-on-ink);
 }
 
+/* Mobile menu: a CSS grid-rows transition, no animation library. */
+.mobile-menu {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s var(--ease-out-quart);
+}
+
+.mobile-menu.is-open {
+  grid-template-rows: 1fr;
+}
+
+.mobile-menu-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
 /* Theme toggle: the icon shown is the weather you can switch to. Hidden
    without JS because it could not do anything. */
 .theme-toggle {
@@ -944,29 +774,18 @@ html:not([data-js]) .theme-toggle {
   display: none;
 }
 
-/* underline slide for text links */
+/* text links: a plain underline on hover, no choreography */
 .link-underline {
-  position: relative;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color 0.2s ease;
 }
 
-.link-underline::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -3px;
-  height: 1px;
-  width: 100%;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: 100% 50%;
-  transition: transform 0.35s var(--ease-out-quint);
-}
-
-.link-underline:hover::after,
-.link-underline:focus-visible::after,
-.link-underline[aria-current]::after {
-  transform: scaleX(1);
-  transform-origin: 0 50%;
+.link-underline:hover,
+.link-underline:focus-visible,
+.link-underline[aria-current] {
+  text-decoration-color: currentColor;
 }
 
 /* ---------- view transitions (case-study morph) ---------- */
@@ -1072,10 +891,6 @@ html:not([data-js]) .theme-toggle {
   @apply mt-2.5 h-2 w-2 rounded-full bg-primary;
 }
 
-.premium-panel {
-  @apply relative isolate overflow-hidden border border-border bg-card;
-}
-
 /* Screen reader only utility (if not provided by Tailwind) */
 .sr-only {
   position: absolute;
@@ -1112,20 +927,9 @@ html:not([data-js]) .theme-toggle {
     transition-duration: 0.01ms !important;
   }
 
-  .intro {
-    display: none !important;
-  }
-
-  html[data-intro="play"] .hero-st,
-  html[data-intro="play"] .nav-wordmark {
+  html[data-js] .hero-st {
     opacity: 1;
-  }
-
-  /* Reveals never hide content when motion is off — not even off-screen. */
-  .rv,
-  html[data-js] .rv {
-    opacity: 1;
-    transform: none;
+    animation: none;
   }
 
   .stack-item,
@@ -1155,7 +959,6 @@ html:not([data-js]) .theme-toggle {
 
   .atmosphere,
   .grain,
-  .intro,
   .site-nav,
   .theme-toggle,
   .exp-toggle {
@@ -1170,12 +973,12 @@ html:not([data-js]) .theme-toggle {
     border-radius: 0;
   }
 
-  .rv,
-  html[data-js] .rv,
+  html[data-js] .hero-st,
   .stack-item,
   .stack-glyph {
     opacity: 1 !important;
     transform: none !important;
+    animation: none !important;
   }
 
   .exp-row {

@@ -12,13 +12,11 @@ interface CaseStudyLayoutProps {
 
 /**
  * Case-study page in the same vocabulary as the home page: the field behind,
- * hairline sections, chip-pill tags, and the same header controls (Resume,
+ * hairline sections, mono tool lines, and the same header controls (Resume,
  * theme toggle) so it never feels like a different product.
  */
 export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutProps) {
-  const metricsGrid = caseStudy.metrics.length > 3
-    ? 'grid-cols-2 md:grid-cols-3'
-    : 'grid-cols-1 sm:grid-cols-3';
+  const metricsGrid = caseStudy.metrics.length > 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-3';
 
   return (
     <>
@@ -35,7 +33,7 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
             <div className="flex items-center gap-2 sm:gap-4">
               <Link
                 href="/#projects"
-                className="nav-link inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-xs font-bold uppercase tracking-[0.16em]"
+                className="nav-link inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-bold"
               >
                 <ArrowLeft className="h-4 w-4" aria-hidden="true" />
                 <span className="hidden sm:inline">Selected work</span>
@@ -59,7 +57,9 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
       <main id="main-content">
         <section className="relative scroll-mt-20 py-16 md:py-24" aria-labelledby="case-study-title">
           <div className="section-shell">
-            <p className="section-kicker">Case study · {typeLabel(caseStudy.role)}</p>
+            <p className="meta-line">
+              Case study · {typeLabel(caseStudy.role)} · {caseStudy.period}
+            </p>
             <h1
               id="case-study-title"
               className="mt-4 max-w-4xl text-balance font-serif text-3xl font-bold leading-tight sm:text-4xl md:text-5xl"
@@ -99,15 +99,14 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
 
         <section className="editorial-rule py-12 md:py-16" aria-label="Project at a glance">
           <div className="section-shell">
-            <dl className={`premium-panel grid divide-border ${metricsGrid} divide-x divide-y md:divide-y-0`}>
+            <dl className={`grid grid-cols-2 gap-x-8 gap-y-7 ${metricsGrid}`}>
               {caseStudy.metrics.map((metric) => (
-                <div key={metric.label} className="flex min-h-28 flex-col gap-2 p-5 sm:p-6">
-                  <dt className="font-serif text-3xl font-bold leading-none text-foreground sm:text-4xl">
+                <div key={metric.label} className="border-t border-border pt-4">
+                  <dt className="sr-only">{metric.label}</dt>
+                  <dd className="font-serif text-3xl font-bold leading-none text-foreground sm:text-4xl">
                     {metric.value}
-                  </dt>
-                  <dd className="max-w-[28ch] text-sm leading-6 text-muted-foreground">
-                    {metric.label}
                   </dd>
+                  <dd className="mt-2 max-w-[28ch] text-sm leading-6 text-muted-foreground">{metric.label}</dd>
                 </div>
               ))}
             </dl>
@@ -116,14 +115,8 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
 
         <section className="editorial-rule py-10 md:py-12" aria-label="Technology stack">
           <div className="section-shell">
-            <p className="section-kicker mb-4">Stack</p>
-            <ul className="flex flex-wrap gap-1.5" role="list">
-              {caseStudy.stack.map((tech) => (
-                <li key={tech} className="chip-pill">
-                  {tech}
-                </li>
-              ))}
-            </ul>
+            <p className="meta-line">Stack</p>
+            <p className="tool-line mt-2 text-foreground">{caseStudy.stack.join(' · ')}</p>
           </div>
         </section>
 
@@ -180,7 +173,7 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
               id="case-study-cta"
               className="max-w-2xl text-balance font-serif text-2xl font-bold leading-tight text-foreground sm:text-3xl md:text-4xl"
             >
-              Interested in work built this way?
+              Working on something similar?
             </h2>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild size="lg">
@@ -203,8 +196,8 @@ export default function CaseStudyLayout({ caseStudy, email }: CaseStudyLayoutPro
 function Meta({ term, value }: { term: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs font-bold uppercase tracking-[0.14em] text-accent">{term}</dt>
-      <dd className="mt-1.5 text-sm font-bold text-foreground">{value}</dd>
+      <dt className="meta-line">{term}</dt>
+      <dd className="mt-1 text-sm font-bold text-foreground">{value}</dd>
     </div>
   );
 }

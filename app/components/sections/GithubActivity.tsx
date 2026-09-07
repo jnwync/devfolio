@@ -87,22 +87,14 @@ export default async function GithubActivity() {
   return (
     <section aria-labelledby="github-activity-heading" className="scroll-mt-20 py-20 md:py-28">
       <div className="section-shell">
-        <header className="rv sec-head">
-          <div>
-            <p className="section-kicker">04 · Proof of work</p>
-            <h2 id="github-activity-heading" className="sec-title">
-              Public activity.
-            </h2>
-          </div>
-          {calendar && (
-            <p className="sec-count" aria-hidden="true">
-              {calendar.total.toLocaleString()} commits / yr
-            </p>
-          )}
+        <header className="sec-head">
+          <h2 id="github-activity-heading" className="sec-title">
+            Public activity
+          </h2>
         </header>
 
         {calendar ? (
-          <div className="rv py-8">
+          <div className="py-8">
             <ContributionGrid weeks={calendar.weeks} total={calendar.total} />
             <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
               <p className="text-sm leading-6 text-muted-foreground">
@@ -123,7 +115,7 @@ export default async function GithubActivity() {
             </div>
           </div>
         ) : (
-          <div className="rv flex flex-wrap items-center justify-between gap-5 py-8">
+          <div className="flex flex-wrap items-center justify-between gap-5 py-8">
             <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
               The live activity calendar is unavailable right now — the source and current
               public activity are on GitHub.

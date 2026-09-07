@@ -47,11 +47,10 @@ export default function StackField() {
   return (
     <section id="stack" aria-labelledby="stack-heading" className="stack-scene">
       <div className="section-shell">
-        <div className="stack-head rv">
+        <div className="stack-head">
           <h2 id="stack-heading" className="mono-meta text-foreground">
             The stack
           </h2>
-          <p className="mono-meta text-muted-foreground">{stack.length} tools · shipped in production</p>
         </div>
 
         <ul className="stack-field" data-stack-field role="list">

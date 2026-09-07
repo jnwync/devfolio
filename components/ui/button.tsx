@@ -4,23 +4,25 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
+/* Flat buttons: colour changes on hover, a slight press on active. No glow,
+   no lift. */
 const buttonVariants = cva(
-  "inline-flex min-h-11 touch-manipulation items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold transition-[transform,background-color,border-color,color,opacity,box-shadow] duration-200 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex min-h-11 touch-manipulation items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold transition-[transform,background-color,border-color,color] duration-200 ease-[var(--ease-out-quart)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-[0_12px_28px_oklch(0.4_0.1_152/0.18)] hover:-translate-y-0.5 hover:bg-primary/92 hover:shadow-[0_18px_38px_oklch(0.4_0.1_152/0.2)] active:translate-y-px",
+          "bg-primary text-primary-foreground hover:bg-primary/88",
         outline:
-          "border border-border bg-background text-foreground hover:-translate-y-0.5 hover:border-primary hover:text-primary hover:shadow-(--shadow-soft) active:translate-y-px",
+          "border border-border bg-background text-foreground hover:border-primary hover:text-primary",
         paper:
-          "bg-paper-on-ink text-ink hover:-translate-y-0.5 hover:bg-green-bright active:translate-y-px",
+          "bg-paper-on-ink text-ink hover:bg-green-bright",
         outlineDark:
-          "border border-border-on-ink bg-transparent text-paper-on-ink hover:-translate-y-0.5 hover:border-paper-on-ink active:translate-y-px",
+          "border border-border-on-ink bg-transparent text-paper-on-ink hover:border-paper-on-ink",
         secondary:
-          "bg-secondary text-secondary-foreground hover:-translate-y-0.5 hover:bg-secondary/80 hover:shadow-(--shadow-soft) active:translate-y-px",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
-          "text-foreground hover:-translate-y-0.5 hover:bg-secondary/70 hover:text-primary active:translate-y-px",
+          "text-foreground hover:bg-secondary/70 hover:text-primary",
         link:
           "min-h-0 rounded-none px-0 py-0 text-primary underline-offset-4 hover:underline focus-visible:ring-0 focus-visible:underline",
       },

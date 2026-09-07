@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Hanken_Grotesk, Fragment_Mono } from "next/font/google";
-import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import Atmosphere from "./components/Atmosphere";
-import ScrollProgress from "./components/ScrollProgress";
 import { ViewTransitionSettler } from "./components/TransitionLink";
 import { portfolioData } from "@/data/portfolio";
 
@@ -141,11 +139,10 @@ const structuredData = {
 
 /**
  * Runs before first paint. Resolves the theme (stored choice → OS preference
- * → dark), flags JS as available for the reveal helpers, and arms the
- * sub-second intro once per session when motion is allowed.
+ * → dark) and flags JS as available for the hero entrance and the toggle.
  */
 const bootScript =
-  "(function(){var d=document.documentElement;d.dataset.js='1';var t=null;try{t=localStorage.getItem('jnwync-theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}d.dataset.theme=t;try{if(!sessionStorage.getItem('jnwync-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.dataset.intro='play'}}catch(e){}})();";
+  "(function(){var d=document.documentElement;d.dataset.js='1';var t=null;try{t=localStorage.getItem('jnwync-theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}d.dataset.theme=t})();";
 
 export default function RootLayout({
   children,
@@ -160,11 +157,8 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         <Atmosphere />
         <div className="grain" aria-hidden="true" />
-        <MotionConfig reducedMotion="user">
-          <ScrollProgress />
-          <ViewTransitionSettler />
-          {children}
-        </MotionConfig>
+        <ViewTransitionSettler />
+        {children}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
