@@ -6,6 +6,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { portfolioData } from '@/data/portfolio';
 import { Button } from '@/components/ui/button';
 import Wordmark from '../Wordmark';
+import MotionToggle from '../MotionToggle';
 import { world } from '../world/state';
 
 async function copyText(value: string): Promise<boolean> {
@@ -183,14 +184,17 @@ export default function Contact() {
                 © {new Date().getFullYear()} Jon Wayne Cabusbusan
               </span>
             </p>
-            <Button
-              onClick={handleBackToTop}
-              variant="outline"
-              size="icon"
-              aria-label="Back to top"
-            >
-              <ArrowUp className="h-5 w-5" aria-hidden="true" />
-            </Button>
+            <div className="flex items-center gap-4">
+              <MotionToggle />
+              <Button
+                onClick={handleBackToTop}
+                variant="outline"
+                size="icon"
+                aria-label="Back to top"
+              >
+                <ArrowUp className="h-5 w-5" aria-hidden="true" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

@@ -143,12 +143,12 @@ const structuredData = {
 
 /**
  * Runs before first paint. Resolves the theme (stored choice → OS preference
- * → dark), the motion tier (OS reduced motion or a stored in-page choice),
+ * → dark), the motion tier (stored choice → OS reduced motion → full),
  * two capability flags the CSS gates on (fine pointer, wide viewport), and
  * arms the intro once per session on the home page when motion is allowed.
  */
 const bootScript =
-  "(function(){var d=document.documentElement,mq=function(q){return matchMedia(q).matches};d.dataset.js='1';var t=null;try{t=localStorage.getItem('jnwync-theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=mq('(prefers-color-scheme: light)')?'light':'dark'}d.dataset.theme=t;var m=null;try{m=localStorage.getItem('jnwync-motion')}catch(e){}d.dataset.motion=(mq('(prefers-reduced-motion: reduce)')||m==='reduce')?'reduce':'full';if(mq('(pointer: fine)'))d.dataset.fine='1';if(mq('(min-width: 768px)'))d.dataset.wide='1';try{if(d.dataset.motion==='full'&&location.pathname==='/'&&!sessionStorage.getItem('jnwync-intro'))d.dataset.intro='play'}catch(e){}})();";
+  "(function(){var d=document.documentElement,mq=function(q){return matchMedia(q).matches};d.dataset.js='1';var t=null;try{t=localStorage.getItem('jnwync-theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=mq('(prefers-color-scheme: light)')?'light':'dark'}d.dataset.theme=t;var m=null;try{m=localStorage.getItem('jnwync-motion')}catch(e){}d.dataset.motion=(m==='reduce'||(m!=='full'&&mq('(prefers-reduced-motion: reduce)')))?'reduce':'full';if(mq('(pointer: fine)'))d.dataset.fine='1';if(mq('(min-width: 768px)'))d.dataset.wide='1';try{if(d.dataset.motion==='full'&&location.pathname==='/'&&!sessionStorage.getItem('jnwync-intro'))d.dataset.intro='play'}catch(e){}})();";
 
 export default function RootLayout({
   children,

@@ -196,3 +196,38 @@ Measured contrast (sRGB, WCAG 2.x):
 | accent (kickers) / plate | 5.6 : 1 | — |
 | primary / page | 8.1 : 1 | 10.5 : 1 |
 | primary-foreground / primary | — | 10.3 : 1 |
+
+## v4 — the world tokens
+
+The scene is lit by the same token block the text is set in. `world/cssColor.ts`
+reads each `--world-*` value through a hidden probe carrying an explicit
+`color-scheme`, converts it to linear RGB, and hands it to the shader — so both
+weathers are read once and the renderer blends between them. Change a token and
+the water changes; nothing is hard-coded in GLSL.
+
+| Token | Role |
+| --- | --- |
+| `--world-sky-top` | the sky at the top of the frame |
+| `--world-sky-horizon` | the sky where it meets the water, and the atmospheric fade into it |
+| `--world-sea-far` | the water at the horizon |
+| `--world-sea-near` | the water at the bottom of the frame |
+| `--world-orb` | the sun or moon disc |
+| `--world-glow` | every light on the water: the glitter lane, the stack's points, the pointer |
+
+Two limits keep body text readable over all of it, and they live in
+`app/components/world/shaders/skysea.ts` rather than here because the shader is
+what enforces them:
+
+- `NIGHT_LUMINANCE_CAP` (0.034) — at night nothing in the scene may exceed this
+  relative luminance. It is why the night water reads as deep and the lights on
+  it are soft rather than bright.
+- `BEACON_NIGHT_GAIN` (0.03) — the contact beacon is added after the cap, so its
+  gain is bounded on its own.
+
+`tests/world-contrast.test.mjs` asserts `--foreground` and `--muted-foreground`
+still clear 4.5:1, and `--primary` clears 3:1, against the brightest background
+the world can produce in either weather. Measured on the built page, the worst
+case across every section in both themes is 4.5:1.
+
+The `-on-ink` plate family is now used by one section rather than two: Contact
+returned to the water in v4, so the Work plate is the only opaque surface left.

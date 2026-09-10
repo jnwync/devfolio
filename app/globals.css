@@ -399,20 +399,21 @@
 }
 
 /* ---------- hero entrance (the only entrance on the page) ---------- */
-/* Gated on JS so static rendering is complete, and collapsed to instant by
-   the reduced-motion block below. */
+/* Gated on the motion tier, which the boot script resolves from the stored
+   choice and the OS preference — so this collapses for no-JS visitors, for
+   reduced motion, and for anyone who used the in-page toggle. */
 
-html[data-js] .hero-st {
+html[data-motion="full"] .hero-st {
   opacity: 0;
   animation: hero-rise 0.7s var(--ease-out-quint) forwards;
 }
 
-html[data-js] .hero-st-1 { animation-delay: 0.05s; }
-html[data-js] .hero-st-2 { animation-delay: 0.12s; }
-html[data-js] .hero-st-3 { animation-delay: 0.2s; }
-html[data-js] .hero-st-4 { animation-delay: 0.28s; }
-html[data-js] .hero-st-5 { animation-delay: 0.36s; }
-html[data-js] .hero-st-6 { animation-delay: 0.46s; }
+html[data-motion="full"] .hero-st-1 { animation-delay: 0.05s; }
+html[data-motion="full"] .hero-st-2 { animation-delay: 0.12s; }
+html[data-motion="full"] .hero-st-3 { animation-delay: 0.2s; }
+html[data-motion="full"] .hero-st-4 { animation-delay: 0.28s; }
+html[data-motion="full"] .hero-st-5 { animation-delay: 0.36s; }
+html[data-motion="full"] .hero-st-6 { animation-delay: 0.46s; }
 
 /* Under the intro the entrance waits; it plays as the overlay fades. */
 html[data-intro="play"] .hero-st {
@@ -981,7 +982,7 @@ html:not([data-js]) .theme-toggle {
     transition-duration: 0.01ms !important;
   }
 
-  html[data-js] .hero-st {
+  html[data-motion="full"] .hero-st {
     opacity: 1;
     animation: none;
   }
@@ -1036,7 +1037,7 @@ html:not([data-js]) .theme-toggle {
     border-radius: 0;
   }
 
-  html[data-js] .hero-st,
+  html[data-motion="full"] .hero-st,
   .stack-item,
   .stack-glyph {
     opacity: 1 !important;
@@ -1685,4 +1686,25 @@ html[data-motion-ready] [data-contact-tail] {
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* The in-page motion switch: a quiet text control in the footer, present
+   only when the operating system has not already asked for reduced motion. */
+.motion-toggle {
+  min-height: 2.75rem;
+  padding: 0 0.25rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.motion-toggle:hover,
+.motion-toggle:focus-visible {
+  color: var(--foreground);
 }

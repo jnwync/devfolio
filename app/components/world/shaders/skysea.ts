@@ -10,6 +10,18 @@
  * RGB from the CSS tokens and are gamma-encoded at the end.
  */
 
+/**
+ * Nothing in the night scene may exceed this luminance (linear, relative),
+ * so muted text stays AA wherever it sits on the world. The beacon is the
+ * one light added after the cap, and its night gain is bounded so the
+ * brightest point of its column still clears AA.
+ *
+ * tests/world-contrast.test.mjs reads both numbers from this file — change
+ * them here and the test tells you whether the page still passes.
+ */
+export const NIGHT_LUMINANCE_CAP = 0.034;
+export const BEACON_NIGHT_GAIN = 0.03;
+
 export const vertex = /* glsl */ `
 attribute vec2 position;
 attribute vec2 uv;
@@ -22,6 +34,9 @@ void main() {
 
 export const fragment = /* glsl */ `
 precision highp float;
+
+#define NIGHT_LUMINANCE_CAP ${NIGHT_LUMINANCE_CAP.toFixed(4)}
+#define BEACON_NIGHT_GAIN ${BEACON_NIGHT_GAIN.toFixed(4)}
 
 uniform vec2 uRes;
 uniform float uTime;
@@ -186,7 +201,7 @@ void main() {
 
   // At night nothing but the moon and the stars may get brighter than a
   // fixed luminance, so muted text stays AA wherever it sits on the world.
-  float capY = mix(0.034, 10.0, uDay);
+  float capY = mix(NIGHT_LUMINANCE_CAP, 10.0, uDay);
   float seaY = dot(sea, vec3(0.2126, 0.7152, 0.0722));
   sea *= min(1.0, capY / max(seaY, 0.0001));
   vec3 skyCapped = sky + uGlow * (glow * uOrbOn + halos);
@@ -200,7 +215,7 @@ void main() {
   // closing scene that has to read. Its amplitude is held low enough that
   // muted text still clears AA over the column.
   float beaconLane = exp(-pow((uv.x - uBeacon.x) * aspect, 2.0) / (0.0012 + 0.02 * depth));
-  sea += uBeaconColor * beaconLane * (0.3 + 0.7 * sparkle) * uBeacon.z * (0.9 - 0.5 * depth) * mix(0.06, 0.45, uDay);
+  sea += uBeaconColor * beaconLane * (0.3 + 0.7 * sparkle) * uBeacon.z * (0.9 - 0.5 * depth) * mix(BEACON_NIGHT_GAIN, 0.45, uDay);
 
   vec3 col = uv.y >= horizon ? skyLit : sea;
 

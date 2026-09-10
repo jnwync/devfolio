@@ -127,8 +127,11 @@ export function mountWorld(canvas: HTMLCanvasElement, onGiveUp?: () => void): ()
     u.uOrb.value = [world.orb.x, world.orb.y, world.orb.r];
     u.uOrbOn.value = world.orb.on;
     u.uPointer.value = [world.pointer.x, world.pointer.y, world.pointer.active];
+    // A renderer that has already dropped resolution does not also get to
+    // spend frames on ripple rings.
+    const degraded = scale < RENDER_SCALE_DEFAULT;
     for (let i = 0; i < 8; i++) {
-      const r = world.ripples[i];
+      const r = degraded ? undefined : world.ripples[i];
       ripples[i * 4] = r ? r.x : 0;
       ripples[i * 4 + 1] = r ? r.y : 0;
       ripples[i * 4 + 2] = r ? now - r.t : 0;
@@ -154,8 +157,15 @@ export function mountWorld(canvas: HTMLCanvasElement, onGiveUp?: () => void): ()
     const t0 = performance.now();
     draw();
     frameCost += (performance.now() - t0 - frameCost) * 0.05;
+    // Drop resolution when frames get expensive, and climb back once the
+    // load passes — a transient stall should not cost the rest of the
+    // visit. The gap between the two thresholds is the hysteresis.
     if (frameCost > 20 && scale > RENDER_SCALE_LOW) {
       scale = RENDER_SCALE_LOW;
+      resize();
+    } else if (frameCost < 8 && scale < RENDER_SCALE_DEFAULT) {
+      scale = RENDER_SCALE_DEFAULT;
+      frameCost = 12;
       resize();
     }
   };
