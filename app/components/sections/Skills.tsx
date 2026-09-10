@@ -3,15 +3,18 @@ import { portfolioData } from '@/data/portfolio';
 /**
  * Capability rows: area, what it covers, where it was proven, and the tools
  * as one mono line — closed out by the education row. No tag walls.
+ *
+ * Motion rests here on purpose: the title surfaces and nothing else moves.
+ * After the pinned work stage and the axis, the page needs a quiet page.
  */
 export default function Skills() {
   const { education } = portfolioData;
 
   return (
-    <section id="skills" aria-labelledby="skills-heading" className="scroll-mt-20 py-20 md:py-28">
+    <section id="skills" data-scene="skills" aria-labelledby="skills-heading" className="scroll-mt-20 py-20 md:py-28">
       <div className="section-shell">
         <header className="sec-head">
-          <h2 id="skills-heading" className="sec-title">
+          <h2 id="skills-heading" className="sec-title mask-rise" data-mask>
             What I cover
           </h2>
         </header>

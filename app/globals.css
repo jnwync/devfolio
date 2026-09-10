@@ -1525,3 +1525,118 @@ html[data-stage-work="on"] .work-plane img {
   background: var(--paper-on-ink);
   transform: scaleY(2);
 }
+
+/* ---------- experience: the time axis ---------- */
+/* A Gantt of the roles below it, newest lane at the top so the lanes read
+   in the same order as the rows. It says the one thing a list of dates
+   cannot — where engagements overlapped and where they ran back to back —
+   and it repeats information the rows already carry, so it is hidden from
+   assistive tech. Sticky under the nav on anything wider than a phone.
+   Without JavaScript every span sits at rest and the diagram still reads. */
+
+.exp-axis {
+  margin-bottom: 1.75rem;
+  padding: 0.5rem 0 0.6rem;
+}
+
+@media (min-width: 768px) {
+  .exp-axis {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 2;
+    /* Denser than the nav: rows pass directly under this one, and they
+       must not read through it. */
+    background: color-mix(in oklab, var(--background) 96%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+.exp-axis-years {
+  position: relative;
+  height: 0.95rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.09em;
+  color: var(--muted-foreground);
+}
+
+.exp-year {
+  position: absolute;
+  top: 0;
+  left: calc(var(--x) * 100%);
+}
+
+.exp-axis-lanes {
+  position: relative;
+  display: grid;
+  grid-auto-rows: 4px;
+  gap: 3px;
+}
+
+.exp-axis-rule {
+  position: absolute;
+  top: -0.4rem;
+  bottom: -0.15rem;
+  left: calc(var(--x) * 100%);
+  width: 1px;
+  background: var(--border);
+}
+
+.exp-span {
+  position: relative;
+  margin-left: calc(var(--x) * 100%);
+  width: max(8px, calc(var(--w) * 100%));
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--foreground) 38%, transparent);
+}
+
+/* Lit by the experience scene as the reading line reaches its row. */
+.exp-span::after {
+  content: "";
+  position: absolute;
+  inset: -1px 0;
+  border-radius: 2px;
+  background: var(--primary);
+  opacity: var(--lit, 0);
+}
+
+[data-exp-row] > summary time {
+  color: color-mix(in oklab, var(--foreground) calc(var(--lit, 0) * 100%), var(--muted-foreground));
+}
+
+@media (max-width: 767px) {
+  .exp-axis-lanes {
+    grid-auto-rows: 3px;
+    gap: 2px;
+  }
+}
+
+/* ---------- public activity: the calendar fills in ---------- */
+/* Armed only when the activity scene runs, so the calendar is never left
+   invisible; one stagger left to right, capped well under half a second. */
+
+[data-cal][data-cal-armed] .github-calendar-week {
+  opacity: 0;
+}
+
+[data-cal][data-cal-armed][data-revealed] .github-calendar-week {
+  opacity: 1;
+  animation: cal-in 0.4s var(--ease-out-quart) backwards;
+  animation-delay: calc(var(--i, 0) * 8ms);
+}
+
+@keyframes cal-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-cal] .github-calendar-week {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+}

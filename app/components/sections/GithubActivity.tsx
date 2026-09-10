@@ -28,7 +28,7 @@ function dayOfWeek(date: string): number {
 
 function ContributionGrid({ weeks, total }: { weeks: ContributionWeek[]; total: number }) {
   return (
-    <div className="github-calendar-wrap">
+    <div className="github-calendar-wrap" data-cal>
       <p className="sr-only">
         {total.toLocaleString()} GitHub contributions in the last year. The visual calendar
         shows contribution intensity by day.
@@ -46,6 +46,7 @@ function ContributionGrid({ weeks, total }: { weeks: ContributionWeek[]; total: 
             <div
               key={week.firstDay}
               className={`github-calendar-week${isOlderThanMobileWindow ? ' github-calendar-week--older' : ''}`}
+              style={{ '--i': index } as React.CSSProperties}
             >
               <span className="github-calendar-month">{startsMonth ? formatMonth(week.firstDay) : ''}</span>
               <div className="github-calendar-days">
@@ -85,10 +86,10 @@ export default async function GithubActivity() {
   const githubUrl = `https://github.com/${personal.githubUsername}`;
 
   return (
-    <section aria-labelledby="github-activity-heading" className="scroll-mt-20 py-20 md:py-28">
+    <section data-scene="activity" aria-labelledby="github-activity-heading" className="scroll-mt-20 py-20 md:py-28">
       <div className="section-shell">
         <header className="sec-head">
-          <h2 id="github-activity-heading" className="sec-title">
+          <h2 id="github-activity-heading" className="sec-title mask-rise" data-mask>
             Public activity
           </h2>
         </header>
