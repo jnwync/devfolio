@@ -1,4 +1,6 @@
 import Navigation from './components/Navigation';
+import Intro from './components/Intro';
+import MotionRoot from './components/motion/MotionRoot';
 import StackMotion from './components/StackMotion';
 import Hero from './components/sections/Hero';
 import StackField from './components/sections/StackField';
@@ -9,13 +11,14 @@ import Skills from './components/sections/Skills';
 import Contact from './components/sections/Contacts';
 
 /**
- * Sections flow over the fixed field (see Atmosphere in the layout). Only the
- * Work and Contact plates are opaque; everything else lets the sky through.
- * Nothing reveals on scroll: the content is simply there.
+ * One continuous world (see WorldRoot in the layout): sections flow over
+ * the same horizon and the day passes as you scroll. The intro comes first
+ * in the DOM so its skip control is the first thing a keyboard reaches.
  */
 export default function Home() {
   return (
     <>
+      <Intro />
       <Navigation />
       <main id="main-content">
         <Hero />
@@ -27,6 +30,7 @@ export default function Home() {
         <Contact />
       </main>
       <StackMotion />
+      <MotionRoot />
     </>
   );
 }

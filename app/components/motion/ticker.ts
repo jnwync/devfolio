@@ -1,15 +1,16 @@
 /**
  * The site has exactly one animation loop: GSAP's ticker. Everything that
- * needs a frame (Lenis, the WebGL world, the 2D orb, DOM subscribers)
- * registers here instead of calling requestAnimationFrame itself, so the
- * work is ordered, batched, and pauses together when the tab is hidden.
+ * needs a frame (Lenis, the scroll derivations, the WebGL world through
+ * the store's frame hooks) registers here instead of calling
+ * requestAnimationFrame itself, so the work is ordered, batched, and
+ * pauses together when the tab is hidden.
  *
  * Importing this module pulls in GSAP core, so it lives in the `motion`
  * bundle and is only loaded for visitors without reduced motion.
  */
 
 import { gsap } from 'gsap';
-import { publish, world } from '../world/state';
+import { clock, frameHooks, world } from '../world/state';
 
 export const MOTION_MARKER = '__jnwync_motion__';
 
@@ -19,7 +20,8 @@ const frames = new Set<Frame>();
 let running = false;
 let lastScroll = 0;
 
-function tick(time: number, deltaTime: number) {
+function tick(_time: number, deltaTime: number) {
+  const time = clock();
   const delta = deltaTime / 1000;
   const scroll = window.scrollY;
   world.velocity += (scroll - lastScroll - world.velocity) * 0.18;
@@ -27,14 +29,16 @@ function tick(time: number, deltaTime: number) {
   lastScroll = scroll;
 
   // Decay pointer activity and expire ripples older than three seconds.
-  world.pointer.active += (0 - world.pointer.active) * 0.05;
-  world.ripples = world.ripples.filter((r) => time - r.t < 3);
+  world.pointer.active += (0 - world.pointer.active) * 0.04;
+  if (world.ripples.length && time - world.ripples[0].t > 3) {
+    world.ripples = world.ripples.filter((r) => time - r.t < 3);
+  }
 
   frames.forEach((frame) => frame(time, delta));
-  publish(time, delta);
+  frameHooks.forEach((hook) => hook(time, delta));
 }
 
-/** Register a per-frame callback (Lenis, renderer, orb). */
+/** Register a per-frame callback (Lenis, derivations); starts the loop. */
 export function addFrame(frame: Frame): () => void {
   frames.add(frame);
   start();
@@ -55,9 +59,4 @@ export function stop(): void {
   if (!running) return;
   running = false;
   gsap.ticker.remove(tick);
-}
-
-/** Current ticker time in seconds (shared clock for ripples and shaders). */
-export function now(): number {
-  return gsap.ticker.time;
 }

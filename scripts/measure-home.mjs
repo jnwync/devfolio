@@ -43,8 +43,15 @@ export function measure() {
     if (!file.endsWith('.js') || refs.has(`static/chunks/${file}`)) continue;
     const buf = readFileSync(join(chunksDir, file));
     const text = buf.toString('utf8');
-    if (text.includes('__jnwync_world__')) lazy.world.push({ file, gz: gz(buf), raw: buf.length });
-    else if (text.includes('__jnwync_motion__')) lazy.motion.push({ file, gz: gz(buf), raw: buf.length });
+    // Markers first (a chunk carrying our own entry code), then library
+    // fingerprints for chunks the bundler split away from the marked entry:
+    // OGL compiles programs, Lenis brands its root classes, GSAP carries
+    // its plugin names.
+    const entry = { file, gz: gz(buf), raw: buf.length };
+    if (text.includes('__jnwync_motion__')) lazy.motion.push(entry);
+    else if (text.includes('__jnwync_world__')) lazy.world.push(entry);
+    else if (text.includes('createProgram(') || text.includes('lenis-smooth')) lazy.world.push(entry);
+    else if (text.includes('ScrollTrigger') || text.includes('gsap.ticker') || text.includes('_gsap')) lazy.motion.push(entry);
   }
 
   const sum = (list) => list.reduce((n, c) => n + c.gz, 0);

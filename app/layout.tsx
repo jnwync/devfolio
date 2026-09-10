@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Hanken_Grotesk, Fragment_Mono } from "next/font/google";
 import "./globals.css";
 import Atmosphere from "./components/Atmosphere";
+import WorldRoot from "./components/world/WorldRoot";
 import { ViewTransitionSettler } from "./components/TransitionLink";
 import { portfolioData } from "@/data/portfolio";
 
@@ -161,6 +162,7 @@ export default function RootLayout({
       >
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         <Atmosphere />
+        <WorldRoot />
         <div className="grain" aria-hidden="true" />
         <ViewTransitionSettler />
         {children}

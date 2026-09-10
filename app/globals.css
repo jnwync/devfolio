@@ -102,14 +102,16 @@
 
   /* geometry written by the timeline (lengths, not colours) */
   --horizon: 62svh;
+  --horizon-static: 62svh;
+  --nav-h: calc(4.5rem + 1px);
   --orb-x: 50vw;
   --orb-y: 60vh;
   --orb-r: 22px;
   --orb-on: 0;
 
   /* z scale: the only layers that may claim a z-index */
-  --z-world: -2;
-  --z-atmo: -1;
+  --z-atmo: -2;
+  --z-world: -1;
   --z-orb: -1;
   --z-plate: 3;
   --z-axis: 20;
@@ -248,7 +250,7 @@
 .atmosphere {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: var(--z-atmo);
   width: 100%;
   height: 100vh;
   height: 100lvh;
@@ -411,6 +413,11 @@ html[data-js] .hero-st-3 { animation-delay: 0.2s; }
 html[data-js] .hero-st-4 { animation-delay: 0.28s; }
 html[data-js] .hero-st-5 { animation-delay: 0.36s; }
 html[data-js] .hero-st-6 { animation-delay: 0.46s; }
+
+/* Under the intro the entrance waits; it plays as the overlay fades. */
+html[data-intro="play"] .hero-st {
+  animation-play-state: paused;
+}
 
 @keyframes hero-rise {
   from {
@@ -958,6 +965,13 @@ html:not([data-js]) .theme-toggle {
     animation: none;
   }
 
+  .hero-mast,
+  .hero-portrait,
+  .hero-water {
+    transform: none !important;
+    clip-path: none !important;
+  }
+
   .stack-item,
   .stack-glyph {
     transform: none !important;
@@ -985,6 +999,8 @@ html:not([data-js]) .theme-toggle {
 
   .atmosphere,
   .grain,
+  .world,
+  .intro-root,
   .site-nav,
   .theme-toggle,
   .exp-toggle {
@@ -1022,4 +1038,320 @@ html:not([data-js]) .theme-toggle {
     font-size: 0.8em;
     color: var(--muted-foreground);
   }
+}
+
+/* ---------- the world: one place, two weathers ---------- */
+/* A fixed layer between the atmosphere and the content. On capable
+   desktops the GL canvas draws sky and sea (html[data-world="gl"]);
+   everywhere else a CSS sea band and a DOM orb read the same frame store
+   through custom properties. All of it is aria-hidden and inert. */
+
+.world {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-world);
+  pointer-events: none;
+  contain: strict;
+}
+
+.world-gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+html[data-world="gl"] .world-gl {
+  display: block;
+}
+
+html[data-world="gl"] .atmosphere {
+  visibility: hidden;
+}
+
+html[data-world="gl"] .world-sea,
+html[data-world="gl"] .world-orb {
+  display: none;
+}
+
+/* The sea, 2D: two stops from the horizon down, a hairline of sky light
+   on the water line, and the orb's lane on the water beneath it. The orb
+   sits before the sea in the DOM so it sets behind the water. */
+.world-sea {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--horizon);
+  bottom: -2px;
+  background: linear-gradient(to bottom, var(--world-sea-far), var(--world-sea-near) 55%);
+  box-shadow: 0 -1px 0 color-mix(in oklab, var(--world-sky-horizon) 55%, transparent);
+}
+
+.world-sea::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--orb-x) - 9vw);
+  top: 0;
+  width: 18vw;
+  height: 45%;
+  background: radial-gradient(ellipse at 50% 0%, color-mix(in oklab, var(--world-glow) 30%, transparent), transparent 70%);
+  opacity: var(--orb-on);
+}
+
+.world-orb {
+  position: absolute;
+  left: var(--orb-x);
+  top: var(--orb-y);
+  width: calc(var(--orb-r) * 2);
+  height: calc(var(--orb-r) * 2);
+  margin: calc(var(--orb-r) * -1) 0 0 calc(var(--orb-r) * -1);
+  border-radius: 50%;
+  background: var(--world-orb);
+  box-shadow:
+    0 0 calc(var(--orb-r) * 1.2) calc(var(--orb-r) * 0.35) color-mix(in oklab, var(--world-glow) 55%, transparent),
+    0 0 calc(var(--orb-r) * 6) calc(var(--orb-r) * 1.5) color-mix(in oklab, var(--world-glow) 22%, transparent);
+  opacity: var(--orb-on);
+}
+
+/* ---------- hero: sky above the horizon, water below ---------- */
+/* The sky box ends exactly on the static horizon (62svh from the top of
+   the viewport, minus the in-flow nav), so the masthead's baseline is the
+   water line at scroll 0 and the intro overlay's copy of it coincides. */
+
+.section-shell {
+  --shell-x: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .section-shell {
+    --shell-x: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-shell {
+    --shell-x: 2rem;
+  }
+}
+
+.hero {
+  --hero-p: 0;
+  position: relative;
+  min-height: 100svh;
+}
+
+.hero-sky {
+  position: relative;
+  height: calc(var(--horizon-static) - var(--nav-h));
+  min-height: 14rem;
+  padding-top: clamp(1.25rem, 4svh, 2.5rem);
+}
+
+.hero-eyebrow {
+  max-width: calc(100% - min(clamp(8rem, 17vw, 15rem), 34svh) - 1.5rem);
+}
+
+.hero-portrait {
+  position: absolute;
+  right: var(--shell-x);
+  top: clamp(1.25rem, 4svh, 2.5rem);
+  width: min(clamp(8rem, 17vw, 15rem), 34svh);
+  will-change: transform;
+}
+
+/* The masthead: the name at its largest, standing in the water. The
+   moment the page scrolls it rides the rising horizon (0.83 of scroll)
+   and sinks through it within the first tenth of a viewport, before the
+   headline climbs past the water line; the clip edge is the water line,
+   so descenders are under water from the start. All of it from one
+   variable, --hero-p, that the scroll scene writes. */
+.hero-mast {
+  --sink: clamp(0, calc(var(--hero-p) / 0.1), 1);
+  position: absolute;
+  left: var(--shell-x);
+  bottom: 0;
+  margin: 0;
+  font-family: var(--font-display), "Arial Black", sans-serif;
+  font-size: clamp(5rem, 14vw, 13rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.78;
+  white-space: nowrap;
+  color: var(--foreground);
+  transform: translateY(calc(var(--hero-p) * 83svh + var(--sink) * var(--sink) * 140%));
+  clip-path: inset(-0.35em -0.1em calc(var(--sink) * var(--sink) * 140%) -0.1em);
+  will-change: transform;
+}
+
+.hero-mast .wordmark {
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.hero-water {
+  position: relative;
+  padding-top: clamp(1.75rem, 6svh, 3.75rem);
+  padding-bottom: clamp(2.5rem, 7svh, 4.5rem);
+  will-change: transform;
+}
+
+/* Kinetic width: Bricolage's wdth axis, scrubbed by the scenes. */
+.wdth-scrub {
+  font-variation-settings: "wdth" var(--wdth, 100);
+}
+
+/* ---------- intro: the horizon draws, the dot rises, the name surfaces ---------- */
+/* Shown only while the boot script has set html[data-intro]; the markup
+   is always in the page but display:none otherwise, so no-JS, reduced
+   motion and return visits never see it. The masthead here uses the same
+   classes and geometry as the hero's, so the exit crossfade is seamless. */
+
+.intro-root {
+  display: none;
+}
+
+html[data-intro] .intro-root {
+  display: block;
+}
+
+html[data-intro] {
+  overflow: hidden;
+}
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-intro);
+  background: var(--background);
+  overflow: hidden;
+}
+
+.intro-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--horizon-static);
+  height: 1px;
+  background: var(--foreground);
+  opacity: 0.5;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  animation: intro-line 0.7s var(--ease-out-quint) 0.1s forwards;
+}
+
+.intro-mast {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--horizon-static);
+}
+
+.intro-mast .section-shell {
+  position: relative;
+  height: 100%;
+}
+
+.intro-mast .hero-mast {
+  transform: none;
+  clip-path: inset(-0.35em -0.1em 0 -0.1em);
+}
+
+.intro-mast .il,
+.intro-mast .intro-dot {
+  display: inline-block;
+  transform: translateY(115%);
+  animation: intro-surface 0.75s var(--ease-out-quint) forwards;
+  animation-delay: calc(0.8s + var(--i) * 0.055s);
+}
+
+.intro-mast .intro-dot {
+  color: var(--primary);
+  animation-delay: 0.5s;
+  animation-duration: 0.85s;
+}
+
+.intro-skip {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: var(--z-skip);
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+  opacity: 0;
+  animation: intro-skip-in 0.4s ease-out 0.7s forwards;
+}
+
+.intro-skip:hover,
+.intro-skip:focus-visible {
+  color: var(--foreground);
+  border-color: var(--foreground);
+}
+
+.intro--exit .intro {
+  animation: intro-out 0.64s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.intro--exit-fast .intro {
+  animation: intro-out 0.24s ease-out forwards;
+}
+
+.intro--exit .intro-horizon,
+.intro--exit-fast .intro-horizon,
+.intro--exit .intro-skip,
+.intro--exit-fast .intro-skip {
+  animation: intro-out 0.2s ease-out forwards;
+}
+
+@keyframes intro-line {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes intro-surface {
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes intro-skip-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes intro-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ---------- Lenis (desktop wheel smoothing only) ---------- */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }

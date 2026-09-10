@@ -131,6 +131,8 @@ export default function Atmosphere() {
 
     const draw = () => {
       raf = 0;
+      // The GL world replaces this canvas on the home page; skip the work.
+      if (document.documentElement.dataset.world === 'gl') return;
       const y = reduceMotion.matches ? 0 : window.scrollY;
       ctx.clearRect(0, 0, w, h);
       for (const layer of layers) {
@@ -166,8 +168,12 @@ export default function Atmosphere() {
       }, 150);
     };
 
-    const themeWatch = new MutationObserver(build);
-    themeWatch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    const themeWatch = new MutationObserver((records) => {
+      // Rebuild on a theme change; redraw when the GL world hands back.
+      if (records.some((r) => r.attributeName === 'data-theme')) build();
+      else schedule();
+    });
+    themeWatch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-world'] });
 
     build();
     window.addEventListener('resize', onResize);
