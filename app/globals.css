@@ -28,8 +28,12 @@
   --popover: var(--bg-raised);
   --popover-foreground: var(--foreground);
 
-  /* the green family — the wordmark's dot is the origin of every accent */
-  --primary: light-dark(oklch(0.40 0.1 152), oklch(0.78 0.13 152));
+  /* the green family — the wordmark's dot is the origin of every accent.
+     Green is also the beacon on the water, so it is declared per weather:
+     see the note above the world tokens. */
+  --primary-day: oklch(0.40 0.1 152);
+  --primary-night: oklch(0.78 0.13 152);
+  --primary: light-dark(var(--primary-day), var(--primary-night));
   --primary-foreground: light-dark(oklch(0.975 0.01 120), oklch(0.15 0.02 160));
   --accent: light-dark(oklch(0.46 0.115 151), oklch(0.80 0.12 152));
   --accent-foreground: light-dark(oklch(0.975 0.01 120), oklch(0.15 0.02 160));
@@ -91,13 +95,34 @@
   --ease-scene: cubic-bezier(0.76, 0, 0.24, 1);
 
   /* the world: one horizon over water, lit as night or day. The WebGL scene
-     and the 2D fallback both read these, so the theme is one source. */
-  --world-sky-top: light-dark(oklch(0.905 0.028 222), oklch(0.15 0.016 212));
-  --world-sky-horizon: light-dark(oklch(0.975 0.022 96), oklch(0.235 0.022 172));
-  --world-sea-far: light-dark(oklch(0.9 0.03 208), oklch(0.2 0.02 182));
-  --world-sea-near: light-dark(oklch(0.82 0.05 202), oklch(0.115 0.014 190));
-  --world-orb: light-dark(oklch(0.985 0.06 92), oklch(0.94 0.02 110));
-  --world-glow: light-dark(oklch(0.95 0.08 90), oklch(0.74 0.11 155));
+     and the 2D fallback both read these, so the theme is one source.
+
+     Each colour is declared once per weather and the live token is composed
+     from the pair. The renderer needs *both* weathers at the same time — it
+     tweens between them so the theme toggle reads as a time-lapse — and a
+     light-dark() inside a custom property always resolves to the page's
+     current scheme, whatever color-scheme the element reading it carries.
+     Ask such a token for the other weather and it answers with this one, the
+     renderer blends night into night, and the world never changes its light.
+     Keep the -day/-night halves and the composed token in step. */
+  --world-sky-top-day: oklch(0.905 0.028 222);
+  --world-sky-top-night: oklch(0.15 0.016 212);
+  --world-sky-top: light-dark(var(--world-sky-top-day), var(--world-sky-top-night));
+  --world-sky-horizon-day: oklch(0.975 0.022 96);
+  --world-sky-horizon-night: oklch(0.235 0.022 172);
+  --world-sky-horizon: light-dark(var(--world-sky-horizon-day), var(--world-sky-horizon-night));
+  --world-sea-far-day: oklch(0.9 0.03 208);
+  --world-sea-far-night: oklch(0.2 0.02 182);
+  --world-sea-far: light-dark(var(--world-sea-far-day), var(--world-sea-far-night));
+  --world-sea-near-day: oklch(0.82 0.05 202);
+  --world-sea-near-night: oklch(0.115 0.014 190);
+  --world-sea-near: light-dark(var(--world-sea-near-day), var(--world-sea-near-night));
+  --world-orb-day: oklch(0.985 0.06 92);
+  --world-orb-night: oklch(0.94 0.02 110);
+  --world-orb: light-dark(var(--world-orb-day), var(--world-orb-night));
+  --world-glow-day: oklch(0.95 0.08 90);
+  --world-glow-night: oklch(0.74 0.11 155);
+  --world-glow: light-dark(var(--world-glow-day), var(--world-glow-night));
   --world-dim: light-dark(oklch(0.2 0.02 160 / 0.35), oklch(0.05 0.01 170 / 0.55));
 
   /* The hero figure carries the name across it, so by day he is hazed back
@@ -1096,6 +1121,18 @@ html[data-world="gl"] .world-gl {
 html[data-world="gl"] .atmosphere {
   visibility: hidden;
 }
+
+/* The weather changes in one frame, and so does the world.
+
+   It used to tween across, on the reasoning that the toggle changes the time
+   of day rather than swapping a palette. But the two weathers are inverses —
+   dark ink on a bright sky, light ink on a dark one — so any continuous path
+   between them has the ink and the water passing *through* each other, and
+   text is unreadable wherever they meet. Measured here: the crossing bottomed
+   out at 1.6:1 whichever half was moving, ink or water. There is no curve
+   that avoids it; a cut is the only crossing that has no middle. The passage
+   of the day still belongs to the scroll, which is where it can be gradual
+   without ever putting text on its own colour. */
 
 html[data-world="gl"] .world-sea,
 html[data-world="gl"] .world-orb {

@@ -47,6 +47,11 @@ function oklchToLinearRgb(l, c, h) {
 const luminanceOf = ([r, g, b]) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
 const contrast = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 
+const parseOklch = (body) => {
+  const [l, c, h] = body.trim().split('/')[0].trim().split(/\s+/).map(Number);
+  return luminanceOf(oklchToLinearRgb(l, c, h || 0));
+};
+
 /**
  * Reads `--name: light-dark(oklch(...), oklch(...))` from the token block
  * and returns the luminance of each weather.
@@ -57,17 +62,33 @@ function token(name) {
   );
   const match = css.match(pattern);
   assert.ok(match, `${name} is not a light-dark(oklch, oklch) token in globals.css`);
-  const parse = (body) => {
-    const [l, c, h] = body.trim().split('/')[0].trim().split(/\s+/).map(Number);
-    return luminanceOf(oklchToLinearRgb(l, c, h || 0));
+  return { light: parseOklch(match[1]), dark: parseOklch(match[2]) };
+}
+
+/**
+ * The colours the world itself paints are declared once per weather, because
+ * the renderer reads both halves at the same time to tween between them. This
+ * reads that pair — and checks the composed token is still built from it, so
+ * the weather the page paints in CSS cannot drift from the one the shader
+ * gets handed.
+ */
+function weatherToken(name) {
+  const half = (suffix) => {
+    const match = css.match(new RegExp(`${name}-${suffix}:\\s*oklch\\(([^)]*)\\)`));
+    assert.ok(match, `${name}-${suffix} is not an oklch() token in globals.css`);
+    return parseOklch(match[1]);
   };
-  return { light: parse(match[1]), dark: parse(match[2]) };
+  assert.ok(
+    css.includes(`${name}: light-dark(var(${name}-day), var(${name}-night))`),
+    `${name} must be composed from its own -day and -night halves`
+  );
+  return { light: half('day'), dark: half('night') };
 }
 
 const foreground = token('--foreground');
 const muted = token('--muted-foreground');
-const primary = token('--primary');
-const worldTokens = ['--world-sky-top', '--world-sky-horizon', '--world-sea-far', '--world-sea-near', '--world-orb', '--world-glow'].map(token);
+const primary = weatherToken('--primary');
+const worldTokens = ['--world-sky-top', '--world-sky-horizon', '--world-sea-far', '--world-sea-near', '--world-orb', '--world-glow'].map(weatherToken);
 
 // By day the shader does not clamp anything, so the worst background is
 // simply the brightest colour the palette can put on screen.

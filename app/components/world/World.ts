@@ -4,11 +4,15 @@
  * lazily by WorldRoot on capable desktops only. Renders one frame on mount
  * (so the intro can reveal a finished scene), then joins the frame hooks.
  *
- * Both weathers' palettes are read from the CSS tokens once; a theme change
- * moves `world.day`, and the renderer eases its own copy toward it so the
- * light changes across the scene over about half a second instead of
- * cutting. A lost context is rebuilt once; a second loss hands the page to
- * the 2D world.
+ * Both weathers' palettes are read from the CSS tokens once, and a theme
+ * change repaints the scene in the same frame the page changes its own
+ * colours. It used to ease across instead, which reads better in isolation
+ * but not with text on top: the weathers are inverses, so easing drags the
+ * water through the ink's own luminance and the copy disappears on the way.
+ * The gradual passage of the day is the scroll's job, not the toggle's.
+ *
+ * A lost context is rebuilt once; a second loss hands the page to the 2D
+ * world.
  */
 
 import { Mesh, Program, Renderer, Triangle } from 'ogl';
@@ -95,7 +99,6 @@ export function mountWorld(canvas: HTMLCanvasElement, onGiveUp?: () => void): ()
   let losses = 0;
   let lastActivity = clock();
   let frameCost = 0;
-  let lastTime = clock();
 
   const resize = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, 1.25) * scale;
@@ -113,11 +116,8 @@ export function mountWorld(canvas: HTMLCanvasElement, onGiveUp?: () => void): ()
     if (lost) return;
     const { u, ripples, renderer, mesh } = scene;
     const now = clock();
-    const dt = Math.min(0.1, now - lastTime);
-    lastTime = now;
     if (dayShown !== world.day) {
-      dayShown += (world.day - dayShown) * (1 - Math.exp(-dt * 7));
-      if (Math.abs(world.day - dayShown) < 0.002) dayShown = world.day;
+      dayShown = world.day;
       applyPalette();
     }
     u.uTime.value = now;

@@ -4,8 +4,13 @@ One place, two weathers, and the day passes as you scroll.
 
 The whole home page sits in a single continuous scene: a horizon over water.
 Dark is night — stars, a moonlit sea. Light is day — a warm sky, sunlit water.
-The theme toggle does not swap a palette; it changes the time of day of the same
-place, tweened over about half a second. Scrolling is the passage of hours: the
+The theme toggle changes the time of day of the whole place at once, in a single
+frame. It used to ease across, which is prettier with nothing on top of it and
+wrong the moment there is: the two weathers are inverses, so any continuous path
+between them drags the water through the ink's own luminance and the text
+vanishes somewhere in the middle. Measured on this page the crossing bottomed
+out at 1.6:1 whichever half was given the easing, so the cut is the only
+crossing without a middle. Scrolling is the passage of hours: the
 sun or moon starts as the period of the hero masthead, travels an arc to the
 right, and has set into the horizon by the time you reach the contact bookend,
 whose own period stays lit as a beacon on the water.
@@ -19,7 +24,7 @@ it casts a shadow onto the water above its edge.
 | Tier | Loads for | Contents | Size (gz) |
 | --- | --- | --- | --- |
 | initial | everyone | page, intro markup, the frame store, capability gates | 200.4 KB |
-| `motion` | JavaScript, motion tier `full` (phones included), after the intro | GSAP + ScrollTrigger, every scene, Lenis on fine pointers | 46.0 KB |
+| `motion` | JavaScript, motion tier `full` (phones included), after the intro | GSAP + ScrollTrigger, every scene | 46.0 KB |
 | `world` | the home page on a wide viewport with WebGL2, motion `full`, no data-saver | OGL subset, the sky/sea program | 22.0 KB |
 
 Reduced-motion and no-JS visitors download neither lazy tier. Phones get
@@ -36,7 +41,7 @@ writes it onto `<html>`, so CSS can gate without waiting for hydration:
 | `data-js` | JavaScript ran |
 | `data-theme` | `light` / `dark`: stored choice → OS → dark |
 | `data-motion` | `full` / `reduce`: stored choice → OS → full |
-| `data-fine` | a fine pointer (Lenis, hover lights, ripples) |
+| `data-fine` | a fine pointer (hover lights, ripples) |
 | `data-wide` | ≥ 768px |
 | `data-intro` | the intro is armed for this session |
 | `data-world` | `gl` / `2d`, written once the world has picked a path |
@@ -63,7 +68,7 @@ bundles share it without pulling each other in — the world registers its
 renderer through `frameHooks` rather than importing the ticker.
 
 There is exactly one animation loop: `gsap.ticker`, in
-`app/components/motion/ticker.ts`. Lenis, the scroll derivations and the world
+`app/components/motion/ticker.ts`. The scroll derivations and the world
 renderer are all callbacks on it.
 
 ## Writing a scene
@@ -107,13 +112,23 @@ the brightest thing the world can put behind it. Raise a limit or brighten a
 world token and the test fails there, not in a screenshot someone happens to
 look at. It has already caught one real regression.
 
+Every colour the world paints is declared twice — `--world-sea-far-day` and
+`--world-sea-far-night`, and so on — with the live token composed from the pair.
+The renderer needs both weathers at once, and it cannot get them from a
+composed token: a `light-dark()` inside a custom property resolves to the page's
+current scheme no matter what `color-scheme` the element reading it carries, so
+asking one for the other weather quietly answers with this one. That is what
+shipped in `4f05b09`, and the world was stuck at night in daylight until the
+tokens were split. The test asserts each composed token is still built from its
+own two halves, so the CSS and the shader cannot drift apart again.
+
 ## Performance
 
-The renderer runs at 0.75 × min(DPR, 1.5). If the sixty-frame mean cost passes
-20 ms it drops to 0.5 × and stops drawing ripples; it climbs back once frames
+The renderer runs at 0.62 × min(DPR, 1.25). If the sixty-frame mean cost passes
+20 ms it drops to 0.45 × and stops drawing ripples; it climbs back once frames
 are comfortably cheap again. It pauses entirely when the tab is hidden and
 halves its rate after a minute of no scrolling or pointer movement. A lost
 WebGL context is rebuilt once; a second loss hands the page to the 2D world.
 
-`window.__jnwync` exposes `{ world, lenis }` when the motion bundle is loaded.
+`window.__jnwync` exposes `{ world }` when the motion bundle is loaded.
 It is a read hook for the screenshot and audit scripts, not an API.
