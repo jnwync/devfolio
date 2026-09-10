@@ -24,7 +24,7 @@ export default function Intro() {
     const root = rootRef.current;
     if (!root) return;
     if (html.dataset.intro !== 'play') {
-      root.remove();
+      root.hidden = true;
       return;
     }
 
@@ -52,7 +52,9 @@ export default function Intro() {
         }
         delete html.dataset.intro;
         window.dispatchEvent(new Event('jnwync:intro-done'));
-        root.remove();
+        // Hidden, never removed: React owns this node, and pulling it out
+        // from under it makes the next client navigation throw on unmount.
+        root.hidden = true;
       }, fast ? 240 : 640);
     };
     finishRef.current = finish;

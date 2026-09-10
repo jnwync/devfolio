@@ -32,7 +32,7 @@ uniform vec3 uOrb;        // x, y (from top), radius as a fraction of height
 uniform float uOrbOn;
 uniform vec3 uPointer;    // x, y (from top), activity
 uniform vec4 uRipples[8]; // x, y (from top), age, strength
-uniform vec4 uDim;        // x, y (from top), w, h
+uniform vec4 uDim;        // left, top (from top), width, height
 uniform float uDimAmount;
 uniform vec3 uBeacon;     // x, y (from top), on
 uniform vec4 uLights[14]; // x, y (from top), strength, hover
@@ -201,9 +201,13 @@ void main() {
 
   vec3 col = uv.y >= horizon ? skyLit : sea;
 
-  // darken the water under an opaque plate
-  float inDim = step(uDim.x, uv.x) * step(uv.x, uDim.x + uDim.z) * step(1.0 - (uDim.y + uDim.w), uv.y) * step(uv.y, 1.0 - uDim.y);
-  col *= 1.0 - inDim * uDimAmount;
+  // An opaque plate sitting on the water casts a shadow onto it: a soft
+  // band above the plate's edge, darkest where the two meet. uDim is
+  // (left, top, width, height) in viewport units, y measured from the top.
+  float shadeX = smoothstep(uDim.x - 0.02, uDim.x + 0.02, uv.x) * (1.0 - smoothstep(uDim.x + uDim.z - 0.02, uDim.x + uDim.z + 0.02, uv.x));
+  float shadeEdge = 1.0 - uDim.y - uDim.w;
+  float shade = 1.0 - smoothstep(shadeEdge, shadeEdge + max(uDim.w, 0.001), uv.y);
+  col *= 1.0 - shadeX * shade * shade * uDimAmount;
 
   // dither, then gamma
   col += (hash21(gl_FragCoord.xy + fract(uTime)) - 0.5) * 0.004;

@@ -37,7 +37,8 @@ export interface WorldState {
   /** Pointer in viewport units; `active` decays to 0 when the pointer rests. */
   pointer: { x: number; y: number; active: number };
   ripples: Ripple[];
-  /** Darkening rectangle under an opaque plate (viewport units, y from top). */
+  /** The shadow an opaque plate casts on the water: the band above its top
+   *  edge, in viewport units with y measured from the top. */
   dim: { x: number; y: number; w: number; h: number; amount: number };
   /** The beacon (the wordmark dot in the closing plate). */
   beacon: { x: number; y: number; on: number };

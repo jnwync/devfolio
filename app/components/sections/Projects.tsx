@@ -28,11 +28,12 @@ function SelectedProject({
 
   return (
     <article
-      className={`grid grid-cols-1 items-center gap-8 py-14 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:gap-14 md:py-20 ${
+      data-work-beat={index}
+      className={`work-beat grid grid-cols-1 items-center gap-8 py-14 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:gap-14 md:py-20 ${
         index > 0 ? 'border-t border-border-on-ink' : ''
       }`}
     >
-      <div className={`min-w-0 ${flip ? 'md:order-2' : ''}`}>
+      <div className={`work-copy min-w-0 ${flip ? 'md:order-2' : ''}`}>
         <p className="meta-line">
           {typeLabels[project.type]} · {project.period}
         </p>
@@ -89,17 +90,21 @@ function SelectedProject({
         )}
       </div>
 
-      <div className={`min-w-0 ${flip ? 'md:order-1' : ''}`}>{children}</div>
+      <div className={`work-media min-w-0 ${flip ? 'md:order-1' : ''}`}>{children}</div>
     </article>
   );
 }
 
 /** A framed figure with its caption underneath. The frame stays dark in both
- *  weathers — it is an artefact sitting on the plate, not part of it. */
+ *  weathers — it is an artefact sitting on the plate, not part of it. In the
+ *  pinned stage the three frames coincide and read as one window, with only
+ *  the plane inside it moving. */
 function Figure({ caption, children }: { caption: string; children: React.ReactNode }) {
   return (
     <figure>
-      <div className="figure-frame">{children}</div>
+      <div className="figure-frame">
+        <div className="work-plane">{children}</div>
+      </div>
       <figcaption className="meta-line mt-3">{caption}</figcaption>
     </figure>
   );
@@ -115,7 +120,7 @@ function OkraBoard() {
   ];
 
   return (
-    <div className="grid min-h-72 grid-cols-3 gap-3 bg-frame-board p-5" aria-hidden="true">
+    <div className="grid h-full min-h-72 grid-cols-3 gap-3 bg-frame-board p-5" aria-hidden="true">
       {columns.map((col) => (
         <div key={col.name} className="flex flex-col gap-2 rounded-lg border border-frame-edge bg-frame-column p-2.5">
           <div className="mono-micro flex justify-between px-1 pb-1 text-frame-muted">
@@ -165,7 +170,7 @@ function TrackbillInbox() {
   ];
 
   return (
-    <div className="flex min-h-72 items-stretch gap-3 overflow-hidden bg-frame-board p-4 sm:gap-4 sm:p-5" aria-hidden="true">
+    <div className="flex h-full min-h-72 items-stretch gap-3 overflow-hidden bg-frame-board p-4 sm:gap-4 sm:p-5" aria-hidden="true">
       <div className="flex min-w-0 flex-1 flex-col gap-2 overflow-hidden rounded-lg border border-frame-edge bg-frame-column p-3">
         <div className="mono-micro flex justify-between px-1 pb-1 text-frame-muted">
           <span>Folders</span>
@@ -214,33 +219,46 @@ function TrackbillInbox() {
   );
 }
 
+/** Captions for real media. The illustrations carry their own, and say so. */
+const mediaCaptions: Record<string, string> = {
+  reisky: 'Reisky Martial Arts, production site (reisky.vercel.app)',
+  trackbill: 'Trackbill, product screen (trackbill.ai)',
+};
+
+/**
+ * The media slot. Any project carrying an `image` shows real media; the
+ * others show an illustration drawn from the product's structure. Trackbill
+ * flips from illustration to screenshot the moment an image path is added
+ * to data/portfolio.ts — nothing else has to change.
+ */
 function visualFor(project: Project): { caption: string; node: React.ReactNode } {
-  switch (project.id) {
-    case 'trackbill':
-      return {
-        caption: 'Trackbill, folder view and mobile inbox drawn from the product’s structure (no public screenshot)',
-        node: <TrackbillInbox />,
-      };
-    case 'okra':
-      return {
-        caption: 'OKRa, board view drawn from the product’s structure (internal tool, no public screenshot)',
-        node: <OkraBoard />,
-      };
-    default:
-      return {
-        caption: 'Reisky Martial Arts, production site (reisky.vercel.app)',
-        node: (
-          <Image
-            src={project.image ?? '/images/projects/reisky-home.png'}
-            alt={`Screenshot of ${project.title}`}
-            width={1200}
-            height={675}
-            className="h-auto w-full object-cover"
-            sizes="(max-width: 768px) 100vw, 560px"
-          />
-        ),
-      };
+  if (project.image) {
+    return {
+      caption: mediaCaptions[project.id] ?? `${project.title}, production screen`,
+      node: (
+        <Image
+          src={project.image}
+          alt={`Screenshot of ${project.title}`}
+          width={1200}
+          height={675}
+          className="h-auto w-full object-cover"
+          sizes="(max-width: 768px) 100vw, 620px"
+        />
+      ),
+    };
   }
+
+  if (project.id === 'trackbill') {
+    return {
+      caption: 'Trackbill, folder view and mobile inbox drawn from the product’s structure (no public screenshot)',
+      node: <TrackbillInbox />,
+    };
+  }
+
+  return {
+    caption: 'OKRa, board view drawn from the product’s structure (internal tool, no public screenshot)',
+    node: <OkraBoard />,
+  };
 }
 
 export default function Projects() {
@@ -250,24 +268,43 @@ export default function Projects() {
   return (
     <section
       id="projects"
+      data-scene="work"
       aria-labelledby="projects-heading"
       className="dark-scene dark-scene--cover scroll-mt-20 pt-16 pb-20 md:pt-24"
     >
       <div className="section-shell">
         <header className="sec-head">
-          <h2 id="projects-heading" className="sec-title text-paper-on-ink">
+          <h2 id="projects-heading" className="sec-title mask-rise text-paper-on-ink" data-mask>
             Selected work
           </h2>
         </header>
 
-        {selected.map((project, index) => {
-          const visual = visualFor(project);
-          return (
-            <SelectedProject key={project.id} project={project} index={index} flip={index % 2 === 1}>
-              <Figure caption={visual.caption}>{visual.node}</Figure>
-            </SelectedProject>
-          );
-        })}
+        <div
+          className="work-stage"
+          data-work-stage
+          style={{ '--beats': selected.length } as React.CSSProperties}
+        >
+          <div className="work-pin">
+            <ul className="work-rail" data-work-rail hidden>
+              {selected.map((project, index) => (
+                <li key={project.id}>
+                  <button type="button" data-work-jump={index} aria-label={`Show ${project.title.split(' — ')[0]}`}>
+                    <span className="work-tick" aria-hidden="true" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            {selected.map((project, index) => {
+              const visual = visualFor(project);
+              return (
+                <SelectedProject key={project.id} project={project} index={index} flip={index % 2 === 1}>
+                  <Figure caption={visual.caption}>{visual.node}</Figure>
+                </SelectedProject>
+              );
+            })}
+          </div>
+        </div>
 
         <MoreBuilds projects={more} startAt={selected.length + 1} />
       </div>

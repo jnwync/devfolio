@@ -1376,3 +1376,152 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+/* ---------- titles surface ---------- */
+/* Clipped at their own lower edge; the motion bundle scrubs --mask from 1
+   to 0 as they enter. Unset means 0, so no-JS and reduced-motion visitors
+   see plain, complete titles. */
+
+.mask-rise {
+  clip-path: inset(-0.35em -0.12em calc(var(--mask, 0) * 108%) -0.12em);
+}
+
+html[data-motion-ready] .mask-rise {
+  will-change: clip-path;
+}
+
+/* ---------- selected work: the pinned stage ---------- */
+/* Off by default: three stacked articles, exactly what the server renders
+   and what phones, short windows, reduced motion and no-JS keep. The work
+   scene turns it on (html[data-stage-work="on"]) when there is room, and
+   then the section pins: one framed window stays put while each project
+   surfaces into it and the copy cross-fades beside it.
+   The three frames coincide, so only the first carries the chrome — the
+   other two are transparent windows whose contents paint over it. */
+
+html[data-stage-work="on"] .work-stage {
+  height: calc(100svh - var(--nav-h) + var(--beats, 3) * 86svh);
+}
+
+/* The pin is the composition: the rail across the top, the copy hanging
+   from the left column, the framed window centred in the right one. Beats
+   are display:contents so all three place their two halves into the same
+   two cells — which is what makes the frames coincide exactly. */
+html[data-stage-work="on"] .work-pin {
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100svh - var(--nav-h));
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  grid-template-rows: auto auto;
+  align-content: center;
+  column-gap: 3.5rem;
+  row-gap: 2rem;
+  padding: 1.5rem 0;
+}
+
+html[data-stage-work="on"] .work-beat {
+  display: contents;
+}
+
+html[data-stage-work="on"] .work-copy {
+  grid-area: 2 / 1;
+  align-self: start;
+  opacity: var(--in, 1);
+  transform: translateY(calc(var(--u, 0) * -22px));
+  will-change: opacity, transform;
+}
+
+html[data-stage-work="on"] .work-media {
+  grid-area: 2 / 2;
+  align-self: center;
+}
+
+html[data-stage-work="on"] .work-copy,
+html[data-stage-work="on"] .work-media {
+  pointer-events: none;
+}
+
+html[data-stage-work="on"] .work-beat[data-active] .work-copy,
+html[data-stage-work="on"] .work-beat[data-active] .work-media {
+  pointer-events: auto;
+}
+
+/* Two lines of caption for every project, so the frames register to the
+   pixel however long the words are. */
+html[data-stage-work="on"] .work-media figcaption {
+  opacity: var(--in, 1);
+  min-block-size: 2.9em;
+  min-block-size: 2lh;
+}
+
+html[data-stage-work="on"] .figure-frame {
+  aspect-ratio: 16 / 10;
+}
+
+html[data-stage-work="on"] .work-beat:not([data-work-beat="0"]) .figure-frame {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* The plane inside the window: it travels up and out while the next one
+   surfaces, dissolving across the handover and blurred while off-centre.
+   The copy uses its own faster fade (--in) so two projects' words are
+   never legible at once. */
+html[data-stage-work="on"] .work-plane {
+  height: 100%;
+  opacity: var(--inm, 1);
+  transform: translateY(calc(var(--u, 0) * -34%));
+  filter: blur(calc((1 - var(--inm, 1)) * 4px));
+  will-change: opacity, transform;
+}
+
+html[data-stage-work="on"] .work-plane > * {
+  height: 100%;
+}
+
+html[data-stage-work="on"] .work-plane img {
+  object-fit: cover;
+}
+
+/* Three ticks: where you are in the passage, and a way to jump. Hidden
+   until the scene turns the stage on, so it never appears without JS. */
+.work-rail {
+  grid-area: 1 / 1 / 2 / 3;
+  display: flex;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.work-rail button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 1.75rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.work-tick {
+  width: 100%;
+  height: 2px;
+  background: var(--border-on-ink);
+  transition:
+    background-color 0.25s ease,
+    transform 0.25s var(--ease-out-quart);
+}
+
+.work-rail button:hover .work-tick,
+.work-rail button:focus-visible .work-tick {
+  background: var(--muted-on-ink);
+}
+
+.work-rail button[aria-current] .work-tick {
+  background: var(--paper-on-ink);
+  transform: scaleY(2);
+}
