@@ -44,7 +44,8 @@ export default function WorldRoot() {
         world.orb.x = world.orbStart.x;
         world.orb.y = world.orbStart.y;
         world.orb.r = world.orbStart.r;
-        world.orb.on = full ? 1 : 0;
+        // The scroll timeline lights it; at rest there is no orb.
+        world.orb.on = 0;
       } else {
         world.orb.on = 0;
       }

@@ -15,7 +15,6 @@ export function buildHero(): void {
   if (!section) return;
   const heading = section.querySelector<HTMLElement>('#hero-heading');
   const water = section.querySelector<HTMLElement>('[data-hero-water]');
-  const portrait = section.querySelector<HTMLElement>('[data-portrait]');
 
   // Width compression only ever shortens the headline, so reserving its
   // natural height keeps the page below it from shifting mid-scrub.
@@ -40,7 +39,6 @@ export function buildHero(): void {
   tl.to(section, { '--hero-p': 1, duration: 1 }, 0);
   if (heading) tl.to(heading, { '--wdth': 88, duration: 0.6 }, 0);
   if (water) tl.to(water, { y: () => -window.innerHeight * 0.1, duration: 1 }, 0);
-  if (portrait) tl.to(portrait, { y: () => window.innerHeight * 0.08, duration: 1 }, 0);
 
   ScrollTrigger.create({
     trigger: section,

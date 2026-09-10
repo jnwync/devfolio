@@ -1159,6 +1159,7 @@ html[data-world="gl"] .world-orb {
 
 .hero {
   --hero-p: 0;
+  --sink: clamp(0, calc(var(--hero-p) / 0.1), 1);
   position: relative;
   min-height: 100svh;
 }
@@ -1170,16 +1171,22 @@ html[data-world="gl"] .world-orb {
   padding-top: clamp(1.25rem, 4svh, 2.5rem);
 }
 
-.hero-eyebrow {
-  max-width: calc(100% - min(clamp(8rem, 17vw, 15rem), 34svh) - 1.5rem);
-}
-
+/* The figure stands on the water line beside the masthead and goes under
+   with it. --sink comes from the hero, so the two move as one scene. */
 .hero-portrait {
   position: absolute;
   right: var(--shell-x);
-  top: clamp(1.25rem, 4svh, 2.5rem);
-  width: min(clamp(8rem, 17vw, 15rem), 34svh);
-  will-change: transform;
+  bottom: 0;
+  width: min(clamp(7rem, 26vw, 17rem), 40svh);
+  transform: translateY(calc(var(--hero-p, 0) * 83svh + var(--sink) * var(--sink) * 130%));
+  clip-path: inset(-2% -4% calc(var(--sink) * var(--sink) * 130%) -4%);
+}
+
+/* His lower edge dissolves into the water rather than ending on a line. */
+.hero-figure {
+  margin: 0;
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 99%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 99%);
 }
 
 /* The masthead: the name at its largest, standing in the water. The
@@ -1189,7 +1196,6 @@ html[data-world="gl"] .world-orb {
    so descenders are under water from the start. All of it from one
    variable, --hero-p, that the scroll scene writes. */
 .hero-mast {
-  --sink: clamp(0, calc(var(--hero-p) / 0.1), 1);
   position: absolute;
   left: var(--shell-x);
   bottom: 0;
@@ -1387,9 +1393,7 @@ html.lenis body {
   clip-path: inset(-0.35em -0.12em calc(var(--mask, 0) * 108%) -0.12em);
 }
 
-html[data-motion-ready] .mask-rise {
-  will-change: clip-path;
-}
+
 
 /* ---------- selected work: the pinned stage ---------- */
 /* Off by default: three stacked articles, exactly what the server renders
@@ -1430,7 +1434,6 @@ html[data-stage-work="on"] .work-copy {
   align-self: start;
   opacity: var(--in, 1);
   transform: translateY(calc(var(--u, 0) * -22px));
-  will-change: opacity, transform;
 }
 
 html[data-stage-work="on"] .work-media {
@@ -1457,7 +1460,7 @@ html[data-stage-work="on"] .work-media figcaption {
 }
 
 html[data-stage-work="on"] .figure-frame {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
 }
 
 html[data-stage-work="on"] .work-beat:not([data-work-beat="0"]) .figure-frame {
@@ -1475,7 +1478,6 @@ html[data-stage-work="on"] .work-plane {
   opacity: var(--inm, 1);
   transform: translateY(calc(var(--u, 0) * -34%));
   filter: blur(calc((1 - var(--inm, 1)) * 4px));
-  will-change: opacity, transform;
 }
 
 html[data-stage-work="on"] .work-plane > * {
@@ -1547,9 +1549,7 @@ html[data-stage-work="on"] .work-plane img {
     z-index: 2;
     /* Denser than the nav: rows pass directly under this one, and they
        must not read through it. */
-    background: color-mix(in oklab, var(--background) 96%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: color-mix(in oklab, var(--background) 97%, transparent);
     border-bottom: 1px solid var(--border);
   }
 }
@@ -1668,11 +1668,6 @@ html[data-stage-work="on"] .work-plane img {
 [data-contact-tail] {
   opacity: calc(1 - var(--r, 0));
   transform: translateY(calc(var(--r, 0) * 16px));
-}
-
-html[data-motion-ready] .contact-word,
-html[data-motion-ready] [data-contact-tail] {
-  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {

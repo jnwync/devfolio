@@ -27,32 +27,20 @@ gsap.registerPlugin(ScrollTrigger);
 
 let started = false;
 
-export async function startMotion(): Promise<void> {
+export function startMotion(): void {
   if (started) return;
   started = true;
   const html = document.documentElement;
 
   ScrollTrigger.config({ ignoreMobileResize: true });
 
-  // Wheel smoothing on fine pointers only; keyboard and touch stay native.
-  if (html.dataset.fine) {
-    try {
-      const { default: Lenis } = await import('lenis');
-      const lenis = new Lenis({ autoRaf: false, lerp: 0.1, smoothWheel: true, syncTouch: false });
-      addFrame((time) => lenis.raf(time * 1000));
-      lenis.on('scroll', ScrollTrigger.update);
-      world.scrollTo = (target, options) => {
-        const el = typeof target === 'string' ? document.querySelector<HTMLElement>(target) : target instanceof Element ? (target as HTMLElement) : Number(target);
-        if (el === null) return;
-        lenis.scrollTo(el, { immediate: options?.immediate, offset: options?.offset ?? 0 });
-      };
-      trackPointer();
-      // QA handle: lets the screenshot and audit scripts read the store and Lenis.
-      (window as unknown as { __jnwync?: unknown }).__jnwync = { world, lenis };
-    } catch {
-      // Lenis is an enhancement; native scrolling is fine.
-    }
-  }
+  // Scrolling stays native. Smoothing the wheel means interpolating toward
+  // where the reader asked to be, which is latency however good it looks;
+  // the scenes are already eased by ScrollTrigger's own scrub.
+  if (html.dataset.fine) trackPointer();
+
+  // QA handle: lets the screenshot and audit scripts read the frame store.
+  (window as unknown as { __jnwync?: unknown }).__jnwync = { world };
 
   // The day passes across the whole document.
   ScrollTrigger.create({
@@ -74,11 +62,20 @@ export async function startMotion(): Promise<void> {
   // Derivations shared by both worlds, then the custom properties the 2D
   // path reads (written only when something moved).
   let lastKey = '';
+  const smoothstep = (a: number, b: number, x: number) => {
+    const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+    return t * t * (3 - 2 * t);
+  };
   addFrame(() => {
     const o = orbAt(world.hour, world.orbStart, world.horizon);
     world.orb.x = o.x;
     world.orb.y = o.y;
     world.orb.r = world.orbStart.r;
+    // At rest the period is just the period. The sun or moon lights and
+    // lifts away from it as soon as the page moves — coincident and both
+    // lit, the green dot would be sitting on its own glow.
+    const target = smoothstep(0.003, 0.03, world.hour);
+    world.orb.on += (target - world.orb.on) * 0.12;
     const key = `${world.horizon.toFixed(4)}|${o.x.toFixed(4)}|${o.y.toFixed(4)}|${world.orb.on.toFixed(3)}`;
     if (key !== lastKey) {
       lastKey = key;

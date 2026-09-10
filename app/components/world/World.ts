@@ -19,8 +19,8 @@ import { fragment, vertex } from './shaders/skysea';
 /** Kept in the bundle on purpose: the measurement script finds the world chunk by it. */
 export const WORLD_MARKER = '__jnwync_world__';
 
-const RENDER_SCALE_DEFAULT = 0.75;
-const RENDER_SCALE_LOW = 0.5;
+const RENDER_SCALE_DEFAULT = 0.62;
+const RENDER_SCALE_LOW = 0.45;
 const IDLE_AFTER_S = 60;
 
 const UNIFORM_FOR: Record<keyof Palette, string> = {
@@ -98,7 +98,7 @@ export function mountWorld(canvas: HTMLCanvasElement, onGiveUp?: () => void): ()
   let lastTime = clock();
 
   const resize = () => {
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5) * scale;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25) * scale;
     scene.renderer.dpr = dpr;
     scene.renderer.setSize(window.innerWidth, window.innerHeight);
     scene.u.uRes.value = [scene.renderer.gl.canvas.width, scene.renderer.gl.canvas.height];

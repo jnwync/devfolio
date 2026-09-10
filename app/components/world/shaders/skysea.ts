@@ -82,7 +82,7 @@ float vnoise(vec2 p) {
 float fbm(vec2 p) {
   float v = 0.0;
   float a = 0.5;
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 2; i++) {
     v += a * vnoise(p);
     p = p * 2.03 + vec2(1.7, 9.2);
     a *= 0.5;
@@ -97,135 +97,140 @@ void main() {
   float horizon = 1.0 - uHorizon;              // in uv space (y up)
   vec2 orb = vec2(uOrb.x * aspect, 1.0 - uOrb.y);
   float orbR = max(uOrb.z, 0.004);
-
-  // ---------- sky ----------
-  float skyT = clamp((uv.y - horizon) / max(1.0 - horizon, 0.001), 0.0, 1.0);
-  vec3 sky = mix(uSkyHorizon, uSkyTop, pow(skyT, 0.65));
-
-  // first light / last light: the horizon warms as the day ends
-  float ending = smoothstep(0.78, 1.0, uHour);
-  sky = mix(sky, uGlow * 0.55 + uSkyHorizon * 0.45, ending * (1.0 - skyT) * 0.55);
-
-  // stars: a sparse hashed field with slow twinkle, night only
-  vec2 sp = p * 140.0;
-  vec2 cell = floor(sp);
-  vec2 f = fract(sp);
-  float h = hash21(cell);
-  float star = 0.0;
-  if (h > 0.982) {
-    vec2 c = vec2(hash21(cell + 7.3), hash21(cell + 2.9)) * 0.8 + 0.1;
-    float d = length(f - c);
-    float tw = 0.7 + 0.3 * sin(uTime * (0.6 + h * 3.0) + h * 60.0);
-    star = smoothstep(0.09, 0.0, d) * tw * smoothstep(0.982, 1.0, h);
-  }
-  // (stars are added after the night luminance cap below)
-
-  // daytime haze near the horizon
-  float haze = fbm(vec2(p.x * 1.6, uv.y * 3.0) + vec2(uTime * 0.012, 0.0));
-  sky += uSkyHorizon * haze * (1.0 - skyT) * uDay * 0.18;
-
-  // the orb and its glow: tight, so text passing over it keeps its contrast
-  float od = length(p - orb);
-  float glow = exp(-(od * od) / (orbR * orbR * 16.0)) * 0.34 + exp(-od / (orbR * 4.5)) * 0.1;
-  // The stack's lights are scaled down at night so they stay under the
-  // luminance cap as soft gradients instead of flattening into plateaus.
-  float lightScale = mix(0.14, 1.0, uDay);
-  float halos = 0.0;
-  for (int i = 0; i < 14; i++) {
-    if (float(i) >= uLightCount) break;
-    vec4 l = uLights[i];
-    if (l.z <= 0.0) continue;
-    vec2 lp = vec2(l.x * aspect, 1.0 - l.y);
-    float ld = length(p - lp);
-    halos += (exp(-ld * ld * 2600.0) * (0.35 + 0.45 * l.w) + exp(-ld * ld * 9000.0) * 0.5) * l.z * lightScale;
-  }
-  vec3 skyLit = sky + uGlow * (glow * uOrbOn + halos);
-  float disc = 1.0 - smoothstep(orbR * 0.88, orbR, od);
-  skyLit = mix(skyLit, uOrbColor, disc * uOrbOn);
-
-  // ---------- sea ----------
-  float depth = clamp((horizon - uv.y) / max(horizon, 0.001), 0.0, 1.0);   // 0 at the horizon, 1 at the bottom
-  float persp = 1.0 / (depth * 5.0 + 0.09);
-  vec2 wp = vec2((uv.x - 0.5) * aspect * persp * 4.0, persp * 2.2 + uTime * 0.09);
-  float e = 0.06;
-  float h0 = fbm(wp * 1.9);
-  float hx = fbm(wp * 1.9 + vec2(e, 0.0));
-  float hy = fbm(wp * 1.9 + vec2(0.0, e));
-  vec2 slope = vec2(hx - h0, hy - h0) * 14.0;
-
-  vec3 sea = mix(uSeaFar, uSeaNear, smoothstep(0.0, 1.0, pow(depth, 0.8)));
-  sea = mix(uSkyHorizon, sea, smoothstep(0.0, 0.07, depth));   // atmosphere at the horizon
-
-  // a faint sheen everywhere: sky light on the facing slopes, so the
-  // water reads as water and not as a gradient
-  float facing = clamp(1.0 - abs(slope.y * 0.9 + slope.x * (uv.x - uOrb.x) * 2.0), 0.0, 1.0);
-  float sparkle = pow(facing, 7.0);
-  sea += uSkyHorizon * sparkle * (0.05 + 0.07 * (1.0 - depth));
-
-  // glitter lane under the orb
-  float laneW = 0.003 + 0.08 * depth;
-  float lane = exp(-pow((uv.x - uOrb.x) * aspect, 2.0) / laneW);
-  float orbAbove = smoothstep(-0.02, 0.06, uHorizon - uOrb.y);
-  sea += uGlow * lane * sparkle * uOrbOn * orbAbove * (0.7 - 0.4 * depth) * (0.4 + 0.6 * (1.0 - uDay));
-
-  // pointer light on the water
-  vec2 pp = vec2(uPointer.x * aspect, 1.0 - uPointer.y);
-  float pd = length(p - pp);
-  sea += uGlow * exp(-pd * pd * 70.0) * uPointer.z * (0.25 + 0.5 * sparkle) * 0.6;
-
-  // ripples
-  for (int i = 0; i < 8; i++) {
-    vec4 r = uRipples[i];
-    if (r.w <= 0.0) continue;
-    vec2 rp = vec2(r.x * aspect, 1.0 - r.y);
-    float rd = length(p - rp);
-    float age = r.z;
-    float ring = sin((rd - age * 0.22) * 90.0) * exp(-age * 1.4) * exp(-rd * rd * 40.0) * smoothstep(0.0, 0.05, age) * r.w;
-    sea += uGlow * ring * 0.07;
-  }
-
-  // the stack's points of light: a diffused glow while a light is still
-  // under the water line, a lane beneath it once it has surfaced
-  for (int i = 0; i < 14; i++) {
-    if (float(i) >= uLightCount) break;
-    vec4 l = uLights[i];
-    if (l.z <= 0.0) continue;
-    vec2 lp = vec2(l.x * aspect, 1.0 - l.y);
-    float under = smoothstep(-0.015, 0.015, l.y - uHorizon);   // 1 below the horizon
-    float ld = length(p - lp);
-    float blob = exp(-ld * ld * 900.0) * (0.35 + 0.25 * sin(uTime * 1.7 + float(i))) * under;
-    float laneL = exp(-pow((uv.x - l.x) * aspect, 2.0) / (0.0006 + 0.01 * depth));
-    float below = smoothstep(0.0, 0.05, horizon - uv.y) * (1.0 - smoothstep(0.0, 0.45, horizon - uv.y));
-    sea += uGlow * (blob + laneL * below * (0.25 + 0.55 * sparkle) * (1.0 - under)) * l.z * (0.6 + 0.4 * l.w) * lightScale;
-  }
-
-  // At night nothing but the moon and the stars may get brighter than a
-  // fixed luminance, so muted text stays AA wherever it sits on the world.
+  // Nothing but the moon and the stars may pass this at night, so muted
+  // text stays AA wherever it sits on the world.
   float capY = mix(NIGHT_LUMINANCE_CAP, 10.0, uDay);
-  float seaY = dot(sea, vec3(0.2126, 0.7152, 0.0722));
-  sea *= min(1.0, capY / max(seaY, 0.0001));
-  vec3 skyCapped = sky + uGlow * (glow * uOrbOn + halos);
-  float skyY = dot(skyCapped, vec3(0.2126, 0.7152, 0.0722));
-  skyCapped *= min(1.0, capY / max(skyY, 0.0001));
-  skyCapped += vec3(0.95, 0.96, 0.9) * star * (1.0 - uDay) * (0.15 + 0.85 * skyT);
-  skyLit = mix(skyCapped, uOrbColor, disc * uOrbOn);
+  // The stack's lights are held under the cap so they read as soft
+  // gradients rather than flattening into plateaus against it.
+  float lightScale = mix(0.14, 1.0, uDay);
+  vec3 col;
 
-  // The beacon is added after the cap, not before it: crushed to the same
-  // ceiling as the water it would vanish, and it is the one light in the
-  // closing scene that has to read. Its amplitude is held low enough that
-  // muted text still clears AA over the column.
-  float beaconLane = exp(-pow((uv.x - uBeacon.x) * aspect, 2.0) / (0.0012 + 0.02 * depth));
-  sea += uBeaconColor * beaconLane * (0.3 + 0.7 * sparkle) * uBeacon.z * (0.9 - 0.5 * depth) * mix(BEACON_NIGHT_GAIN, 0.45, uDay);
+  // Sky and sea are one branch each, not both summed and then chosen: the
+  // horizon is a horizontal line, so whole wavefronts take the same side of
+  // it and the branch costs nothing while halving the fill.
+  if (uv.y >= horizon) {
+    float skyT = clamp((uv.y - horizon) / max(1.0 - horizon, 0.001), 0.0, 1.0);
+    vec3 sky = mix(uSkyHorizon, uSkyTop, pow(skyT, 0.65));
 
-  vec3 col = uv.y >= horizon ? skyLit : sea;
+    // first light / last light: the horizon warms as the day ends
+    float ending = smoothstep(0.78, 1.0, uHour);
+    sky = mix(sky, uGlow * 0.55 + uSkyHorizon * 0.45, ending * (1.0 - skyT) * 0.55);
+
+    // daytime haze near the horizon, skipped entirely at night
+    if (uDay > 0.02) {
+      float haze = fbm(vec2(p.x * 1.6, uv.y * 3.0) + vec2(uTime * 0.012, 0.0));
+      sky += uSkyHorizon * haze * (1.0 - skyT) * uDay * 0.18;
+    }
+
+    // the orb and its glow: tight, so text passing over it keeps its contrast
+    float od = length(p - orb);
+    float glow = exp(-(od * od) / (orbR * orbR * 16.0)) * 0.34 + exp(-od / (orbR * 4.5)) * 0.1;
+    float halos = 0.0;
+    for (int i = 0; i < 14; i++) {
+      if (float(i) >= uLightCount) break;
+      vec4 l = uLights[i];
+      if (l.z <= 0.0) continue;
+      vec2 lp = vec2(l.x * aspect, 1.0 - l.y);
+      float ld = length(p - lp);
+      halos += (exp(-ld * ld * 2600.0) * (0.35 + 0.45 * l.w) + exp(-ld * ld * 9000.0) * 0.5) * l.z * lightScale;
+    }
+    col = sky + uGlow * (glow * uOrbOn + halos);
+
+    float skyY = dot(col, vec3(0.2126, 0.7152, 0.0722));
+    col *= min(1.0, capY / max(skyY, 0.0001));
+
+    // stars and the disc are the two things allowed above the cap
+    if (uDay < 0.98) {
+      vec2 sp = p * 140.0;
+      vec2 cell = floor(sp);
+      float h = hash21(cell);
+      if (h > 0.982) {
+        vec2 c = vec2(hash21(cell + 7.3), hash21(cell + 2.9)) * 0.8 + 0.1;
+        float d = length(fract(sp) - c);
+        float tw = 0.7 + 0.3 * sin(uTime * (0.6 + h * 3.0) + h * 60.0);
+        col += vec3(0.95, 0.96, 0.9) * smoothstep(0.09, 0.0, d) * tw * smoothstep(0.982, 1.0, h)
+               * (1.0 - uDay) * (0.15 + 0.85 * skyT);
+      }
+    }
+    float disc = 1.0 - smoothstep(orbR * 0.88, orbR, od);
+    col = mix(col, uOrbColor, disc * uOrbOn);
+  } else {
+    float depth = clamp((horizon - uv.y) / max(horizon, 0.001), 0.0, 1.0);   // 0 at the horizon, 1 at the bottom
+    float persp = 1.0 / (depth * 5.0 + 0.09);
+    vec2 wp = vec2((uv.x - 0.5) * aspect * persp * 4.0, persp * 2.2 + uTime * 0.09) * 1.9;
+    float e = 0.114;
+    float h0 = fbm(wp);
+    vec2 slope = vec2(fbm(wp + vec2(e, 0.0)) - h0, fbm(wp + vec2(0.0, e)) - h0) * 14.0;
+
+    vec3 sea = mix(uSeaFar, uSeaNear, smoothstep(0.0, 1.0, pow(depth, 0.8)));
+    sea = mix(uSkyHorizon, sea, smoothstep(0.0, 0.07, depth));   // atmosphere at the horizon
+
+    // a faint sheen everywhere: sky light on the facing slopes, so the
+    // water reads as water and not as a gradient
+    float facing = clamp(1.0 - abs(slope.y * 0.9 + slope.x * (uv.x - uOrb.x) * 2.0), 0.0, 1.0);
+    float sparkle = pow(facing, 7.0);
+    sea += uSkyHorizon * sparkle * (0.05 + 0.07 * (1.0 - depth));
+
+    // glitter lane under the orb
+    float laneW = 0.003 + 0.08 * depth;
+    float lane = exp(-pow((uv.x - uOrb.x) * aspect, 2.0) / laneW);
+    float orbAbove = smoothstep(-0.02, 0.06, uHorizon - uOrb.y);
+    sea += uGlow * lane * sparkle * uOrbOn * orbAbove * (0.7 - 0.4 * depth) * (0.4 + 0.6 * (1.0 - uDay));
+
+    // pointer light on the water
+    if (uPointer.z > 0.01) {
+      vec2 pp = vec2(uPointer.x * aspect, 1.0 - uPointer.y);
+      float pd = length(p - pp);
+      sea += uGlow * exp(-pd * pd * 70.0) * uPointer.z * (0.25 + 0.5 * sparkle) * 0.6;
+    }
+
+    // ripples
+    for (int i = 0; i < 8; i++) {
+      vec4 r = uRipples[i];
+      if (r.w <= 0.0) continue;
+      vec2 rp = vec2(r.x * aspect, 1.0 - r.y);
+      float rd = length(p - rp);
+      float ring = sin((rd - r.z * 0.22) * 90.0) * exp(-r.z * 1.4) * exp(-rd * rd * 40.0) * smoothstep(0.0, 0.05, r.z) * r.w;
+      sea += uGlow * ring * 0.07;
+    }
+
+    // the stack's points of light: a diffused glow while a light is still
+    // under the water line, a lane beneath it once it has surfaced
+    for (int i = 0; i < 14; i++) {
+      if (float(i) >= uLightCount) break;
+      vec4 l = uLights[i];
+      if (l.z <= 0.0) continue;
+      vec2 lp = vec2(l.x * aspect, 1.0 - l.y);
+      float under = smoothstep(-0.015, 0.015, l.y - uHorizon);   // 1 below the horizon
+      float ld = length(p - lp);
+      float blob = exp(-ld * ld * 900.0) * (0.35 + 0.25 * sin(uTime * 1.7 + float(i))) * under;
+      float laneL = exp(-pow((uv.x - l.x) * aspect, 2.0) / (0.0006 + 0.01 * depth));
+      float below = smoothstep(0.0, 0.05, horizon - uv.y) * (1.0 - smoothstep(0.0, 0.45, horizon - uv.y));
+      sea += uGlow * (blob + laneL * below * (0.25 + 0.55 * sparkle) * (1.0 - under)) * l.z * (0.6 + 0.4 * l.w) * lightScale;
+    }
+
+    float seaY = dot(sea, vec3(0.2126, 0.7152, 0.0722));
+    col = sea * min(1.0, capY / max(seaY, 0.0001));
+
+    // The beacon is added after the cap, not before it: crushed to the same
+    // ceiling as the water it would vanish, and it is the one light in the
+    // closing scene that has to read. Its amplitude is held low enough that
+    // muted text still clears AA over the column.
+    if (uBeacon.z > 0.01) {
+      float beaconLane = exp(-pow((uv.x - uBeacon.x) * aspect, 2.0) / (0.0012 + 0.02 * depth));
+      col += uBeaconColor * beaconLane * (0.3 + 0.7 * sparkle) * uBeacon.z * (0.9 - 0.5 * depth) * mix(BEACON_NIGHT_GAIN, 0.45, uDay);
+    }
+  }
 
   // An opaque plate sitting on the water casts a shadow onto it: a soft
   // band above the plate's edge, darkest where the two meet. uDim is
   // (left, top, width, height) in viewport units, y measured from the top.
-  float shadeX = smoothstep(uDim.x - 0.02, uDim.x + 0.02, uv.x) * (1.0 - smoothstep(uDim.x + uDim.z - 0.02, uDim.x + uDim.z + 0.02, uv.x));
-  float shadeEdge = 1.0 - uDim.y - uDim.w;
-  float shade = 1.0 - smoothstep(shadeEdge, shadeEdge + max(uDim.w, 0.001), uv.y);
-  col *= 1.0 - shadeX * shade * shade * uDimAmount;
+  if (uDimAmount > 0.001) {
+    float shadeX = smoothstep(uDim.x - 0.02, uDim.x + 0.02, uv.x) * (1.0 - smoothstep(uDim.x + uDim.z - 0.02, uDim.x + uDim.z + 0.02, uv.x));
+    float shadeEdge = 1.0 - uDim.y - uDim.w;
+    float shade = 1.0 - smoothstep(shadeEdge, shadeEdge + max(uDim.w, 0.001), uv.y);
+    col *= 1.0 - shadeX * shade * shade * uDimAmount;
+  }
 
   // dither, then gamma
   col += (hash21(gl_FragCoord.xy + fract(uTime)) - 0.5) * 0.004;
