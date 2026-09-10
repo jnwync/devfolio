@@ -12,10 +12,13 @@ const siteDescription =
   "Remote full-stack web and mobile developer: Next.js, React, React Native/Expo, Node.js, PostgreSQL. Production apps for client teams and product organizations, from interface to deployment.";
 const ogImageUrl = `${siteUrl}/opengraph-image`;
 
+// The full variable font: weight plus the width and optical-size axes the
+// kinetic type uses (font-stretch scrubbed on scroll, opsz set per size).
 const displayFont = Bricolage_Grotesque({
   variable: "--font-display",
   subsets: ["latin"],
   weight: "variable",
+  axes: ["opsz", "wdth"],
   display: "swap",
   preload: true,
 });
@@ -139,10 +142,12 @@ const structuredData = {
 
 /**
  * Runs before first paint. Resolves the theme (stored choice → OS preference
- * → dark) and flags JS as available for the hero entrance and the toggle.
+ * → dark), the motion tier (OS reduced motion or a stored in-page choice),
+ * two capability flags the CSS gates on (fine pointer, wide viewport), and
+ * arms the intro once per session on the home page when motion is allowed.
  */
 const bootScript =
-  "(function(){var d=document.documentElement;d.dataset.js='1';var t=null;try{t=localStorage.getItem('jnwync-theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}d.dataset.theme=t})();";
+  "(function(){var d=document.documentElement,mq=function(q){return matchMedia(q).matches};d.dataset.js='1';var t=null;try{t=localStorage.getItem('jnwync-theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=mq('(prefers-color-scheme: light)')?'light':'dark'}d.dataset.theme=t;var m=null;try{m=localStorage.getItem('jnwync-motion')}catch(e){}d.dataset.motion=(mq('(prefers-reduced-motion: reduce)')||m==='reduce')?'reduce':'full';if(mq('(pointer: fine)'))d.dataset.fine='1';if(mq('(min-width: 768px)'))d.dataset.wide='1';try{if(d.dataset.motion==='full'&&location.pathname==='/'&&!sessionStorage.getItem('jnwync-intro'))d.dataset.intro='play'}catch(e){}})();";
 
 export default function RootLayout({
   children,

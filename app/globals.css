@@ -90,6 +90,33 @@
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-scene: cubic-bezier(0.76, 0, 0.24, 1);
 
+  /* the world: one horizon over water, lit as night or day. The WebGL scene
+     and the 2D fallback both read these, so the theme is one source. */
+  --world-sky-top: light-dark(oklch(0.905 0.028 222), oklch(0.15 0.016 212));
+  --world-sky-horizon: light-dark(oklch(0.975 0.022 96), oklch(0.235 0.022 172));
+  --world-sea-far: light-dark(oklch(0.9 0.03 208), oklch(0.2 0.02 182));
+  --world-sea-near: light-dark(oklch(0.82 0.05 202), oklch(0.115 0.014 190));
+  --world-orb: light-dark(oklch(0.985 0.06 92), oklch(0.94 0.02 110));
+  --world-glow: light-dark(oklch(0.95 0.08 90), oklch(0.74 0.11 155));
+  --world-dim: light-dark(oklch(0.2 0.02 160 / 0.35), oklch(0.05 0.01 170 / 0.55));
+
+  /* geometry written by the timeline (lengths, not colours) */
+  --horizon: 62svh;
+  --orb-x: 50vw;
+  --orb-y: 60vh;
+  --orb-r: 22px;
+  --orb-on: 0;
+
+  /* z scale: the only layers that may claim a z-index */
+  --z-world: -2;
+  --z-atmo: -1;
+  --z-orb: -1;
+  --z-plate: 3;
+  --z-axis: 20;
+  --z-nav: 50;
+  --z-intro: 100;
+  --z-skip: 110;
+
   /* weather (non-colour tokens, dark defaults) */
   --grain-alpha: 0.07;
   --atmo-bg:
