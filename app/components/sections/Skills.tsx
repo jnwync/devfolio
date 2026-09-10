@@ -11,7 +11,7 @@ export default function Skills() {
   const { education } = portfolioData;
 
   return (
-    <section id="skills" data-scene="skills" aria-labelledby="skills-heading" className="scroll-mt-20 py-20 md:py-28">
+    <section id="skills" data-scene="skills" aria-labelledby="skills-heading" className="py-20 md:py-28">
       <div className="section-shell">
         <header className="sec-head">
           <h2 id="skills-heading" className="sec-title mask-rise" data-mask>

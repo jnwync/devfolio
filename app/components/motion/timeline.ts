@@ -17,6 +17,7 @@ import { buildStack } from './scenes/stack';
 import { buildWork } from './scenes/work';
 import { buildExperience } from './scenes/experience';
 import { buildActivity } from './scenes/activity';
+import { buildContact } from './scenes/contact';
 import { measureOrbStart, orbAt, world, writeWorldVars } from '../world/state';
 import { trackPointer } from '../world/pointer';
 
@@ -67,6 +68,7 @@ export async function startMotion(): Promise<void> {
   buildWork();
   buildExperience();
   buildActivity();
+  buildContact();
   buildMasks();
 
   // Derivations shared by both worlds, then the custom properties the 2D

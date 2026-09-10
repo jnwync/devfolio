@@ -86,7 +86,7 @@ export default async function GithubActivity() {
   const githubUrl = `https://github.com/${personal.githubUsername}`;
 
   return (
-    <section data-scene="activity" aria-labelledby="github-activity-heading" className="scroll-mt-20 py-20 md:py-28">
+    <section data-scene="activity" aria-labelledby="github-activity-heading" className="py-20 md:py-28">
       <div className="section-shell">
         <header className="sec-head">
           <h2 id="github-activity-heading" className="sec-title mask-rise" data-mask>

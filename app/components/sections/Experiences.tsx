@@ -53,7 +53,7 @@ export default function ProfessionalExperience() {
       id="experience"
       data-scene="experience"
       aria-labelledby="experience-heading"
-      className="scroll-mt-20 py-20 md:py-28"
+      className="py-20 md:py-28"
     >
       <div className="section-shell">
         <header className="sec-head">

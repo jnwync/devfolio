@@ -1640,3 +1640,49 @@ html[data-stage-work="on"] .work-plane img {
     animation: none !important;
   }
 }
+
+/* ---------- contact: the bookend ---------- */
+/* No plate here: the page opened on the water and it closes on the water,
+   so the world stays visible all the way down. The closing line rises out
+   of it word by word and its period stays lit as the beacon. Every value
+   defaults to "already arrived", so no-JS and reduced-motion visitors see
+   the finished section. */
+
+.contact-scene {
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(4rem, 9svh, 6.5rem) 0;
+}
+
+.contact-word {
+  display: inline-block;
+  clip-path: inset(-0.3em -0.06em calc(var(--r, 0) * 112%) -0.06em);
+  transform: translateY(calc(var(--r, 0) * 0.4em));
+}
+
+[data-contact-lead],
+[data-contact-tail] {
+  opacity: calc(1 - var(--r, 0));
+  transform: translateY(calc(var(--r, 0) * 16px));
+}
+
+html[data-motion-ready] .contact-word,
+html[data-motion-ready] [data-contact-tail] {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-word {
+    clip-path: none !important;
+    transform: none !important;
+  }
+
+  [data-contact-lead],
+  [data-contact-tail] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

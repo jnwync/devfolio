@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import Wordmark from './Wordmark';
+import { world } from './world/state';
 
 const links = [
   { name: 'Work', href: '#projects' },
@@ -144,19 +145,14 @@ export default function Navigation() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
 
+  // Every jump goes through the shared scroll: it wraps Lenis when the
+  // motion bundle has it and falls back to the native call otherwise, so
+  // the page never has two things scrolling it at once. The nav offset
+  // comes from each section's own scroll-margin-top.
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (!element) return;
-
-    const navBar = document.querySelector('[data-nav-bar]');
-    const navHeight = navBar?.getBoundingClientRect().height || 72;
-    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    window.scrollTo({
-      top: Math.max(elementPosition - navHeight, 0),
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
-    });
+    world.scrollTo(element);
   };
 
   const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -191,8 +187,7 @@ export default function Navigation() {
   const handleHomeClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     setIsOpen(false);
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    world.scrollTo(0);
   };
 
   return (

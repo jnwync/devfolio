@@ -184,10 +184,6 @@ void main() {
     sea += uGlow * (blob + laneL * below * (0.25 + 0.55 * sparkle) * (1.0 - under)) * l.z * (0.6 + 0.4 * l.w) * lightScale;
   }
 
-  // the beacon reflected straight down
-  float beaconLane = exp(-pow((uv.x - uBeacon.x) * aspect, 2.0) / (0.0012 + 0.02 * depth));
-  sea += uBeaconColor * beaconLane * (0.35 + 0.65 * sparkle) * uBeacon.z * (0.7 - 0.4 * depth);
-
   // At night nothing but the moon and the stars may get brighter than a
   // fixed luminance, so muted text stays AA wherever it sits on the world.
   float capY = mix(0.034, 10.0, uDay);
@@ -198,6 +194,13 @@ void main() {
   skyCapped *= min(1.0, capY / max(skyY, 0.0001));
   skyCapped += vec3(0.95, 0.96, 0.9) * star * (1.0 - uDay) * (0.15 + 0.85 * skyT);
   skyLit = mix(skyCapped, uOrbColor, disc * uOrbOn);
+
+  // The beacon is added after the cap, not before it: crushed to the same
+  // ceiling as the water it would vanish, and it is the one light in the
+  // closing scene that has to read. Its amplitude is held low enough that
+  // muted text still clears AA over the column.
+  float beaconLane = exp(-pow((uv.x - uBeacon.x) * aspect, 2.0) / (0.0012 + 0.02 * depth));
+  sea += uBeaconColor * beaconLane * (0.3 + 0.7 * sparkle) * uBeacon.z * (0.9 - 0.5 * depth) * mix(0.06, 0.45, uDay);
 
   vec3 col = uv.y >= horizon ? skyLit : sea;
 

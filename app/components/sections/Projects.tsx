@@ -270,7 +270,7 @@ export default function Projects() {
       id="projects"
       data-scene="work"
       aria-labelledby="projects-heading"
-      className="dark-scene dark-scene--cover scroll-mt-20 pt-16 pb-20 md:pt-24"
+      className="dark-scene dark-scene--cover pt-16 pb-20 md:pt-24"
     >
       <div className="section-shell">
         <header className="sec-head">

@@ -79,7 +79,15 @@ export const world: WorldState = {
   scrollTo: (target, options) => {
     if (typeof window === 'undefined') return;
     const el = typeof target === 'string' ? document.querySelector(target) : target instanceof Element ? target : null;
-    const top = el ? el.getBoundingClientRect().top + window.scrollY + (options?.offset ?? 0) : Number(target) + (options?.offset ?? 0);
+    // Match Lenis exactly: the nav clearance comes from the root's
+    // scroll-padding-top plus the target's own scroll-margin-top, so a
+    // jump lands in the same place whether or not the motion bundle is
+    // loaded, and native anchors agree with both.
+    const margin = el ? parseFloat(getComputedStyle(el).scrollMarginTop) || 0 : 0;
+    const padding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const top = el
+      ? el.getBoundingClientRect().top + window.scrollY - margin - padding + (options?.offset ?? 0)
+      : Number(target) + (options?.offset ?? 0);
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top: Math.max(0, top), behavior: reduce || options?.immediate ? 'auto' : 'smooth' });
   },
