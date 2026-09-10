@@ -1182,6 +1182,31 @@ html[data-world="gl"] .world-orb {
   clip-path: inset(-2% -4% calc(var(--sink) * var(--sink) * 130%) -4%);
 }
 
+/* On a phone there is no room beside the masthead: standing him on the
+   water line puts his body through the last letters. He moves up into the
+   sky instead, which is also the dead third of the screen that the eyebrow
+   leaves empty, and he drifts rather than sinking. */
+@media (max-width: 639px) {
+  .hero-portrait {
+    top: auto;
+    /* Anchored clear of the masthead rather than under the eyebrow, so a
+       short phone shortens the gap above him instead of pushing him
+       through the last letters. */
+    bottom: 4.8rem;
+    width: min(50vw, 21svh);
+    transform: translateY(calc(var(--hero-p, 0) * 22svh));
+    clip-path: none;
+  }
+}
+
+/* Below this there is no sky worth standing in; the eyebrow and the
+   masthead have the screen to themselves. */
+@media (max-width: 639px) and (max-height: 620px) {
+  .hero-portrait {
+    display: none;
+  }
+}
+
 /* His lower edge dissolves into the water rather than ending on a line. */
 .hero-figure {
   margin: 0;
@@ -1251,8 +1276,13 @@ html[data-intro] {
   position: fixed;
   inset: 0;
   z-index: var(--z-intro);
-  background: var(--background);
   overflow: hidden;
+}
+
+.intro-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--background);
 }
 
 .intro-horizon {
@@ -1265,7 +1295,7 @@ html[data-intro] {
   opacity: 0.5;
   transform: scaleX(0);
   transform-origin: 0 50%;
-  animation: intro-line 0.7s var(--ease-out-quint) 0.1s forwards;
+  animation: intro-line 0.55s var(--ease-out-quint) 0.05s forwards;
 }
 
 .intro-mast {
@@ -1290,14 +1320,15 @@ html[data-intro] {
 .intro-mast .intro-dot {
   display: inline-block;
   transform: translateY(115%);
-  animation: intro-surface 0.75s var(--ease-out-quint) forwards;
-  animation-delay: calc(0.8s + var(--i) * 0.055s);
+  animation: intro-surface 0.62s var(--ease-out-quint) forwards;
+  animation-delay: calc(0.3s + var(--i) * 0.05s);
 }
 
 .intro-mast .intro-dot {
   color: var(--primary);
-  animation-delay: 0.5s;
-  animation-duration: 0.85s;
+  /* last, as punctuation — a dot arriving before its word reads as a bug */
+  animation-delay: 0.62s;
+  animation-duration: 0.7s;
 }
 
 .intro-skip {
@@ -1326,19 +1357,19 @@ html[data-intro] {
   border-color: var(--foreground);
 }
 
-.intro--exit .intro {
-  animation: intro-out 0.64s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+.intro--exit .intro-bg {
+  animation: intro-out 0.52s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
-.intro--exit-fast .intro {
-  animation: intro-out 0.24s ease-out forwards;
+.intro--exit-fast .intro-bg {
+  animation: intro-out 0.22s ease-out forwards;
 }
 
 .intro--exit .intro-horizon,
 .intro--exit-fast .intro-horizon,
 .intro--exit .intro-skip,
 .intro--exit-fast .intro-skip {
-  animation: intro-out 0.2s ease-out forwards;
+  animation: intro-out 0.18s ease-out forwards;
 }
 
 @keyframes intro-line {
@@ -1681,6 +1712,15 @@ html[data-stage-work="on"] .work-plane img {
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* The email address is 29 characters and the button will not wrap, so on
+   the narrowest phones it pushed the whole document wider than the screen.
+   It wraps inside itself now rather than taking the page with it. */
+.contact-scene a[href^="mailto:"] {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 /* The in-page motion switch: a quiet text control in the footer, present

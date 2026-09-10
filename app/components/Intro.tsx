@@ -6,10 +6,11 @@ import { useEffect, useRef } from 'react';
  * The opening beat, once per session on the home page, never longer than
  * 2.5 s and skippable at any moment.
  *
- * A hairline horizon draws across the screen; the green dot rises from
- * below it and settles as the wordmark's period; the letters surface
- * through the line. The overlay then fades to reveal the world, whose
- * masthead sits in exactly the same place, so nothing jumps. The boot
+ * A hairline horizon draws across the screen, the letters surface through
+ * it left to right, and the period lands last. The exit dissolves only the
+ * background, leaving the wordmark opaque until the end: the hero's
+ * masthead sits in exactly the same place underneath it, and fading two
+ * copies of the same word across each other would ghost the letters. The boot
  * script sets `html[data-intro="play"]` before first paint (only when the
  * session has not seen it, the page is `/`, and motion is allowed), which
  * is what shows the overlay and starts its CSS keyframes; this component
@@ -55,7 +56,7 @@ export default function Intro() {
         // Hidden, never removed: React owns this node, and pulling it out
         // from under it makes the next client navigation throw on unmount.
         root.hidden = true;
-      }, fast ? 240 : 640);
+      }, fast ? 220 : 520);
     };
     finishRef.current = finish;
 
@@ -82,6 +83,7 @@ export default function Intro() {
   return (
     <div ref={rootRef} className="intro-root">
       <div className="intro" aria-hidden="true">
+        <span className="intro-bg" />
         <span className="intro-horizon" />
         <div className="intro-mast">
           <div className="section-shell">

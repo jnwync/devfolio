@@ -52,13 +52,17 @@ function SelectedProject({
             {impact.map((item, i) => (
               <div
                 key={item.description}
-                className={`flex-1 py-3.5 ${i > 0 ? 'border-l border-border-on-ink pl-4' : 'pr-4'} ${i > 0 && i < impact.length - 1 ? 'pr-4' : ''}`}
+                // min-w-0: a flex child will not shrink below its content
+                // without it, which pushed the page wider than the screen.
+                className={`min-w-0 flex-1 py-3.5 ${i > 0 ? 'border-l border-border-on-ink pl-4' : 'pr-4'} ${i > 0 && i < impact.length - 1 ? 'pr-4' : ''}`}
               >
                 <dt className="sr-only">{item.description}</dt>
                 <dd className="font-serif text-xl font-bold leading-none text-paper-on-ink sm:text-2xl">
                   {item.metric}
                 </dd>
-                <dd className="mono-micro mt-1.5 text-muted-on-ink">
+                {/* break-words: at 320px a cell is 87px wide and a single
+                    long word would otherwise widen the whole page. */}
+                <dd className="mono-micro mt-1.5 break-words text-muted-on-ink">
                   {item.description}
                 </dd>
               </div>
