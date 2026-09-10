@@ -13,7 +13,7 @@
 
 import { Mesh, Program, Renderer, Triangle } from 'ogl';
 import { PALETTE_KEYS, readPalette, releaseProbe, type Palette, type RGB } from './cssColor';
-import { clock, frameHooks, world } from './state';
+import { clock, frameHooks, LIGHT_SLOTS, world } from './state';
 import { fragment, vertex } from './shaders/skysea';
 
 /** Kept in the bundle on purpose: the measurement script finds the world chunk by it. */
@@ -69,6 +69,8 @@ function createScene(canvas: HTMLCanvasElement): Scene {
       uDim: { value: [0, 0, 0, 0] },
       uDimAmount: { value: 0 },
       uBeacon: { value: [0.5, 0.5, 0] },
+      uLights: { value: world.lights },
+      uLightCount: { value: 0 },
       uSkyTop: { value: [0, 0, 0] },
       uSkyHorizon: { value: [0, 0, 0] },
       uSeaFar: { value: [0, 0, 0] },
@@ -135,6 +137,7 @@ export function mountWorld(canvas: HTMLCanvasElement, onGiveUp?: () => void): ()
     u.uDim.value = [world.dim.x, world.dim.y, world.dim.w, world.dim.h];
     u.uDimAmount.value = world.dim.amount;
     u.uBeacon.value = [world.beacon.x, world.beacon.y, world.beacon.on];
+    u.uLightCount.value = Math.min(LIGHT_SLOTS, world.lightCount);
     renderer.render({ scene: mesh });
   };
 

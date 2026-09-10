@@ -35,6 +35,8 @@ uniform vec4 uRipples[8]; // x, y (from top), age, strength
 uniform vec4 uDim;        // x, y (from top), w, h
 uniform float uDimAmount;
 uniform vec3 uBeacon;     // x, y (from top), on
+uniform vec4 uLights[14]; // x, y (from top), strength, hover
+uniform float uLightCount;
 uniform vec3 uSkyTop;
 uniform vec3 uSkyHorizon;
 uniform vec3 uSeaFar;
@@ -110,7 +112,19 @@ void main() {
   // the orb and its glow: tight, so text passing over it keeps its contrast
   float od = length(p - orb);
   float glow = exp(-(od * od) / (orbR * orbR * 16.0)) * 0.34 + exp(-od / (orbR * 4.5)) * 0.1;
-  vec3 skyLit = sky + uGlow * glow * uOrbOn;
+  // The stack's lights are scaled down at night so they stay under the
+  // luminance cap as soft gradients instead of flattening into plateaus.
+  float lightScale = mix(0.14, 1.0, uDay);
+  float halos = 0.0;
+  for (int i = 0; i < 14; i++) {
+    if (float(i) >= uLightCount) break;
+    vec4 l = uLights[i];
+    if (l.z <= 0.0) continue;
+    vec2 lp = vec2(l.x * aspect, 1.0 - l.y);
+    float ld = length(p - lp);
+    halos += (exp(-ld * ld * 2600.0) * (0.35 + 0.45 * l.w) + exp(-ld * ld * 9000.0) * 0.5) * l.z * lightScale;
+  }
+  vec3 skyLit = sky + uGlow * (glow * uOrbOn + halos);
   float disc = 1.0 - smoothstep(orbR * 0.88, orbR, od);
   skyLit = mix(skyLit, uOrbColor, disc * uOrbOn);
 
@@ -155,6 +169,21 @@ void main() {
     sea += uGlow * ring * 0.07;
   }
 
+  // the stack's points of light: a diffused glow while a light is still
+  // under the water line, a lane beneath it once it has surfaced
+  for (int i = 0; i < 14; i++) {
+    if (float(i) >= uLightCount) break;
+    vec4 l = uLights[i];
+    if (l.z <= 0.0) continue;
+    vec2 lp = vec2(l.x * aspect, 1.0 - l.y);
+    float under = smoothstep(-0.015, 0.015, l.y - uHorizon);   // 1 below the horizon
+    float ld = length(p - lp);
+    float blob = exp(-ld * ld * 900.0) * (0.35 + 0.25 * sin(uTime * 1.7 + float(i))) * under;
+    float laneL = exp(-pow((uv.x - l.x) * aspect, 2.0) / (0.0006 + 0.01 * depth));
+    float below = smoothstep(0.0, 0.05, horizon - uv.y) * (1.0 - smoothstep(0.0, 0.45, horizon - uv.y));
+    sea += uGlow * (blob + laneL * below * (0.25 + 0.55 * sparkle) * (1.0 - under)) * l.z * (0.6 + 0.4 * l.w) * lightScale;
+  }
+
   // the beacon reflected straight down
   float beaconLane = exp(-pow((uv.x - uBeacon.x) * aspect, 2.0) / (0.0012 + 0.02 * depth));
   sea += uBeaconColor * beaconLane * (0.35 + 0.65 * sparkle) * uBeacon.z * (0.7 - 0.4 * depth);
@@ -164,7 +193,7 @@ void main() {
   float capY = mix(0.034, 10.0, uDay);
   float seaY = dot(sea, vec3(0.2126, 0.7152, 0.0722));
   sea *= min(1.0, capY / max(seaY, 0.0001));
-  vec3 skyCapped = sky + uGlow * glow * uOrbOn;
+  vec3 skyCapped = sky + uGlow * (glow * uOrbOn + halos);
   float skyY = dot(skyCapped, vec3(0.2126, 0.7152, 0.0722));
   skyCapped *= min(1.0, capY / max(skyY, 0.0001));
   skyCapped += vec3(0.95, 0.96, 0.9) * star * (1.0 - uDay) * (0.15 + 0.85 * skyT);

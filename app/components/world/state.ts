@@ -41,6 +41,10 @@ export interface WorldState {
   dim: { x: number; y: number; w: number; h: number; amount: number };
   /** The beacon (the wordmark dot in the closing plate). */
   beacon: { x: number; y: number; on: number };
+  /** Points of light (the stack): x, y from top, strength, hover; LIGHT_SLOTS × 4. */
+  lights: number[];
+  /** How many of the light slots are live this frame. */
+  lightCount: number;
   /** Progress 0..1 per scene id, written by the scroll timeline. */
   progress: Record<string, number>;
   /** Scene currently owning the viewport centre. */
@@ -52,6 +56,8 @@ export interface WorldState {
 export type FrameHook = (time: number, delta: number) => void;
 
 const MAX_RIPPLES = 8;
+/** Light slots the shader loops over; the stack has fourteen tools. */
+export const LIGHT_SLOTS = 14;
 
 export const world: WorldState = {
   scroll: 0,
@@ -65,6 +71,8 @@ export const world: WorldState = {
   ripples: [],
   dim: { x: 0, y: 0, w: 0, h: 0, amount: 0 },
   beacon: { x: 0.5, y: 0.5, on: 0 },
+  lights: new Array(LIGHT_SLOTS * 4).fill(0),
+  lightCount: 0,
   progress: {},
   section: 'hero',
   scrollTo: (target, options) => {

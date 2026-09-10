@@ -12,6 +12,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { addFrame, MOTION_MARKER } from './ticker';
 import { buildHero } from './scenes/hero';
+import { buildStack } from './scenes/stack';
 import { measureOrbStart, orbAt, world, writeWorldVars } from '../world/state';
 import { trackPointer } from '../world/pointer';
 
@@ -58,6 +59,7 @@ export async function startMotion(): Promise<void> {
   });
 
   buildHero();
+  buildStack();
 
   // Derivations shared by both worlds, then the custom properties the 2D
   // path reads (written only when something moved).

@@ -563,12 +563,33 @@ html[data-js] .stack-item {
 }
 
 .stack-glyph {
+  position: relative;
   display: grid;
   place-items: center;
   width: 3.25rem;
   height: 3.25rem;
   color: var(--foreground);
   transition: color 0.3s ease;
+}
+
+/* The 2D world's point of light: a halo behind the glyph, lit by the stack
+   scene through --lit (0 → 1 as the icon settles). The GL world draws its
+   lights in the scene instead. */
+html[data-world="2d"] .stack-glyph::before {
+  content: "";
+  position: absolute;
+  inset: -45%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in oklab, var(--world-glow) 32%, transparent), transparent 62%);
+  opacity: var(--lit, 0);
+  pointer-events: none;
+}
+
+/* Under the water line a glyph is hazy; it sharpens as it surfaces. The
+   stack scene writes --sub (1 submerged → 0 surfaced); labels stay crisp. */
+html[data-motion-ready] .stack-glyph {
+  filter: blur(calc(var(--sub, 0) * 2px));
 }
 
 .stack-glyph svg {

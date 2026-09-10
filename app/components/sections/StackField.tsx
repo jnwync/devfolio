@@ -37,15 +37,16 @@ const ICONS: Record<string, IconType> = {
 
 /**
  * The signature moment: the tools in production, as a single row of glyphs
- * that sit in loose 3D space and settle flat as you scroll to them. The
- * markup is a plain list with visible labels; StackMotion (client) adds the
- * depth, and without it the row is simply flat.
+ * that sit in loose 3D space and settle flat as you scroll to them, each
+ * one a point of light that surfaces through the water line (see
+ * motion/scenes/stack.ts). The markup is a plain list with visible labels;
+ * without JavaScript the row is simply flat.
  */
 export default function StackField() {
   const { stack } = portfolioData;
 
   return (
-    <section id="stack" aria-labelledby="stack-heading" className="stack-scene">
+    <section id="stack" data-scene="stack" aria-labelledby="stack-heading" className="stack-scene">
       <div className="section-shell">
         <div className="stack-head">
           <h2 id="stack-heading" className="mono-meta text-foreground">
