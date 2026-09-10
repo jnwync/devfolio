@@ -116,7 +116,7 @@ const structuredData = {
   givenName: "Jon Wayne",
   familyName: "Cabusbusan",
   url: siteUrl,
-  image: `${siteUrl}/images/hero/hero-portrait.webp`,
+  image: `${siteUrl}/images/hero/portrait-2026.webp`,
   jobTitle: "Full-Stack Web & Mobile Developer",
   description: siteDescription,
   email: `mailto:${portfolioData.personal.email}`,

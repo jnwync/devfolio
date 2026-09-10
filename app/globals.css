@@ -100,6 +100,11 @@
   --world-glow: light-dark(oklch(0.95 0.08 90), oklch(0.74 0.11 155));
   --world-dim: light-dark(oklch(0.2 0.02 160 / 0.35), oklch(0.05 0.01 170 / 0.55));
 
+  /* The hero figure carries the name across it, so by day he is hazed back
+     to keep dark type legible over the gown; at night he stands at full
+     strength against the dark. */
+  --portrait-veil: light-dark(rgb(0 0 0 / 0.58), rgb(0 0 0 / 1));
+
   /* geometry written by the timeline (lengths, not colours) */
   --horizon: 62svh;
   --horizon-static: 62svh;
@@ -1171,13 +1176,19 @@ html[data-world="gl"] .world-orb {
   padding-top: clamp(1.25rem, 4svh, 2.5rem);
 }
 
-/* The figure stands on the water line beside the masthead and goes under
-   with it. --sink comes from the hero, so the two move as one scene. */
+/* The figure stands on the water line *behind* the masthead: his head in
+   the open sky, the name written across his gown. Beside the type he read
+   as a separate object; behind it the two occupy one space. He sinks with
+   the masthead — --sink comes from the hero, so they move as one scene. */
 .hero-portrait {
   position: absolute;
-  right: var(--shell-x);
+  left: 8%;
   bottom: 0;
-  width: min(clamp(7rem, 26vw, 17rem), 40svh);
+  /* Sized to the name, not to the viewport: the wordmark is about 3.1x its
+     own font-size wide, so this keeps him under 70% of it at every width
+     and the green period always lands on open sky rather than on his gown,
+     where a green dot on navy has no contrast. */
+  width: min(34svh, calc(2.1 * clamp(5rem, 14vw, 13rem)));
   transform: translateY(calc(var(--hero-p, 0) * 83svh + var(--sink) * var(--sink) * 130%));
   clip-path: inset(-2% -4% calc(var(--sink) * var(--sink) * 130%) -4%);
 }
@@ -1186,32 +1197,21 @@ html[data-world="gl"] .world-orb {
    water line puts his body through the last letters. He moves up into the
    sky instead, which is also the dead third of the screen that the eyebrow
    leaves empty, and he drifts rather than sinking. */
-@media (max-width: 639px) {
-  .hero-portrait {
-    top: auto;
-    /* Anchored clear of the masthead rather than under the eyebrow, so a
-       short phone shortens the gap above him instead of pushing him
-       through the last letters. */
-    bottom: 4.8rem;
-    width: min(50vw, 21svh);
-    transform: translateY(calc(var(--hero-p, 0) * 22svh));
-    clip-path: none;
-  }
-}
-
 /* Below this there is no sky worth standing in; the eyebrow and the
    masthead have the screen to themselves. */
-@media (max-width: 639px) and (max-height: 620px) {
+@media (max-height: 600px) {
   .hero-portrait {
     display: none;
   }
 }
 
-/* His lower edge dissolves into the water rather than ending on a line. */
+/* One mask does two jobs: his lower edge dissolves into the water rather
+   than ending on a line, and the alpha it starts at is the daylight haze.
+   opacity cannot take light-dark() — it is not a colour — but a mask can. */
 .hero-figure {
   margin: 0;
-  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 99%);
-  mask-image: linear-gradient(to bottom, #000 78%, transparent 99%);
+  -webkit-mask-image: linear-gradient(to bottom, var(--portrait-veil) 78%, transparent 99%);
+  mask-image: linear-gradient(to bottom, var(--portrait-veil) 78%, transparent 99%);
 }
 
 /* The masthead: the name at its largest, standing in the water. The
