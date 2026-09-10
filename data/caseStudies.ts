@@ -178,7 +178,97 @@ export const okraCaseStudy: CaseStudy = {
   ],
 };
 
+// Figures below come from a read-only investigation of the three repositories
+// (local git history, 2026-09-10). 42 merged PRs is the verified 2026-08-30
+// GitHub snapshot; local history now shows more, but only the verified number
+// is published. No ticket IDs, internal names, endpoint paths, or production
+// metrics: none of those are cleared for publication.
+export const trackbillCaseStudy: CaseStudy = {
+  projectId: 'trackbill',
+  title: 'Trackbill — Receipts, Security, and Reporting across Web and Mobile',
+  client: 'Inertia · Remote contract',
+  role: 'Contract Full-Stack Product Engineer',
+  period: 'Jul 2026 – Sep 2026',
+  liveUrl: 'https://trackbill.ai',
+  summary:
+    'Contract product engineering for Trackbill, an AI-powered receipt and expense platform: an API-key security lifecycle, unified receipt routing across backend, web and native, and workflow improvements across three production codebases.',
+  metrics: [
+    { value: '42', label: 'Sole-authored merged pull requests across the API, dashboard, and mobile app in about six weeks' },
+    { value: '38', label: 'Tickets delivered end-to-end, from schema and routes to web and native UI' },
+    { value: '66', label: 'Test files authored: Jest and Supertest on the server, React Testing Library on the web, contract tests on mobile' },
+    { value: '3', label: 'Production codebases: Express/Prisma API, Next.js dashboard, Expo mobile app' },
+    { value: '15', label: 'Locales shipped with the unified-inbox setting, each covered by a locale-completeness test' },
+    { value: '350', label: 'Files touched across the three repositories, excluding lockfiles and generated output' },
+  ],
+  stack: [
+    'Node.js',
+    'Express 4',
+    'Prisma 5',
+    'MySQL',
+    'TypeScript',
+    'Zod',
+    'Next.js 15',
+    'React 19',
+    'TanStack Query',
+    'Expo SDK 57',
+    'React Native',
+    'Jest',
+    'Supertest',
+    'React Testing Library',
+    'GitHub Actions',
+    'EAS',
+    'Google Cloud Run',
+  ],
+  sections: [
+    {
+      heading: 'The brief',
+      body: 'Trackbill is an AI-powered expense and receipt platform for small businesses in Asia-Pacific. Receipts arrive through WhatsApp, LINE, forwarded email, Gmail import, a web dashboard, a mobile app, and a public API; the AI classifies each one, and the records flow into approvals, folders, reports, and accounting sync. I joined Inertia on a six-week remote contract to ship product slices end-to-end across the three codebases: the Express and Prisma API, the Next.js dashboard, and the Expo mobile app. Work arrived as tickets, and each one was owned from schema to screen, tests included, in sole-authored pull requests reviewed by the team.',
+    },
+    {
+      heading: 'Three codebases, one slice at a time',
+      body: 'The API mounts one protected router behind two front doors: first-party web and mobile clients authenticate with a Firebase ID token, third parties with an API key. Because the mobile app behaves like the web client, most mobile features needed little new backend, and a typical ticket touched the Prisma schema and migrations, Express controllers and routes, the Zod response schemas, the dashboard, and the Expo screens in one pass.',
+      bullets: [
+        'Mobile: trash and restore with swipe-to-delete, receipt thumbnails, sign-in polish and legal links, a development-environment badge, invite-link onboarding over universal links, Export Center parity with the web, a reproducible local iOS build with local signing, and the App Store icon.',
+        'Web: inline receipt editing, bulk category updates, bulk approvals with partial-failure handling, clearer duplicate-receipt results, debounced folder search and sorting by last upload, paginated user lists, inline seat editing, persisted report exports, a request-timeout policy, analytics tracking, and MRR reporting for the admin console.',
+        'Server: changes to existing endpoints across twelve route modules, plus new routes for API keys and phone linking, each with Supertest coverage.',
+      ],
+    },
+    {
+      heading: 'API-key security lifecycle',
+      body: 'Third-party integrations authenticate with API keys, and those keys had been stored in plaintext. I replaced that with a lifecycle in which the secret is 256 bits of randomness, shown exactly once at creation, and stored only as a SHA-256 hash with its last four characters kept for display.',
+      bullets: [
+        'Legacy keys migrate themselves: when a hash lookup misses, the server checks the legacy column, writes the hash, and clears the plaintext in place, so every existing integration kept working with no forced re-issue and no downtime.',
+        'Redaction is a property of the type. The public API-key schema is a Zod transform that strips the secret and emits only a masked value, and every response passes through the same sanitiser, so a plaintext key cannot leak through a list or read response even from a not-yet-migrated row.',
+        'Revocation is a soft delete that takes effect on the next request; each key records when it was last used; a per-user quota is enforced on both client and server; and the settings page gained create and revoke dialogs that clear the revealed secret from state as soon as it is copied.',
+      ],
+    },
+    {
+      heading: 'Routing receipts from many channels into one inbox',
+      body: 'By default the product filed each receipt by the channel it came through, so one person’s receipts scattered across a WhatsApp folder, an app folder, and more. I shipped a per-user setting that routes WhatsApp, LINE, and mobile uploads into a single inbox, across all three codebases in one ticket.',
+      bullets: [
+        'Folder resolution is find-or-create, and the API runs on several Cloud Run instances at once, so two first uploads arriving together could both try to create the inbox and one would fail. Resolution now runs under a per-user MySQL named advisory lock held inside one interactive transaction, so the lock is released on the same connection that took it and one user never blocks another.',
+        'Folder identity is a metadata key rather than a name, so renaming the inbox keeps routing intact and an existing folder with the default name is adopted instead of duplicated. A lock timeout fails before any credit is spent, a mid-transaction failure rolls back, and a failed classification refunds the OCR credit through an append-only ledger.',
+        'Neither client implements routing logic: the dashboard sends the folder in view, the app asks the API for its default folder, and the preference lives in one server-side column, so flipping it on the web changes the next mobile upload with no app release. The setting shipped in all fifteen locales with tests asserting every language carries the strings.',
+      ],
+    },
+    {
+      heading: 'Quality across server, web, and mobile',
+      body: 'Every slice shipped with tests in the layer it touched, and the routing work in particular is covered around its failure modes.',
+      bullets: [
+        'Server: Jest with Supertest at the route level, including tests that the advisory lock is released when resolution fails and that no folder is resolved when the lock cannot be acquired.',
+        'Web: Jest with React Testing Library, including an optimistic-UI test that the routing toggle reverts to its stored value and reports an error when the save is rejected.',
+        'Mobile: contract tests on Node’s built-in test runner against the API’s response shapes, catching client and server drift without a device farm. Continuous integration runs lint, type-check, tests, and an Expo prebuild for both platforms on every pull request.',
+      ],
+    },
+    {
+      heading: 'Outcome',
+      body: 'Over about six weeks the engagement produced 42 sole-authored merged pull requests across the API, dashboard, and mobile app, 38 tickets delivered end-to-end, and 66 new test files. The API-key migration removed plaintext secrets from the database without disrupting existing integrations, and the unified inbox replaced per-channel folder scatter for people who capture receipts from their phone.',
+    },
+  ],
+};
+
 export const caseStudies: Record<string, CaseStudy> = {
+  trackbill: trackbillCaseStudy,
   reisky: reiskyCaseStudy,
   okra: okraCaseStudy,
 };

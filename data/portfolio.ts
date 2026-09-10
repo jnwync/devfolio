@@ -184,6 +184,7 @@ export const portfolioData: PortfolioData = {
         { metric: '3', description: 'Production codebases contributed to across API, web, and mobile' },
       ],
       technologies: ['Node.js', 'Express.js', 'Prisma ORM', 'Next.js', 'React', 'Expo', 'React Native', 'OpenAPI'],
+      link: 'https://trackbill.ai',
     },
     {
       id: 'okra',
@@ -353,6 +354,8 @@ export const portfolioData: PortfolioData = {
         'Contributed across three production codebases with 42 merged author-filtered PR records and test changes across server, client, and mobile layers.',
       ],
       technologies: ['Node.js', 'Express.js', 'Prisma ORM', 'Next.js', 'Expo', 'React Native', 'OpenAPI'],
+      link: 'https://trackbill.ai',
+      caseStudyPath: '/work/trackbill',
     },
     {
       id: 'reisky',

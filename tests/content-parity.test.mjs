@@ -57,8 +57,24 @@ test('keeps Reisky aligned with the CV and selects only complete case studies', 
     .map(({ id }) => id);
 
   assert.equal(reisky?.period, 'Jan 2026 - Apr 2026');
-  assert.deepEqual([...selectedProjects], ['reisky', 'okra']);
+  assert.deepEqual([...selectedProjects], ['trackbill', 'reisky', 'okra']);
   assert.equal(portfolioData.projects.some(({ featured }) => featured), false);
+});
+
+test('publishes a Trackbill case study with verified figures and nothing internal', () => {
+  const trackbill = caseStudyModule.exports.getCaseStudy('trackbill');
+  const serialized = JSON.stringify(trackbill);
+
+  assert.equal(trackbill?.period, 'Jul 2026 – Sep 2026');
+  assert.equal(trackbill?.metrics[0].value, '42');
+  assert.match(trackbill?.summary ?? '', /receipt/);
+  assert.match(serialized, /advisory lock/);
+  // Ticket keys, internal codebase names, org slugs, and endpoint paths stay out.
+  assert.doesNotMatch(serialized, /TB-\d+|[Aa]ccounthouse|inertia-hk|\/web\/|\/api\//);
+  assert.match(
+    readFileSync(new URL('../app/work/trackbill/page.tsx', import.meta.url), 'utf8'),
+    /CaseStudyLayout/
+  );
 });
 
 test('uses balanced audience positioning and concise homepage copy', () => {

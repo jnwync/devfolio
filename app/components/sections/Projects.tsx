@@ -28,11 +28,11 @@ function SelectedProject({
 
   return (
     <article
-      className={`grid items-center gap-8 py-14 md:grid-cols-[5fr_6fr] md:gap-14 md:py-20 ${
+      className={`grid grid-cols-1 items-center gap-8 py-14 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:gap-14 md:py-20 ${
         index > 0 ? 'border-t border-border-on-ink' : ''
       }`}
     >
-      <div className={flip ? 'md:order-2' : ''}>
+      <div className={`min-w-0 ${flip ? 'md:order-2' : ''}`}>
         <p className="meta-line">
           {typeLabels[project.type]} · {project.period}
         </p>
@@ -89,7 +89,7 @@ function SelectedProject({
         )}
       </div>
 
-      <div className={flip ? 'md:order-1' : ''}>{children}</div>
+      <div className={`min-w-0 ${flip ? 'md:order-1' : ''}`}>{children}</div>
     </article>
   );
 }
@@ -151,6 +151,98 @@ function OkraBoard() {
   );
 }
 
+/** Abstracted folder view plus phone for Trackbill — the structure is read
+ *  from the product (folder rows with a per-source breakdown, a mobile inbox
+ *  with a capture button), the proportions are illustrative, and there is no
+ *  screenshot. One image for the routing story: many channels, one inbox. */
+function TrackbillInbox() {
+  const sourceTones = ['bg-frame-green', 'bg-frame-text/55', 'bg-frame-text/35', 'bg-frame-text/20'];
+  const folders = [
+    { name: 'Unified', hot: true, mix: [5, 3, 1, 3] },
+    { name: 'Gmail Imports', mix: [0, 6, 0, 1] },
+    { name: 'API Uploads', mix: [0, 0, 0, 5] },
+    { name: 'Trackbill Billing', mix: [0, 0, 4, 0] },
+  ];
+
+  return (
+    <div className="flex min-h-72 items-stretch gap-3 overflow-hidden bg-frame-board p-4 sm:gap-4 sm:p-5" aria-hidden="true">
+      <div className="flex min-w-0 flex-1 flex-col gap-2 overflow-hidden rounded-lg border border-frame-edge bg-frame-column p-3">
+        <div className="mono-micro flex justify-between px-1 pb-1 text-frame-muted">
+          <span>Folders</span>
+          <span>Sources</span>
+        </div>
+        {folders.map((folder) => (
+          <div
+            key={folder.name}
+            className={`flex items-center gap-3 rounded-md border p-2.5 ${
+              folder.hot ? 'border-frame-green bg-frame-card-hot' : 'border-frame-text/10 bg-frame-card'
+            }`}
+          >
+            <span className={`h-2.5 w-3.5 shrink-0 rounded-[2px] ${folder.hot ? 'bg-frame-green' : 'bg-frame-text/30'}`} />
+            <span className="mono-micro min-w-0 flex-1 truncate text-frame-text">{folder.name}</span>
+            <span className="flex h-1.5 w-16 shrink-0 overflow-hidden rounded-full bg-frame-text/10 sm:w-20">
+              {folder.mix.map((weight, i) =>
+                weight ? <span key={i} style={{ flex: weight }} className={sourceTones[i]} /> : null
+              )}
+            </span>
+          </div>
+        ))}
+        <div className="mono-micro mt-auto flex flex-wrap gap-x-3 px-1 pt-2 text-frame-muted">
+          <span>WhatsApp</span>
+          <span>Email</span>
+          <span>Billing</span>
+          <span>Upload</span>
+        </div>
+      </div>
+
+      <div className="relative flex w-20 shrink-0 flex-col gap-2 rounded-2xl border border-frame-edge bg-frame-column p-2 sm:w-28">
+        <div className="mx-auto h-1 w-8 rounded-full bg-frame-text/20" />
+        <div className="mono-micro px-1 text-frame-muted">Inbox</div>
+        {[3, 2, 3, 2].map((lines, i) => (
+          <div key={i} className="rounded-md border border-frame-text/10 bg-frame-card p-2">
+            {Array.from({ length: lines }).map((_, j) => (
+              <div
+                key={j}
+                className={`mb-1 h-1 rounded-full last:mb-0 ${j === 0 ? 'w-4/5 bg-frame-text/30' : 'w-3/5 bg-frame-text/15'}`}
+              />
+            ))}
+          </div>
+        ))}
+        <div className="absolute right-3 bottom-3 h-8 w-8 rounded-full bg-frame-green" />
+      </div>
+    </div>
+  );
+}
+
+function visualFor(project: Project): { caption: string; node: React.ReactNode } {
+  switch (project.id) {
+    case 'trackbill':
+      return {
+        caption: 'Trackbill, folder view and mobile inbox drawn from the product’s structure (no public screenshot)',
+        node: <TrackbillInbox />,
+      };
+    case 'okra':
+      return {
+        caption: 'OKRa, board view drawn from the product’s structure (internal tool, no public screenshot)',
+        node: <OkraBoard />,
+      };
+    default:
+      return {
+        caption: 'Reisky Martial Arts, production site (reisky.vercel.app)',
+        node: (
+          <Image
+            src={project.image ?? '/images/projects/reisky-home.png'}
+            alt={`Screenshot of ${project.title}`}
+            width={1200}
+            height={675}
+            className="h-auto w-full object-cover"
+            sizes="(max-width: 768px) 100vw, 560px"
+          />
+        ),
+      };
+  }
+}
+
 export default function Projects() {
   const selected = portfolioData.projects.filter((project) => project.caseStudyPath);
   const more = portfolioData.projects.filter((project) => !project.caseStudyPath);
@@ -168,24 +260,14 @@ export default function Projects() {
           </h2>
         </header>
 
-        <SelectedProject project={selected[0]} index={0}>
-          <Figure caption="Reisky Martial Arts, production site (reisky.vercel.app)">
-            <Image
-              src={selected[0].image ?? '/images/projects/reisky-home.png'}
-              alt={`Screenshot of ${selected[0].title}`}
-              width={1200}
-              height={675}
-              className="h-auto w-full object-cover"
-              sizes="(max-width: 768px) 100vw, 560px"
-            />
-          </Figure>
-        </SelectedProject>
-
-        <SelectedProject project={selected[1]} index={1} flip>
-          <Figure caption="OKRa, board view drawn from the product’s structure (internal tool, no public screenshot)">
-            <OkraBoard />
-          </Figure>
-        </SelectedProject>
+        {selected.map((project, index) => {
+          const visual = visualFor(project);
+          return (
+            <SelectedProject key={project.id} project={project} index={index} flip={index % 2 === 1}>
+              <Figure caption={visual.caption}>{visual.node}</Figure>
+            </SelectedProject>
+          );
+        })}
 
         <MoreBuilds projects={more} startAt={selected.length + 1} />
       </div>

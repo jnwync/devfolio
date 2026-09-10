@@ -204,6 +204,7 @@ function Meta({ term, value }: { term: string; value: string }) {
 
 function typeLabel(role: string): string {
   const normalizedRole = role.toLowerCase();
+  if (normalizedRole.includes('contract')) return 'Contract';
   if (normalizedRole.includes('freelance')) return 'Freelance';
   if (normalizedRole.includes('intern')) return 'Internship';
   return 'Project';

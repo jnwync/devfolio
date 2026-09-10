@@ -1,5 +1,12 @@
 # Trackbill case study — content brief
 
+> **Status (2026-09-10):** answered by a read-only investigation of the three
+> repositories; the case study now lives in `data/caseStudies.ts` and renders at
+> `/work/trackbill`. Still open before it is published: written permission from
+> Inertia (the client code is marked proprietary and the repositories carry no
+> disclosure policy), and whether to publish the verified 42 merged PRs or the
+> ~52 that local history shows. Everything else in this brief is resolved.
+
 The Work plate only gives a project the full "selected" treatment (browser frame,
 metrics rail, case-study page) when a complete case study exists in
 `data/caseStudies.ts`. The content-parity tests enforce that, so nothing below
